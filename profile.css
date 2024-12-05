@@ -1,0 +1,69 @@
+/* General Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Profile Container */
+.profile-container {
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    width: 60%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Avatar Section */
+.avatar-section {
+    margin: 20px 0;
+}
+.avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid white;
+}
+.change-avatar {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.change-avatar:hover {
+    background-color: #005f73;
+}
+
+/* Stats Section */
+.stats-section {
+    margin: 20px 0;
+}
+.stats-section p {
+    margin: 5px 0;
+    font-size: 18px;
+}
+
+/* Back Button */
+.back-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #F44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.back-button:hover {
+    background-color: #D32F2F;
+}
