@@ -18,8 +18,8 @@ body, html {
     padding: 20px;
     background: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
-    width: 80%; /* Make the container larger to fit the avatar */
-    max-width: 1200px; /* Optional: Limits the maximum container width */
+    width: 90%; /* Expand container width for a larger avatar */
+    max-width: 1200px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -28,12 +28,12 @@ body, html {
     margin: 20px 0;
 }
 .avatar {
-    width: 100%; /* Image spans the full width of the container */
-    max-width: 1000px; /* Prevent the image from becoming excessively large */
-    height: auto; /* Maintains the 1312 x 736 aspect ratio */
-    border-radius: 10px; /* Rounded corners for a sleek look */
-    border: 5px solid white; /* Add a border to frame the image */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Shadow for emphasis */
+    width: 80%; /* Scale image to 80% of the container width */
+    max-width: 1000px; /* Prevent the avatar from becoming excessively large */
+    height: auto; /* Maintain the 1312 x 736 aspect ratio */
+    border: 5px solid white; /* Optional: Border for emphasis */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Shadow for styling */
+    border-radius: 10px; /* Slight rounding for aesthetic effect */
 }
 .change-avatar {
     margin-top: 10px;
@@ -43,6 +43,7 @@ body, html {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
 }
 .change-avatar:hover {
     background-color: #005f73;
@@ -66,6 +67,7 @@ body, html {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
 }
 .back-button:hover {
     background-color: #D32F2F;
