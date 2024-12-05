@@ -18,7 +18,8 @@ body, html {
     padding: 20px;
     background: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
-    width: 70%; /* Increase to fit larger avatar image */
+    width: 80%; /* Make the container larger to fit the avatar */
+    max-width: 1200px; /* Optional: Limits the maximum container width */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -27,12 +28,12 @@ body, html {
     margin: 20px 0;
 }
 .avatar {
-    width: 90%; /* Avatar image takes up 90% of the container width */
-    height: auto; /* Maintains the aspect ratio (1312 x 736) */
-    max-height: 400px; /* Optional: Prevents the image from getting too large */
-    border-radius: 10px; /* Soft corners for a sleek look */
-    border: 3px solid white; /* Border to make the image stand out */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    width: 100%; /* Image spans the full width of the container */
+    max-width: 1000px; /* Prevent the image from becoming excessively large */
+    height: auto; /* Maintains the 1312 x 736 aspect ratio */
+    border-radius: 10px; /* Rounded corners for a sleek look */
+    border: 5px solid white; /* Add a border to frame the image */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Shadow for emphasis */
 }
 .change-avatar {
     margin-top: 10px;
