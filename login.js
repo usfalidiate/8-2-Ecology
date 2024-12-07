@@ -2,6 +2,7 @@ import { auth, db } from "./firebase-config.js";
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    deleteUser,
 } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import {
     doc,
@@ -58,25 +59,33 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        let userCredential = null;
+
         try {
-            console.log("Checking class code validity...");
+            // Step 1: Create user in Firebase Authentication
+            console.log("Creating user...");
+            userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const uid = userCredential.user.uid;
+
+            console.log("User created successfully. Validating class code...");
+
+            // Step 2: Check class code validity
             const classDoc = await getDoc(doc(db, "class-codes", classCode));
 
             if (!classDoc.exists()) {
-                console.error("Invalid class code provided.");
+                console.error("Invalid class code provided. Rolling back user creation...");
                 document.getElementById("error-message").innerText = "Invalid class code!";
+
+                // Rollback: Delete the user if class code is invalid
+                await deleteUser(userCredential.user);
+                console.log("User deleted successfully.");
                 return;
             }
 
             const className = classDoc.data().className;
-            console.log("Class code valid. Creating user...");
 
-            // Create user in Firebase Auth
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const uid = userCredential.user.uid;
-
-            console.log("User created. Storing user data in Firestore...");
-            // Write user data to Firestore
+            // Step 3: Write user data to Firestore
+            console.log("Class code valid. Storing user data in Firestore...");
             await setDoc(doc(db, "users", uid), {
                 email: email,
                 class: className,
@@ -89,6 +98,13 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "profile.html"; // Redirect on success
         } catch (error) {
             console.error("Error during registration:", error);
+
+            // Clean up: Delete user if it was created but an error occurred later
+            if (userCredential && userCredential.user) {
+                console.log("Cleaning up incomplete user registration...");
+                await deleteUser(userCredential.user);
+            }
+
             document.getElementById("error-message").innerText = error.message;
         }
     });
