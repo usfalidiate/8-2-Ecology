@@ -2,17 +2,20 @@ import { db, auth } from "./firebase-config.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
-
 // Fetch User Data
 async function fetchUserData(uid) {
-    const userRef = doc(db, "users", uid); // Firestore users collection
-    const userDoc = await getDoc(userRef);
+    try {
+        const userRef = doc(db, "users", uid); // Firestore users collection
+        const userDoc = await getDoc(userRef);
 
-    if (userDoc.exists()) {
-        return userDoc.data();
-    } else {
-        console.error("No user found with UID:", uid);
-        return null;
+        if (userDoc.exists()) {
+            return userDoc.data();
+        } else {
+            console.error("No user found with UID:", uid);
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching user data:", error.message);
     }
 }
 
@@ -20,18 +23,19 @@ async function fetchUserData(uid) {
 async function displayUserData() {
     auth.onAuthStateChanged(async (user) => {
         if (user) {
+            console.log("User signed in:", user.uid);
             const userData = await fetchUserData(user.uid);
             if (userData) {
                 document.getElementById("synapse-points").innerHTML = `<strong>Synapse Points (SP):</strong> ${userData.synapsePoints}`;
                 document.getElementById("badges").innerHTML = `<strong>Badges:</strong> ${userData.badges.join(", ")}`;
-
+                
                 // Set avatar parts
                 const avatarConfig = userData.avatarConfig || {};
                 updateAvatar(avatarConfig);
             }
         } else {
             console.log("No user signed in. Redirecting to login...");
-            window.location.href = "login.html"; // Redirect if no user logged in
+            window.location.href = "login.html"; // Redirect if no user is logged in
         }
     });
 }
@@ -59,34 +63,42 @@ function updateAvatar(avatarConfig) {
         img.src = src;
         img.style.position = "absolute";
         img.style.zIndex = getLayerZIndex(layer);
-        img.style.width = "100%"; // Ensure images scale to the container size
+        img.style.objectFit = "contain";
+        img.style.width = "1920px"; // Match avatar canvas width
+        img.style.height = "1080px"; // Match avatar canvas height
         avatarContainer.appendChild(img);
     });
 }
 
 // Map layers to z-index
 function getLayerZIndex(layer) {
-    const layerOrder = ["base", "skin", "pants"];
-    return layerOrder.indexOf(layer);
+    const layerOrder = ["base", "skin", "pants", "shirt", "shoes"];
+    return layerOrder.indexOf(layer) + 1; // Ensure z-index starts at 1
 }
 
 // Save Avatar Configuration
 async function saveAvatarConfig(newConfig) {
-    const user = auth.currentUser;
-    if (user) {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            console.error("No user signed in while saving avatar configuration.");
+            return;
+        }
+
         const userRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userRef);
 
-        if (userDoc.exists()) {
-            const existingConfig = userDoc.data().avatarConfig || {};
-            const updatedConfig = { ...existingConfig, ...newConfig };
-            await updateDoc(userRef, { avatarConfig: updatedConfig });
-            console.log("Avatar configuration saved!");
-        } else {
-            console.error("User document does not exist.");
+        if (!userDoc.exists()) {
+            console.error("User document does not exist in Firestore.");
+            return;
         }
-    } else {
-        console.error("No user signed in.");
+
+        const existingConfig = userDoc.data().avatarConfig || {};
+        const updatedConfig = { ...existingConfig, ...newConfig };
+        await updateDoc(userRef, { avatarConfig: updatedConfig });
+        console.log("Avatar configuration saved successfully!");
+    } catch (error) {
+        console.error("Error saving avatar configuration:", error.message);
     }
 }
 
@@ -119,7 +131,6 @@ document.getElementById("logout-button").addEventListener("click", async () => {
         console.error("Error during logout:", error.message);
     }
 });
-
 
 // Initialize
 displayUserData();
