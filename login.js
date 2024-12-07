@@ -36,9 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const password = document.getElementById("login-password").value;
 
         try {
+            console.log("Attempting to log in...");
             await signInWithEmailAndPassword(auth, email, password);
+            console.log("Login successful!");
             window.location.href = "profile.html"; // Redirect on success
         } catch (error) {
+            console.error("Error during login:", error);
             document.getElementById("error-message").innerText = error.message;
         }
     });
@@ -56,32 +59,36 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            // Check if class code is valid
+            console.log("Checking class code validity...");
             const classDoc = await getDoc(doc(db, "class-codes", classCode));
+
             if (!classDoc.exists()) {
+                console.error("Invalid class code provided.");
                 document.getElementById("error-message").innerText = "Invalid class code!";
                 return;
             }
 
-            // Get class name from Firestore
             const className = classDoc.data().className;
+            console.log("Class code valid. Creating user...");
 
             // Create user in Firebase Auth
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const uid = userCredential.user.uid;
 
+            console.log("User created. Storing user data in Firestore...");
             // Write user data to Firestore
             await setDoc(doc(db, "users", uid), {
                 email: email,
                 class: className,
                 synapsePoints: 0,
                 badges: [],
-                avatarConfig: {}, // Placeholder for future avatar customisation
+                avatarConfig: {}, // Placeholder for future avatar customization
             });
 
-            console.log("User registered and data saved to Firestore!");
+            console.log("User registered and data saved to Firestore successfully!");
             window.location.href = "profile.html"; // Redirect on success
         } catch (error) {
+            console.error("Error during registration:", error);
             document.getElementById("error-message").innerText = error.message;
         }
     });
