@@ -2,6 +2,18 @@ import { db, auth } from "./firebase-config.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
+// Load customisation options from JSON
+async function loadCustomisationOptions() {
+    try {
+        const response = await fetch("assets/customization-options.json");
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error loading customisation options:", error);
+        return null;
+    }
+}
+
 // Fetch User Data
 async function fetchUserData(uid) {
     try {
@@ -28,7 +40,7 @@ async function displayUserData() {
             if (userData) {
                 document.getElementById("synapse-points").innerHTML = `<strong>Synapse Points (SP):</strong> ${userData.synapsePoints}`;
                 document.getElementById("badges").innerHTML = `<strong>Badges:</strong> ${userData.badges.join(", ")}`;
-                
+
                 // Set avatar parts
                 const avatarConfig = userData.avatarConfig || {};
                 updateAvatar(avatarConfig);
@@ -46,7 +58,6 @@ function updateAvatar(avatarConfig) {
     // Default configuration
     const defaultConfig = {
         base: "assets/base/Avatar.png",
-        pants: "assets/pants/DarkGreyPants.png",
         skin: "assets/skin/PaleSkin.png",
     };
 
@@ -68,10 +79,9 @@ function updateAvatar(avatarConfig) {
     });
 }
 
-
 // Map layers to z-index
 function getLayerZIndex(layer) {
-    const layerOrder = ["base", "skin", "pants", "shirt", "shoes"];
+    const layerOrder = ["skin", "pants", "tops", "face", "mouth", "eyes", "hair", "shoes"];
     return layerOrder.indexOf(layer) + 1; // Ensure z-index starts at 1
 }
 
@@ -101,22 +111,29 @@ async function saveAvatarConfig(newConfig) {
     }
 }
 
-// Add Event Listeners for Customisation
-function setupAvatarControls() {
-    const pantsSelect = document.getElementById("pants-select");
-    const skinSelect = document.getElementById("skin-select");
+// Populate Customisation Options
+async function populateCustomisationOptions() {
+    const options = await loadCustomisationOptions();
+    if (!options) return;
 
-    // Update avatar on selection change
-    pantsSelect.addEventListener("change", () => {
-        const newConfig = { pants: `assets/pants/${pantsSelect.value}` };
-        updateAvatar(newConfig);
-        saveAvatarConfig(newConfig);
-    });
+    // Populate each category dynamically
+    Object.keys(options).forEach((category) => {
+        const selectElement = document.getElementById(`${category}-select`);
+        if (selectElement) {
+            options[category].forEach((option) => {
+                const optionElement = document.createElement("option");
+                optionElement.value = option.file;
+                optionElement.textContent = option.label;
+                selectElement.appendChild(optionElement);
+            });
 
-    skinSelect.addEventListener("change", () => {
-        const newConfig = { skin: `assets/skin/${skinSelect.value}` };
-        updateAvatar(newConfig);
-        saveAvatarConfig(newConfig);
+            // Add change listener to update avatar
+            selectElement.addEventListener("change", () => {
+                const newConfig = { [category]: `assets/${category}/${selectElement.value}` };
+                updateAvatar(newConfig);
+                saveAvatarConfig(newConfig);
+            });
+        }
     });
 }
 
@@ -133,4 +150,4 @@ document.getElementById("logout-button").addEventListener("click", async () => {
 
 // Initialize
 displayUserData();
-setupAvatarControls();
+populateCustomisationOptions();
