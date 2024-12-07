@@ -1,5 +1,7 @@
 import { db, auth } from "./firebase-config.js";
-import { doc, getDoc, updateDoc, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+
 
 // Fetch User Data
 async function fetchUserData(uid) {
