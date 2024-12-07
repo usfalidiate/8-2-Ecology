@@ -28,7 +28,8 @@ async function displayUserData() {
                 updateAvatar(avatarConfig);
             }
         } else {
-            console.log("No user signed in.");
+            console.log("No user signed in. Redirecting to login...");
+            window.location.href = "login.html"; // Redirect if no user logged in
         }
     });
 }
@@ -56,6 +57,7 @@ function updateAvatar(avatarConfig) {
         img.src = src;
         img.style.position = "absolute";
         img.style.zIndex = getLayerZIndex(layer);
+        img.style.width = "100%"; // Ensure images scale to the container size
         avatarContainer.appendChild(img);
     });
 }
@@ -67,12 +69,20 @@ function getLayerZIndex(layer) {
 }
 
 // Save Avatar Configuration
-async function saveAvatarConfig(config) {
+async function saveAvatarConfig(newConfig) {
     const user = auth.currentUser;
     if (user) {
         const userRef = doc(db, "users", user.uid);
-        await updateDoc(userRef, { avatarConfig: config });
-        console.log("Avatar configuration saved!");
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+            const existingConfig = userDoc.data().avatarConfig || {};
+            const updatedConfig = { ...existingConfig, ...newConfig };
+            await updateDoc(userRef, { avatarConfig: updatedConfig });
+            console.log("Avatar configuration saved!");
+        } else {
+            console.error("User document does not exist.");
+        }
     } else {
         console.error("No user signed in.");
     }
@@ -85,19 +95,15 @@ function setupAvatarControls() {
 
     // Update avatar on selection change
     pantsSelect.addEventListener("change", () => {
-        const config = {
-            pants: `assets/pants/${pantsSelect.value}`,
-        };
-        updateAvatar(config);
-        saveAvatarConfig(config);
+        const newConfig = { pants: `assets/pants/${pantsSelect.value}` };
+        updateAvatar(newConfig);
+        saveAvatarConfig(newConfig);
     });
 
     skinSelect.addEventListener("change", () => {
-        const config = {
-            skin: `assets/skin/${skinSelect.value}`,
-        };
-        updateAvatar(config);
-        saveAvatarConfig(config);
+        const newConfig = { skin: `assets/skin/${skinSelect.value}` };
+        updateAvatar(newConfig);
+        saveAvatarConfig(newConfig);
     });
 }
 
