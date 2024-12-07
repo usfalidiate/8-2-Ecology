@@ -40,13 +40,12 @@ async function displayUserData() {
     });
 }
 
-// Update Avatar Layers
 function updateAvatar(avatarConfig) {
     const avatarContainer = document.getElementById("avatar-container");
 
     // Default configuration
     const defaultConfig = {
-        base: "assets/base/Avatar.png",
+        base: "assets/base/avatar.png",
         pants: "assets/pants/DarkGreyPants.png",
         skin: "assets/skin/PaleSkin.png",
     };
@@ -62,13 +61,13 @@ function updateAvatar(avatarConfig) {
         const img = document.createElement("img");
         img.src = src;
         img.style.position = "absolute";
+        img.style.width = "100%"; // Ensure images scale to the container size
+        img.style.height = "100%"; // Ensure images scale to the container size
         img.style.zIndex = getLayerZIndex(layer);
-        img.style.objectFit = "contain";
-        img.style.width = "1920px"; // Match avatar canvas width
-        img.style.height = "1080px"; // Match avatar canvas height
         avatarContainer.appendChild(img);
     });
 }
+
 
 // Map layers to z-index
 function getLayerZIndex(layer) {
