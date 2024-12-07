@@ -13,11 +13,8 @@
         <!-- Avatar Section -->
         <div class="avatar-section">
             <h2>Avatar</h2>
-            <div id="avatar-container" style="position: relative; width: 1920px; height: 1080px;">
-                <!-- Placeholder for avatar layers -->
-                <img id="base-layer" src="assets/base/avatar.png" style="position: absolute; z-index: 0;" alt="Base">
-                <img id="pants-layer" src="assets/pants/DarkGreyPants.png" style="position: absolute; z-index: 1;" alt="Pants">
-                <img id="skin-layer" src="assets/skin/PaleSkin.png" style="position: absolute; z-index: 2;" alt="Skin">
+            <div id="avatar-container" style="position: relative; width: 300px; height: 540px; margin: 0 auto; background: transparent;">
+                <!-- Avatar layers dynamically generated -->
             </div>
         </div>
         
@@ -29,6 +26,7 @@
         
         <!-- Avatar Customisation Controls -->
         <div class="avatar-controls">
+            <h3>Customise Avatar</h3>
             <label for="pants-select">Select Pants:</label>
             <select id="pants-select">
                 <option value="DarkGreyPants.png">Dark Grey Pants</option>
@@ -42,6 +40,7 @@
             </select>
         </div>
 
+        <!-- Back Button -->
         <button class="back-button" onclick="location.href='home.html';">Back to Home</button>
     </div>
 
