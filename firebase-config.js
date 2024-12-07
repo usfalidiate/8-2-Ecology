@@ -13,6 +13,9 @@ const firebaseConfig = {
   appId: "1:346571176421:web:7d5a0e2bffb096fa40970c"
 };
 
+firebase.firestore.setLogLevel('debug');
+
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
