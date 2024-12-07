@@ -45,7 +45,7 @@ function updateAvatar(avatarConfig) {
 
     // Default configuration
     const defaultConfig = {
-        base: "assets/base/avatar.png",
+        base: "assets/base/Avatar.png",
         pants: "assets/pants/DarkGreyPants.png",
         skin: "assets/skin/PaleSkin.png",
     };
