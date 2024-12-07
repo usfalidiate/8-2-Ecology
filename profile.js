@@ -1,5 +1,5 @@
 import { db, auth } from "./firebase-config.js";
-import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
 // Fetch User Data
 async function fetchUserData(uid) {
@@ -106,6 +106,18 @@ function setupAvatarControls() {
         saveAvatarConfig(newConfig);
     });
 }
+
+// Log Out Function
+document.getElementById("logout-button").addEventListener("click", async () => {
+    try {
+        await signOut(auth);
+        console.log("User logged out successfully.");
+        window.location.href = "login.html"; // Redirect to login after logout
+    } catch (error) {
+        console.error("Error during logout:", error.message);
+    }
+});
+
 
 // Initialize
 displayUserData();
