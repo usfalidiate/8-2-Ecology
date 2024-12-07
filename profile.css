@@ -12,21 +12,7 @@ body, html {
     align-items: center;
 }
 
-#avatar-container {
-    position: relative;
-    width: 60%; /* Adjust as needed */
-    height: auto; /* Keep height proportional */
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-#avatar-container img {
-    position: absolute;
-    max-width: 100%; /* Ensure images scale properly */
-    height: auto; /* Maintain aspect ratio */
-}
 
 
 /* Profile Container */
@@ -44,6 +30,27 @@ body, html {
 .avatar-section {
     margin: 20px 0;
 }
+
+.avatar-section {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#avatar-container {
+    position: relative;
+    width: 480px; /* Scale to fit the screen */
+    height: 270px; /* Maintain aspect ratio 1920x1080 scaled down */
+    margin: 0 auto;
+    background-color: transparent;
+}
+
+#avatar-container img {
+    position: absolute;
+    width: 100%; /* Ensure layers scale to container size */
+    height: 100%; /* Maintain aspect ratio */
+}
+
+
 .avatar {
     width: 80%; /* Scale image to 80% of the container width */
     max-width: 1000px; /* Prevent the avatar from becoming excessively large */
