@@ -1,6 +1,13 @@
 import { auth, db } from "./firebase-config.js";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import {
+    doc,
+    setDoc,
+    getDoc,
+} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     // Tab Switching
@@ -56,18 +63,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // Create user and store additional data
+            // Get class name from Firestore
+            const className = classDoc.data().className;
+
+            // Create user in Firebase Auth
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const uid = userCredential.user.uid;
 
+            // Write user data to Firestore
             await setDoc(doc(db, "users", uid), {
                 email: email,
-                class: classCode,
+                class: className,
                 synapsePoints: 0,
                 badges: [],
                 avatarConfig: {}, // Placeholder for future avatar customisation
             });
 
+            console.log("User registered and data saved to Firestore!");
             window.location.href = "profile.html"; // Redirect on success
         } catch (error) {
             document.getElementById("error-message").innerText = error.message;
