@@ -1,22 +1,27 @@
 import { db, auth } from "./firebase-config.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
-let currentAvatarConfig = {};
+let currentAvatarConfig = {}; // Tracks the current avatar configuration
 
 // Open and Close Modal
 document.getElementById("customise-avatar-button").addEventListener("click", () => {
-    document.getElementById("customisation-modal").style.display = "flex";
+    document.getElementById("customisation-modal").classList.add("visible");
 });
 
 document.getElementById("close-modal").addEventListener("click", () => {
-    document.getElementById("customisation-modal").style.display = "none";
+    document.getElementById("customisation-modal").classList.remove("visible");
 });
 
 // Load Customisation Options
 async function loadCustomisationOptions(category) {
-    const response = await fetch("assets/customisation-options.json");
-    const options = await response.json();
-    return options[category] || [];
+    try {
+        const response = await fetch("assets/customisation-options.json");
+        const options = await response.json();
+        return options[category] || [];
+    } catch (error) {
+        console.error("Error loading customisation options:", error);
+        return [];
+    }
 }
 
 // Display Customisation Options in Grid
@@ -69,10 +74,15 @@ document.querySelectorAll(".tab").forEach((tab) => {
 
 // Save Avatar Configuration to Firestore
 async function saveAvatarConfig() {
-    const user = auth.currentUser;
-    if (!user) return;
-    const userRef = doc(db, "users", user.uid);
-    await updateDoc(userRef, { avatarConfig: currentAvatarConfig });
+    try {
+        const user = auth.currentUser;
+        if (!user) return;
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, { avatarConfig: currentAvatarConfig });
+        console.log("Avatar configuration saved successfully!");
+    } catch (error) {
+        console.error("Error saving avatar configuration:", error.message);
+    }
 }
 
 // Update Avatar Display
@@ -100,13 +110,25 @@ function getLayerZIndex(layer) {
     return order.indexOf(layer) + 1;
 }
 
-// Initialize
+// Initialize and Load User Data
 auth.onAuthStateChanged(async (user) => {
     if (user) {
-        const userRef = doc(db, "users", user.uid);
-        const userData = await getDoc(userRef);
-        currentAvatarConfig = userData.exists() ? userData.data().avatarConfig || {} : {};
-        updateAvatar(currentAvatarConfig);
-        displayCustomisationOptions("hair"); // Default tab
+        try {
+            const userRef = doc(db, "users", user.uid);
+            const userData = await getDoc(userRef);
+
+            if (userData.exists()) {
+                currentAvatarConfig = userData.data().avatarConfig || {};
+                updateAvatar(currentAvatarConfig);
+                displayCustomisationOptions("hair"); // Default tab
+            } else {
+                console.error("User data not found.");
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error.message);
+        }
+    } else {
+        console.log("No user signed in. Redirecting to login...");
+        window.location.href = "login.html";
     }
 });
