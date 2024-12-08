@@ -29,10 +29,6 @@ body, html {
 
 /* Avatar Section */
 .avatar-section {
-    margin: 20px 0;
-}
-
-.avatar-section {
     text-align: center;
     margin-top: 20px;
 }
@@ -41,16 +37,20 @@ body, html {
     position: relative;
     width: 480px; /* Adjust to desired size */
     height: 480px; /* Make the container square for better proportions */
-    margin: auto; /* Center the avatar on the page */
+    margin: auto; /* Center the container on the page */
     background-color: transparent;
+    display: flex; /* Flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
 }
 
 #avatar-container img {
     position: absolute;
-    width: 100%; /* Ensure images scale to container size */
-    height: 100%; /* Ensure images scale to container size */
+    max-width: 100%; /* Ensure images scale to fit within the container */
+    max-height: 100%; /* Ensure images scale proportionally */
     object-fit: contain; /* Maintain aspect ratio */
 }
+
 
 
 
