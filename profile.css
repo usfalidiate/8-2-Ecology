@@ -85,7 +85,7 @@ body, html {
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
-    flex-wrap: wrap; /* Ensure all tabs are visible on smaller screens */
+    flex-wrap: wrap;
 }
 
 .tab {
@@ -96,7 +96,7 @@ body, html {
     border: none;
     cursor: pointer;
     border-radius: 5px;
-    flex: 1; /* Equal tab width */
+    flex: 1;
     max-width: 120px;
     text-align: center;
 }
@@ -111,7 +111,7 @@ body, html {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 10px;
     overflow-y: auto; /* Allow scrolling */
-    flex-grow: 1; /* Ensure grid fills available space */
+    flex-grow: 1;
 }
 
 .grid-item {
