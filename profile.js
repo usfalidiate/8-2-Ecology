@@ -2,7 +2,7 @@ import { db, auth } from "./firebase-config.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
-let currentAvatarConfig = {}; // Track the full state of the avatar configuration
+let currentAvatarConfig = {}; // Full state of the avatar configuration
 
 // Load customisation options from JSON
 async function loadCustomisationOptions() {
@@ -45,7 +45,7 @@ async function displayUserData() {
 
                 // Set avatar parts
                 currentAvatarConfig = userData.avatarConfig || {}; // Load current avatar configuration
-                updateAvatar(currentAvatarConfig);
+                updateAvatar(currentAvatarConfig); // Display avatar
                 populateDropdowns(currentAvatarConfig); // Sync dropdowns with current avatarConfig
             }
         } else {
@@ -114,12 +114,16 @@ async function populateDropdowns(currentConfig) {
                 const optionElement = document.createElement("option");
                 optionElement.value = option.file;
                 optionElement.textContent = option.label;
+
+                // Set selected option to match current configuration
                 if (currentConfig[category] === `assets/${category}/${option.file}`) {
-                    optionElement.selected = true; // Match dropdown to current config
+                    optionElement.selected = true;
                 }
+
                 selectElement.appendChild(optionElement);
             });
 
+            // Add change listener to update avatar
             selectElement.addEventListener("change", () => {
                 currentAvatarConfig[category] = `assets/${category}/${selectElement.value}`; // Update config
                 updateAvatar(currentAvatarConfig); // Update avatar preview
