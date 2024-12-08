@@ -116,3 +116,87 @@ body, html {
     background-color: #d62828;
 }
 
+/* Modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    color: black;
+}
+
+/* Tabs */
+.tab-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.tab.active {
+    background: #2E7D32;
+}
+
+/* Grid */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.grid-item {
+    position: relative;
+    border: 2px solid transparent;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    background: #f4f4f4;
+}
+
+.grid-item.selected {
+    border-color: green;
+}
+
+.grid-item img {
+    width: 100%;
+    height: auto;
+}
+
+.grid-item .tick {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background: url('assets/tick-icon.png') no-repeat center;
+    background-size: cover;
+    display: none;
+}
+
+.grid-item.selected .tick {
+    display: block;
+}
+
