@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Attempting to log in...");
             await signInWithEmailAndPassword(auth, email, password);
             console.log("Login successful!");
-            window.location.href = "profile.html"; // Redirect on success
+            window.location.href = "home.html"; // Redirect on success
         } catch (error) {
             console.error("Error during login:", error);
             document.getElementById("error-message").innerText = error.message;
