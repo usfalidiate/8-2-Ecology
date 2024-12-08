@@ -23,14 +23,6 @@ body, html {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Avatar and Customisation Container */
-.avatar-customisation-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    margin-top: 20px;
-}
-
 /* Avatar Section */
 .avatar-section {
     text-align: center;
@@ -57,45 +49,56 @@ body, html {
 
 /* Modal */
 .modal {
-    background: rgba(0, 0, 0, 0.8);
-    width: 600px; /* Adjust width */
-    max-height: 90%;
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 80%;
+    height: 80%;
+    background: rgba(0, 0, 0, 0.9);
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    z-index: 10;
     overflow: hidden;
 }
 
 .modal.visible {
-    display: block;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Modal Content */
 .modal-content {
     background: #ffffff;
     color: black;
-    width: 100%;
     height: 100%;
     border-radius: 10px;
     padding: 20px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 /* Tabs */
 .tab-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    flex-wrap: wrap; /* Ensure all tabs are visible on smaller screens */
 }
 
 .tab {
     padding: 10px 20px;
-    margin: 0 5px;
+    margin: 5px;
     background: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    flex: 1; /* Equal tab width */
+    max-width: 120px;
+    text-align: center;
 }
 
 .tab.active {
@@ -107,8 +110,8 @@ body, html {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 10px;
-    overflow-y: auto;
-    max-height: 300px; /* Limit height */
+    overflow-y: auto; /* Allow scrolling */
+    flex-grow: 1; /* Ensure grid fills available space */
 }
 
 .grid-item {
