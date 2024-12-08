@@ -13,8 +13,8 @@
         <!-- Avatar Section -->
         <div class="avatar-section">
             <h2>Avatar</h2>
-            <div id="avatar-container">
-                <!-- Avatar layers dynamically generated -->
+            <div id="avatar-container" style="position: relative; width: 1920px; height: 1080px;">
+                <!-- Avatar layers will be dynamically added here -->
             </div>
         </div>
         
@@ -24,26 +24,35 @@
             <p id="badges"><strong>Badges:</strong> Loading...</p>
         </div>
         
-        <!-- Avatar Customisation Controls -->
-        <div class="avatar-controls">
+        <!-- Customisation Controls -->
+        <div class="customisation-controls">
             <h3>Customise Avatar</h3>
-            <label for="pants-select">Select Pants:</label>
-            <select id="pants-select">
-                <option value="DarkGreyPants.png">Dark Grey Pants</option>
-                <option value="BrownPants.png">Brown Pants</option>
-            </select>
-            
-            <label for="skin-select">Select Skin Tone:</label>
-            <select id="skin-select">
-                <option value="PaleSkin.png">Pale Skin</option>
-                <option value="DarkerSkin.png">Darker Skin</option>
-            </select>
+            <label for="skin-select">Skin Tone:</label>
+            <select id="skin-select"></select>
+
+            <label for="pants-select">Pants:</label>
+            <select id="pants-select"></select>
+
+            <label for="tops-select">Tops:</label>
+            <select id="tops-select"></select>
+
+            <label for="eyes-select">Eyes:</label>
+            <select id="eyes-select"></select>
+
+            <label for="mouth-select">Mouth:</label>
+            <select id="mouth-select"></select>
+
+            <label for="face-select">Face:</label>
+            <select id="face-select"></select>
+
+            <label for="hair-select">Hair:</label>
+            <select id="hair-select"></select>
+
+            <label for="shoes-select">Shoes:</label>
+            <select id="shoes-select"></select>
         </div>
 
-        <!-- Back Button -->
-        <button class="back-button" onclick="location.href='home.html';">Back to Home</button>
-        <button id="logout-button" class="logout-button">Log Out</button>
-
+        <button id="logout-button">Log Out</button>
     </div>
 
     <script type="module" src="profile.js"></script>
