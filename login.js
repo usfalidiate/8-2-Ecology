@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             console.log("User registered and data saved to Firestore successfully!");
-            window.location.href = "profile.html"; // Redirect on success
+            window.location.href = "home.html"; // Redirect on success
         } catch (error) {
             console.error("Error during registration:", error);
 
