@@ -4,12 +4,16 @@ import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.
 let currentAvatarConfig = {}; // Tracks the current avatar configuration
 
 // Open and Close Modal
-document.getElementById("customise-avatar-button").addEventListener("click", () => {
-    document.getElementById("customisation-modal").classList.add("visible");
+const modal = document.getElementById("customisation-modal");
+const customiseButton = document.getElementById("customise-avatar-button");
+const closeModalButton = document.getElementById("close-modal-button");
+
+customiseButton.addEventListener("click", () => {
+    modal.classList.add("visible");
 });
 
-document.getElementById("close-modal-button").addEventListener("click", () => {
-    document.getElementById("customisation-modal").classList.remove("visible");
+closeModalButton.addEventListener("click", () => {
+    modal.classList.remove("visible");
 });
 
 // Load Customisation Options
