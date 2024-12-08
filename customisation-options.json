@@ -1,0 +1,74 @@
+{
+  "customisationOptions": {
+    "base": [
+      {
+        "name": "Default Avatar",
+        "file": "Avatar.png"
+      }
+    ],
+    "skin": [
+      {
+        "name": "Pale Skin",
+        "file": "PaleSkin.png"
+      },
+      {
+        "name": "Darker Skin",
+        "file": "DarkerSkin.png"
+      }
+    ],
+    "face": [
+      {
+        "name": "Blue Eyes and Pink Mouth Face",
+        "file": "BlueEyesPinkMouthFace.png"
+      }
+    ],
+    "eyes": [
+      {
+        "name": "Blue Eyes",
+        "file": "BlueEyes.png"
+      }
+    ],
+    "mouth": [
+      {
+        "name": "Red Mouth",
+        "file": "RedMouth.png"
+      }
+    ],
+    "hair": [
+      {
+        "name": "Short Brown Hair",
+        "file": "ShortBrownHair.png"
+      },
+      {
+        "name": "Long Black Hair",
+        "file": "LongBlackHair.png"
+      }
+    ],
+    "tops": [
+      {
+        "name": "Green Top",
+        "file": "GreenTop.png"
+      },
+      {
+        "name": "Orange Top",
+        "file": "OrangeTop.png"
+      }
+    ],
+    "pants": [
+      {
+        "name": "Dark Grey Pants",
+        "file": "DarkGreyPants.png"
+      },
+      {
+        "name": "Brown Pants",
+        "file": "BrownPants.png"
+      }
+    ],
+    "shoes": [
+      {
+        "name": "Red Shoes",
+        "file": "RedShoes.png"
+      }
+    ]
+  }
+}
