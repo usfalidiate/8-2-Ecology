@@ -21,10 +21,11 @@ body, html {
     padding: 20px;
     background: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
-    width: 90%; /* Expand container width for a larger avatar */
-    max-width: 1200px;
+    width: 80%; /* Reduce width for better fit */
+    max-width: 1000px; /* Limit max width */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
+
 
 /* Avatar Section */
 .avatar-section {
@@ -38,17 +39,19 @@ body, html {
 
 #avatar-container {
     position: relative;
-    width: 480px; /* Scale to fit the screen */
-    height: 270px; /* Maintain aspect ratio 1920x1080 scaled down */
-    margin: 0 auto;
+    width: 480px; /* Adjust to desired size */
+    height: 480px; /* Make the container square for better proportions */
+    margin: auto; /* Center the avatar on the page */
     background-color: transparent;
 }
 
 #avatar-container img {
     position: absolute;
-    width: 100%; /* Ensure layers scale to container size */
-    height: 100%; /* Maintain aspect ratio */
+    width: 100%; /* Ensure images scale to container size */
+    height: 100%; /* Ensure images scale to container size */
+    object-fit: contain; /* Maintain aspect ratio */
 }
+
 
 
 .avatar {
