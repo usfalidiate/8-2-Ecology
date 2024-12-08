@@ -35,21 +35,22 @@ body, html {
 
 #avatar-container {
     position: relative;
-    width: 480px; /* Adjust to desired size */
-    height: 480px; /* Make the container square for better proportions */
-    margin: auto; /* Center the container on the page */
+    width: 480px;
+    height: 480px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: transparent;
-    display: flex; /* Flexbox for centering */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
 }
 
 #avatar-container img {
-    position: absolute;
-    max-width: 100%; /* Ensure images scale to fit within the container */
-    max-height: 100%; /* Ensure images scale proportionally */
-    object-fit: contain; /* Maintain aspect ratio */
+    position: relative; /* Change from absolute to relative */
+    max-width: 100%; /* Ensure images scale to fit the container */
+    max-height: 100%; /* Maintain aspect ratio */
+    object-fit: contain; /* Keep the proportions of the avatar layers */
 }
+
 
 
 
