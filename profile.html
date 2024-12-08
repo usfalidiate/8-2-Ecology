@@ -10,37 +10,11 @@
     <div class="profile-container">
         <h1>Your Profile</h1>
 
-        <!-- Avatar and Customisation Section -->
-        <div class="avatar-customisation-container">
-            <!-- Avatar Section -->
-            <div class="avatar-section">
-                <h2>Avatar</h2>
-                <div id="avatar-container"></div>
-                <button id="customise-avatar-button">Customise Avatar</button>
-            </div>
-
-            <!-- Customisation Modal -->
-            <div id="customisation-modal" class="modal">
-                <div class="modal-content">
-                    <button id="close-modal-button" class="close-modal">×</button>
-                    <h2>Customise Avatar</h2>
-
-                    <!-- Tabs for Categories -->
-                    <div class="tab-container">
-                        <button data-category="hair" class="tab active">Hair</button>
-                        <button data-category="skin" class="tab">Skin</button>
-                        <button data-category="eyes" class="tab">Eyes</button>
-                        <button data-category="face" class="tab">Face</button>
-                        <button data-category="mouth" class="tab">Mouth</button>
-                        <button data-category="shoes" class="tab">Shoes</button>
-                        <button data-category="pants" class="tab">Pants</button>
-                        <button data-category="tops" class="tab">Tops</button>
-                    </div>
-
-                    <!-- Grid for Customisation Options -->
-                    <div id="customisation-grid" class="grid-container"></div>
-                </div>
-            </div>
+        <!-- Avatar Section -->
+        <div class="avatar-section">
+            <h2>Avatar</h2>
+            <div id="avatar-container"></div>
+            <button id="customise-avatar-button">Customise Avatar</button>
         </div>
 
         <!-- Stats Section -->
@@ -51,6 +25,29 @@
 
         <button id="logout-button">Log Out</button>
         <button class="back-button" onclick="location.href='home.html';">Back to Home</button>
+    </div>
+
+    <!-- Customisation Modal -->
+    <div id="customisation-modal" class="modal hidden">
+        <div class="modal-content">
+            <button id="close-modal-button" class="close-modal">×</button>
+            <h2>Customise Avatar</h2>
+
+            <!-- Tabs for Categories -->
+            <div class="tab-container">
+                <button data-category="hair" class="tab active">Hair</button>
+                <button data-category="skin" class="tab">Skin</button>
+                <button data-category="eyes" class="tab">Eyes</button>
+                <button data-category="face" class="tab">Face</button>
+                <button data-category="mouth" class="tab">Mouth</button>
+                <button data-category="shoes" class="tab">Shoes</button>
+                <button data-category="pants" class="tab">Pants</button>
+                <button data-category="tops" class="tab">Tops</button>
+            </div>
+
+            <!-- Grid for Customisation Options -->
+            <div id="customisation-grid" class="grid-container"></div>
+        </div>
     </div>
 
     <script type="module" src="profile.js"></script>
