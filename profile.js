@@ -56,7 +56,6 @@ async function displayUserData() {
 function updateAvatar(avatarConfig) {
     const avatarContainer = document.getElementById("avatar-container");
 
-    // Default configuration
     const defaultConfig = {
         base: "assets/base/Avatar.png",
         skin: "assets/skin/PaleSkin.png",
@@ -84,7 +83,7 @@ function getLayerZIndex(layer) {
 }
 
 // Save Avatar Configuration to Firestore
-async function saveAvatarConfig(config) {
+async function saveAvatarConfig(newConfig) {
     try {
         const user = auth.currentUser;
         if (!user) {
@@ -93,8 +92,16 @@ async function saveAvatarConfig(config) {
         }
 
         const userRef = doc(db, "users", user.uid);
-        await updateDoc(userRef, { avatarConfig: config });
+        const userDoc = await getDoc(userRef);
+
+        const existingConfig = userDoc.exists() ? userDoc.data().avatarConfig || {} : {};
+        const updatedConfig = { ...existingConfig, ...newConfig };
+
+        await updateDoc(userRef, { avatarConfig: updatedConfig });
         console.log("Avatar configuration saved successfully!");
+
+        // Update the avatar preview
+        updateAvatar(updatedConfig);
     } catch (error) {
         console.error("Error saving avatar configuration:", error.message);
     }
@@ -115,26 +122,13 @@ async function populateCustomisationOptions() {
                 selectElement.appendChild(optionElement);
             });
 
-            selectElement.addEventListener("change", () => {
+            selectElement.addEventListener("change", async () => {
                 const newConfig = { [category]: `assets/${category}/${selectElement.value}` };
-                updateAvatar(newConfig);
+                await saveAvatarConfig(newConfig); // Save and preview changes
             });
         }
     });
 }
-
-// Handle Save Button
-document.getElementById("save-button").addEventListener("click", async () => {
-    const config = {};
-    document.querySelectorAll("select").forEach((select) => {
-        const category = select.id.split("-")[0]; // Extract category from select ID
-        const value = select.value;
-        config[category] = `assets/${category}/${value}`;
-    });
-
-    updateAvatar(config);
-    await saveAvatarConfig(config);
-});
 
 // Log Out Function
 document.getElementById("logout-button").addEventListener("click", async () => {
