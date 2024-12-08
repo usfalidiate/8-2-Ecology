@@ -18,9 +18,17 @@ body, html {
     padding: 20px;
     background: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
-    width: 80%;
-    max-width: 1000px;
+    width: 90%;
+    max-width: 1200px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Avatar and Customisation Container */
+.avatar-customisation-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: 20px;
 }
 
 /* Avatar Section */
@@ -47,66 +55,18 @@ body, html {
     object-fit: contain;
 }
 
-/* Stats Section */
-.stats-section {
-    margin: 20px 0;
-}
-
-.stats-section p {
-    margin: 5px 0;
-    font-size: 18px;
-}
-
-/* Back Button */
-.back-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #F44336;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.back-button:hover {
-    background-color: #D32F2F;
-}
-
-.logout-button {
-    background-color: #e63946;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 14px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-}
-
-.logout-button:hover {
-    background-color: #d62828;
-}
-
-/* Customisation Modal */
+/* Modal */
 .modal {
-    display: none;
-    position: fixed;
-    top: 10%;
-    left: 10%;
-    width: 80%;
-    height: 80%;
-    background: rgba(0, 0, 0, 0.9);
-    justify-content: center;
-    align-items: center;
+    background: rgba(0, 0, 0, 0.8);
+    width: 600px; /* Adjust width */
+    max-height: 90%;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    z-index: 10;
     overflow: hidden;
 }
 
 .modal.visible {
-    display: flex;
+    display: block;
 }
 
 /* Modal Content */
@@ -148,6 +108,7 @@ body, html {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 10px;
     overflow-y: auto;
+    max-height: 300px; /* Limit height */
 }
 
 .grid-item {
