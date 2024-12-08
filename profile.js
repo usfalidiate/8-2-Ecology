@@ -5,7 +5,7 @@ import { signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth
 // Load customisation options from JSON
 async function loadCustomisationOptions() {
     try {
-        const response = await fetch("assets/customization-options.json");
+        const response = await fetch("assets/customisation-options.json");
         const data = await response.json();
         return data;
     } catch (error) {
