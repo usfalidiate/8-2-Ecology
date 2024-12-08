@@ -8,7 +8,7 @@ document.getElementById("customise-avatar-button").addEventListener("click", () 
     document.getElementById("customisation-modal").classList.add("visible");
 });
 
-document.getElementById("close-modal").addEventListener("click", () => {
+document.getElementById("close-modal-button").addEventListener("click", () => {
     document.getElementById("customisation-modal").classList.remove("visible");
 });
 
