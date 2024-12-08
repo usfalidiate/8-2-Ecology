@@ -1,74 +1,30 @@
 {
-  "customisationOptions": {
-    "base": [
-      {
-        "name": "Default Avatar",
-        "file": "Avatar.png"
-      }
-    ],
     "skin": [
-      {
-        "name": "Pale Skin",
-        "file": "PaleSkin.png"
-      },
-      {
-        "name": "Darker Skin",
-        "file": "DarkerSkin.png"
-      }
-    ],
-    "face": [
-      {
-        "name": "Blue Eyes and Pink Mouth Face",
-        "file": "BlueEyesPinkMouthFace.png"
-      }
-    ],
-    "eyes": [
-      {
-        "name": "Blue Eyes",
-        "file": "BlueEyes.png"
-      }
-    ],
-    "mouth": [
-      {
-        "name": "Red Mouth",
-        "file": "RedMouth.png"
-      }
-    ],
-    "hair": [
-      {
-        "name": "Short Brown Hair",
-        "file": "ShortBrownHair.png"
-      },
-      {
-        "name": "Long Black Hair",
-        "file": "LongBlackHair.png"
-      }
-    ],
-    "tops": [
-      {
-        "name": "Green Top",
-        "file": "GreenTop.png"
-      },
-      {
-        "name": "Orange Top",
-        "file": "OrangeTop.png"
-      }
+        { "file": "PaleSkin.png", "label": "Pale Skin" },
+        { "file": "DarkerSkin.png", "label": "Darker Skin" }
     ],
     "pants": [
-      {
-        "name": "Dark Grey Pants",
-        "file": "DarkGreyPants.png"
-      },
-      {
-        "name": "Brown Pants",
-        "file": "BrownPants.png"
-      }
+        { "file": "DarkGreyPants.png", "label": "Dark Grey Pants" },
+        { "file": "BrownPants.png", "label": "Brown Pants" }
+    ],
+    "tops": [
+        { "file": "GreenTop.png", "label": "Green Top" },
+        { "file": "OrangeTop.png", "label": "Orange Top" }
+    ],
+    "eyes": [
+        { "file": "BlueEyes.png", "label": "Blue Eyes" }
+    ],
+    "mouth": [
+        { "file": "RedMouth.png", "label": "Red Mouth" }
+    ],
+    "face": [
+        { "file": "BlueEyesPinkMouthFace.png", "label": "Blue Eyes and Pink Mouth Face" }
+    ],
+    "hair": [
+        { "file": "ShortBrownHair.png", "label": "Short Brown Hair" },
+        { "file": "LongBlackHair.png", "label": "Long Black Hair" }
     ],
     "shoes": [
-      {
-        "name": "Red Shoes",
-        "file": "RedShoes.png"
-      }
+        { "file": "RedShoes.png", "label": "Red Shoes" }
     ]
-  }
 }
