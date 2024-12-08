@@ -9,10 +9,14 @@
     ],
     "tops": [
         { "file": "GreenTop.png", "label": "Green Top" },
-        { "file": "OrangeTop.png", "label": "Orange Top" }
+        { "file": "OrangeTop.png", "label": "Orange Top" },
+        { "file": "TurquoiseTop.png", "label": "Turquoise Top" }
+
     ],
     "eyes": [
-        { "file": "BlueEyes.png", "label": "Blue Eyes" }
+        { "file": "BlueEyes.png", "label": "Blue Eyes" },
+        { "file": "GreenEyes.png", "label": "Green Eyes" }
+
     ],
     "mouth": [
         { "file": "RedMouth.png", "label": "Red Mouth" }
@@ -22,9 +26,13 @@
     ],
     "hair": [
         { "file": "ShortBrownHair.png", "label": "Short Brown Hair" },
-        { "file": "LongBlackHair.png", "label": "Long Black Hair" }
+        { "file": "LongBlackHair.png", "label": "Long Black Hair" },
+        { "file": "ShortYellowHair.png", "label": "Short Yellow Hair" },
+        { "file": "LongYellowHair.png", "label": "Long Yellow Hair" }
     ],
     "shoes": [
-        { "file": "RedShoes.png", "label": "Red Shoes" }
+        { "file": "RedShoes.png", "label": "Red Shoes" },
+        { "file": "BlueShoes.png", "label": "Blue Shoes" }
+
     ]
 }
