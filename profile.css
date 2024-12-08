@@ -18,8 +18,8 @@ body, html {
     padding: 20px;
     background: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
-    width: 80%; /* Reduce width for better fit */
-    max-width: 1000px; /* Limit max width */
+    width: 80%;
+    max-width: 1000px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -42,34 +42,9 @@ body, html {
 
 #avatar-container img {
     position: relative;
-    max-width: 100%; /* Ensure images scale to fit the container */
-    max-height: 100%; /* Maintain aspect ratio */
-    object-fit: contain; /* Keep the proportions of the avatar layers */
-}
-
-/* Avatar */
-.avatar {
-    width: 80%;
-    max-width: 1000px; /* Prevent the avatar from becoming excessively large */
-    height: auto;
-    border: 5px solid white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-}
-
-.change-avatar {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #008CBA;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.change-avatar:hover {
-    background-color: #005f73;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 /* Stats Section */
@@ -113,9 +88,9 @@ body, html {
     background-color: #d62828;
 }
 
-/* Modal */
+/* Customisation Modal */
 .modal {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     top: 10%;
     left: 10%;
@@ -225,4 +200,20 @@ body, html {
 
 .close-modal:hover {
     background-color: #D32F2F;
+}
+
+/* Customise Avatar Button */
+#customise-avatar-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#customise-avatar-button:hover {
+    background-color: #005f73;
 }
