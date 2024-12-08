@@ -2,6 +2,8 @@ import { db, auth } from "./firebase-config.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
+let currentAvatarConfig = {}; // Track the full state of the avatar configuration
+
 // Load customisation options from JSON
 async function loadCustomisationOptions() {
     try {
@@ -42,9 +44,9 @@ async function displayUserData() {
                 document.getElementById("badges").innerHTML = `<strong>Badges:</strong> ${userData.badges.join(", ")}`;
 
                 // Set avatar parts
-                const avatarConfig = userData.avatarConfig || {};
-                updateAvatar(avatarConfig);
-                populateDropdowns(avatarConfig); // Sync dropdowns with current avatarConfig
+                currentAvatarConfig = userData.avatarConfig || {}; // Load current avatar configuration
+                updateAvatar(currentAvatarConfig);
+                populateDropdowns(currentAvatarConfig); // Sync dropdowns with current avatarConfig
             }
         } else {
             console.log("No user signed in. Redirecting to login...");
@@ -61,7 +63,7 @@ function updateAvatar(avatarConfig) {
         base: "assets/base/Avatar.png",
     };
 
-    const config = { ...defaultConfig, ...avatarConfig };
+    const config = { ...defaultConfig, ...avatarConfig }; // Merge default with current avatarConfig
 
     avatarContainer.innerHTML = "";
 
@@ -83,7 +85,7 @@ function getLayerZIndex(layer) {
 }
 
 // Save Avatar Configuration
-async function saveAvatarConfig(newConfig) {
+async function saveAvatarConfig() {
     try {
         const user = auth.currentUser;
         if (!user) {
@@ -92,16 +94,7 @@ async function saveAvatarConfig(newConfig) {
         }
 
         const userRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userRef);
-
-        if (!userDoc.exists()) {
-            console.error("User document does not exist in Firestore.");
-            return;
-        }
-
-        const existingConfig = userDoc.data().avatarConfig || {};
-        const updatedConfig = { ...existingConfig, ...newConfig };
-        await updateDoc(userRef, { avatarConfig: updatedConfig });
+        await updateDoc(userRef, { avatarConfig: currentAvatarConfig });
         console.log("Avatar configuration saved successfully!");
     } catch (error) {
         console.error("Error saving avatar configuration:", error.message);
@@ -128,9 +121,9 @@ async function populateDropdowns(currentConfig) {
             });
 
             selectElement.addEventListener("change", () => {
-                const newConfig = { [category]: `assets/${category}/${selectElement.value}` };
-                updateAvatar(newConfig);
-                saveAvatarConfig(newConfig); // Save to Firestore when changed
+                currentAvatarConfig[category] = `assets/${category}/${selectElement.value}`; // Update config
+                updateAvatar(currentAvatarConfig); // Update avatar preview
+                saveAvatarConfig(); // Save updated config to Firestore
             });
         }
     });
