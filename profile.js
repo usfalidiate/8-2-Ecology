@@ -43,8 +43,8 @@ async function displayUserData() {
                 document.getElementById("synapse-points").innerHTML = `<strong>Synapse Points (SP):</strong> ${userData.synapsePoints}`;
                 document.getElementById("badges").innerHTML = `<strong>Badges:</strong> ${userData.badges.join(", ")}`;
 
-                // Set avatar parts
-                currentAvatarConfig = userData.avatarConfig || {}; // Load current avatar configuration
+                // Load current avatar configuration
+                currentAvatarConfig = userData.avatarConfig || {};
                 updateAvatar(currentAvatarConfig); // Display avatar
                 populateDropdowns(currentAvatarConfig); // Sync dropdowns with current avatarConfig
             }
@@ -65,16 +65,19 @@ function updateAvatar(avatarConfig) {
 
     const config = { ...defaultConfig, ...avatarConfig }; // Merge default with current avatarConfig
 
-    avatarContainer.innerHTML = "";
+    avatarContainer.innerHTML = ""; // Clear previous layers
 
+    // Add avatar layers dynamically
     Object.entries(config).forEach(([layer, src]) => {
-        const img = document.createElement("img");
-        img.src = src;
-        img.style.position = "absolute";
-        img.style.width = "100%";
-        img.style.height = "100%";
-        img.style.zIndex = getLayerZIndex(layer);
-        avatarContainer.appendChild(img);
+        if (src) { // Only add layers that have a valid source
+            const img = document.createElement("img");
+            img.src = src;
+            img.style.position = "absolute";
+            img.style.width = "100%";
+            img.style.height = "100%";
+            img.style.zIndex = getLayerZIndex(layer);
+            avatarContainer.appendChild(img);
+        }
     });
 }
 
@@ -125,7 +128,8 @@ async function populateDropdowns(currentConfig) {
 
             // Add change listener to update avatar
             selectElement.addEventListener("change", () => {
-                currentAvatarConfig[category] = `assets/${category}/${selectElement.value}`; // Update config
+                // Update only the selected category in the current config
+                currentAvatarConfig[category] = `assets/${category}/${selectElement.value}`;
                 updateAvatar(currentAvatarConfig); // Update avatar preview
                 saveAvatarConfig(); // Save updated config to Firestore
             });
