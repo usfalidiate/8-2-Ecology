@@ -44,6 +44,7 @@ async function displayUserData() {
                 // Set avatar parts
                 const avatarConfig = userData.avatarConfig || {};
                 updateAvatar(avatarConfig);
+                populateDropdowns(avatarConfig); // Sync dropdowns with current avatarConfig
             }
         } else {
             console.log("No user signed in. Redirecting to login...");
@@ -52,13 +53,12 @@ async function displayUserData() {
     });
 }
 
-// Update Avatar Preview
+// Update Avatar Layers
 function updateAvatar(avatarConfig) {
     const avatarContainer = document.getElementById("avatar-container");
 
     const defaultConfig = {
         base: "assets/base/Avatar.png",
-        skin: "assets/skin/PaleSkin.png",
     };
 
     const config = { ...defaultConfig, ...avatarConfig };
@@ -78,11 +78,11 @@ function updateAvatar(avatarConfig) {
 
 // Map layers to z-index
 function getLayerZIndex(layer) {
-    const layerOrder = ["skin", "pants", "tops", "face", "mouth", "eyes", "hair", "shoes"];
+    const layerOrder = ["base", "skin", "pants", "tops", "face", "mouth", "eyes", "hair", "shoes"];
     return layerOrder.indexOf(layer) + 1;
 }
 
-// Save Avatar Configuration to Firestore
+// Save Avatar Configuration
 async function saveAvatarConfig(newConfig) {
     try {
         const user = auth.currentUser;
@@ -94,37 +94,43 @@ async function saveAvatarConfig(newConfig) {
         const userRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userRef);
 
-        const existingConfig = userDoc.exists() ? userDoc.data().avatarConfig || {} : {};
-        const updatedConfig = { ...existingConfig, ...newConfig };
+        if (!userDoc.exists()) {
+            console.error("User document does not exist in Firestore.");
+            return;
+        }
 
+        const existingConfig = userDoc.data().avatarConfig || {};
+        const updatedConfig = { ...existingConfig, ...newConfig };
         await updateDoc(userRef, { avatarConfig: updatedConfig });
         console.log("Avatar configuration saved successfully!");
-
-        // Update the avatar preview
-        updateAvatar(updatedConfig);
     } catch (error) {
         console.error("Error saving avatar configuration:", error.message);
     }
 }
 
-// Populate Customisation Options
-async function populateCustomisationOptions() {
+// Populate Customisation Options and Sync Dropdowns
+async function populateDropdowns(currentConfig) {
     const options = await loadCustomisationOptions();
     if (!options) return;
 
     Object.keys(options).forEach((category) => {
         const selectElement = document.getElementById(`${category}-select`);
         if (selectElement) {
+            selectElement.innerHTML = ""; // Clear existing options
             options[category].forEach((option) => {
                 const optionElement = document.createElement("option");
                 optionElement.value = option.file;
                 optionElement.textContent = option.label;
+                if (currentConfig[category] === `assets/${category}/${option.file}`) {
+                    optionElement.selected = true; // Match dropdown to current config
+                }
                 selectElement.appendChild(optionElement);
             });
 
-            selectElement.addEventListener("change", async () => {
+            selectElement.addEventListener("change", () => {
                 const newConfig = { [category]: `assets/${category}/${selectElement.value}` };
-                await saveAvatarConfig(newConfig); // Save and preview changes
+                updateAvatar(newConfig);
+                saveAvatarConfig(newConfig); // Save to Firestore when changed
             });
         }
     });
@@ -143,4 +149,3 @@ document.getElementById("logout-button").addEventListener("click", async () => {
 
 // Initialize
 displayUserData();
-populateCustomisationOptions();
