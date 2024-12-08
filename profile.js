@@ -17,7 +17,7 @@ async function loadCustomisationOptions() {
 // Fetch User Data
 async function fetchUserData(uid) {
     try {
-        const userRef = doc(db, "users", uid); // Firestore users collection
+        const userRef = doc(db, "users", uid);
         const userDoc = await getDoc(userRef);
 
         if (userDoc.exists()) {
@@ -47,11 +47,12 @@ async function displayUserData() {
             }
         } else {
             console.log("No user signed in. Redirecting to login...");
-            window.location.href = "login.html"; // Redirect if no user is logged in
+            window.location.href = "login.html";
         }
     });
 }
 
+// Update Avatar Preview
 function updateAvatar(avatarConfig) {
     const avatarContainer = document.getElementById("avatar-container");
 
@@ -61,19 +62,16 @@ function updateAvatar(avatarConfig) {
         skin: "assets/skin/PaleSkin.png",
     };
 
-    // Merge user config with defaults
     const config = { ...defaultConfig, ...avatarConfig };
 
-    // Clear previous layers
     avatarContainer.innerHTML = "";
 
-    // Add avatar layers dynamically
     Object.entries(config).forEach(([layer, src]) => {
         const img = document.createElement("img");
         img.src = src;
         img.style.position = "absolute";
-        img.style.width = "100%"; // Ensure images scale to the container size
-        img.style.height = "100%"; // Ensure images scale to the container size
+        img.style.width = "100%";
+        img.style.height = "100%";
         img.style.zIndex = getLayerZIndex(layer);
         avatarContainer.appendChild(img);
     });
@@ -82,11 +80,11 @@ function updateAvatar(avatarConfig) {
 // Map layers to z-index
 function getLayerZIndex(layer) {
     const layerOrder = ["skin", "pants", "tops", "face", "mouth", "eyes", "hair", "shoes"];
-    return layerOrder.indexOf(layer) + 1; // Ensure z-index starts at 1
+    return layerOrder.indexOf(layer) + 1;
 }
 
-// Save Avatar Configuration
-async function saveAvatarConfig(newConfig) {
+// Save Avatar Configuration to Firestore
+async function saveAvatarConfig(config) {
     try {
         const user = auth.currentUser;
         if (!user) {
@@ -95,16 +93,7 @@ async function saveAvatarConfig(newConfig) {
         }
 
         const userRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userRef);
-
-        if (!userDoc.exists()) {
-            console.error("User document does not exist in Firestore.");
-            return;
-        }
-
-        const existingConfig = userDoc.data().avatarConfig || {};
-        const updatedConfig = { ...existingConfig, ...newConfig };
-        await updateDoc(userRef, { avatarConfig: updatedConfig });
+        await updateDoc(userRef, { avatarConfig: config });
         console.log("Avatar configuration saved successfully!");
     } catch (error) {
         console.error("Error saving avatar configuration:", error.message);
@@ -116,7 +105,6 @@ async function populateCustomisationOptions() {
     const options = await loadCustomisationOptions();
     if (!options) return;
 
-    // Populate each category dynamically
     Object.keys(options).forEach((category) => {
         const selectElement = document.getElementById(`${category}-select`);
         if (selectElement) {
@@ -127,22 +115,33 @@ async function populateCustomisationOptions() {
                 selectElement.appendChild(optionElement);
             });
 
-            // Add change listener to update avatar
             selectElement.addEventListener("change", () => {
                 const newConfig = { [category]: `assets/${category}/${selectElement.value}` };
                 updateAvatar(newConfig);
-                saveAvatarConfig(newConfig);
             });
         }
     });
 }
+
+// Handle Save Button
+document.getElementById("save-button").addEventListener("click", async () => {
+    const config = {};
+    document.querySelectorAll("select").forEach((select) => {
+        const category = select.id.split("-")[0]; // Extract category from select ID
+        const value = select.value;
+        config[category] = `assets/${category}/${value}`;
+    });
+
+    updateAvatar(config);
+    await saveAvatarConfig(config);
+});
 
 // Log Out Function
 document.getElementById("logout-button").addEventListener("click", async () => {
     try {
         await signOut(auth);
         console.log("User logged out successfully.");
-        window.location.href = "login.html"; // Redirect to login after logout
+        window.location.href = "login.html";
     } catch (error) {
         console.error("Error during logout:", error.message);
     }
