@@ -23,6 +23,8 @@
         .profile-container {
             display: flex;
             justify-content: space-between; /* Align child elements side by side */
+            align-items: flex-start;
+            gap: 20px;
             padding: 20px;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
@@ -72,6 +74,7 @@
             border-radius: 10px;
             padding: 20px;
             height: 100%;
+            width: 45%;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -179,6 +182,50 @@
         #customise-avatar-button:hover {
             background-color: #005f73;
         }
+
+        /* Stats Section */
+.stats-section {
+    margin-top: 20px;
+    text-align: center;
+    width: 45%; /* Adjust width to match avatar section */
+}
+
+.stats-section p {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+/* Action Buttons */
+.action-button {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #e63946;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.action-button:hover {
+    background-color: #d62828;
+}
+
+.back-button {
+    background-color: #F44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.back-button:hover {
+    background-color: #D32F2F;
+}
+
+        
     </style>
 </head>
 <body>
@@ -188,6 +235,15 @@
             <h2>Avatar</h2>
             <div id="avatar-container"></div>
             <button id="customise-avatar-button">Customise Avatar</button>
+        </div>
+
+                <!-- Stats Section -->
+
+        <div class="stats-section">
+            <p id="synapse-points"><strong>Synapse Points (SP):</strong> Loading...</p>
+            <p id="badges"><strong>Badges:</strong> Loading...</p>
+            <button id="logout-button" class="action-button">Log Out</button>
+            <button class="back-button" onclick="location.href='home.html';">Back to Home</button>
         </div>
 
         <!-- Customisation Modal -->
