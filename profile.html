@@ -4,242 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
-    <style>
-        /* General Reset */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Profile Container */
-        .profile-container {
-            text-align: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            width: 80%; /* Reduce width for better fit */
-            max-width: 1000px; /* Limit max width */
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Avatar Section */
-        .avatar-section {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        #avatar-container {
-            position: relative;
-            width: 480px;
-            height: 480px;
-            margin: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: transparent;
-        }
-
-        #avatar-container img {
-            position: relative;
-            max-width: 100%; /* Ensure images scale to fit the container */
-            max-height: 100%; /* Maintain aspect ratio */
-            object-fit: contain; /* Keep the proportions of the avatar layers */
-        }
-
-        /* Avatar */
-        .avatar {
-            width: 80%;
-            max-width: 1000px; /* Prevent the avatar from becoming excessively large */
-            height: auto;
-            border: 5px solid white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-        }
-
-        /* Buttons */
-        .change-avatar, .logout-button, .back-button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .change-avatar {
-            background-color: #008CBA;
-        }
-
-        .change-avatar:hover {
-            background-color: #005f73;
-        }
-
-        .logout-button {
-            background-color: #e63946;
-            font-size: 14px;
-        }
-
-        .logout-button:hover {
-            background-color: #d62828;
-        }
-
-        .back-button {
-            background-color: #F44336;
-        }
-
-        .back-button:hover {
-            background-color: #D32F2F;
-        }
-
-        /* Modal */
-        .customisation-modal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 10%;
-            left: 10%;
-            width: 80%;
-            height: 80%;
-            background: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            z-index: 10;
-            overflow: hidden;
-        }
-
-        .customisation-modal.visible {
-            display: flex;
-        }
-
-        /* Modal Content */
-        .customisation-modal-content {
-            background: #ffffff;
-            color: black;
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            margin: 0 5px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .tab.active {
-            background: #2E7D32;
-        }
-
-        /* Grid */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            overflow-y: auto;
-        }
-
-        .grid-item {
-            position: relative;
-            border: 2px solid transparent;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            background: #f4f4f4;
-        }
-
-        .grid-item.selected {
-            border-color: green;
-        }
-
-        .grid-item img {
-            width: 100%;
-            height: auto;
-        }
-
-        .grid-item .tick {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 20px;
-            height: 20px;
-            background: url('assets/tick-icon.png') no-repeat center;
-            background-size: cover;
-            display: none;
-        }
-
-        .grid-item.selected .tick {
-            display: block;
-        }
-
-        /* Modal Close Button */
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #F44336;
-            color: white;
-            border: none;
-            font-size: 18px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-        }
-
-        .close-modal:hover {
-            background-color: #D32F2F;
-        }
-    </style>
+    <link rel="stylesheet" href="profile.css">
 </head>
 <body>
     <div class="profile-container">
         <h1>Your Profile</h1>
-
+        <!-- Avatar Section -->
         <div class="avatar-section">
             <h2>Avatar</h2>
             <div id="avatar-container"></div>
-            <button id="customise-button">Customise Avatar</button>
+            <button id="customise-avatar-button">Customise Avatar</button>
         </div>
-
+        <!-- Stats Section -->
         <div class="stats-section">
             <p id="synapse-points"><strong>Synapse Points (SP):</strong> Loading...</p>
             <p id="badges"><strong>Badges:</strong> Loading...</p>
         </div>
-
         <button id="logout-button">Log Out</button>
         <button class="back-button" onclick="location.href='home.html';">Back to Home</button>
     </div>
-
-    <div id="customisation-modal" class="customisation-modal">
-        <div class="customisation-modal-content">
+    <!-- Customisation Modal -->
+    <div id="customisation-modal" class="modal hidden">
+        <div class="modal-content">
             <button id="close-modal-button" class="close-modal">×</button>
             <h2>Customise Avatar</h2>
-
-            <div class="tabs">
+            <!-- Tabs for Categories -->
+            <div class="tab-container">
                 <button data-category="hair" class="tab active">Hair</button>
                 <button data-category="skin" class="tab">Skin</button>
                 <button data-category="eyes" class="tab">Eyes</button>
@@ -249,11 +39,10 @@
                 <button data-category="pants" class="tab">Pants</button>
                 <button data-category="tops" class="tab">Tops</button>
             </div>
-
-            <div class="grid-container" id="customisation-grid"></div>
+            <!-- Grid for Customisation Options -->
+            <div id="customisation-grid" class="grid-container"></div>
         </div>
     </div>
-
     <script type="module" src="profile.js"></script>
 </body>
 </html>
