@@ -258,8 +258,8 @@
         </div>
     </div>
 
-    <script>
-        import { db, auth } from "./firebase-config.js";
+    <script type="module">
+import { db, auth } from "./firebase-config.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
 let currentAvatarConfig = {}; // Tracks the current avatar configuration
