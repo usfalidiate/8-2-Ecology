@@ -6,227 +6,210 @@
     <title>Profile</title>
     <style>
         /* General Reset */
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #4CAF50, #2E7D32);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-/* Profile Container */
-.profile-container {
-    text-align: center;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 10px;
-    width: 90%;
-    max-width: 1200px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-}
+        /* Profile Container */
+        .profile-container {
+            display: flex;
+            justify-content: space-between; /* Align child elements side by side */
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
 
-/* Avatar Section */
-.avatar-section {
-    text-align: center;
-    margin-top: 20px;
-}
+        /* Avatar Section */
+        .avatar-section {
+            width: 45%; /* Take 45% of the container width */
+            text-align: center;
+        }
 
-#avatar-container {
-    position: relative;
-    width: 480px;
-    height: 480px;
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-}
+        #avatar-container {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+        }
 
-#avatar-container img {
-    position: relative;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
+        #avatar-container img {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
 
-/* Modal */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, 0);
-    width: 80%;
-    height: 80%;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    z-index: 10;
-    overflow: hidden;
-}
+        /* Customisation Modal */
+        .modal {
+            display: none; /* Hidden by default */
+            width: 45%; /* Take 45% of the container width */
+        }
 
-.modal.visible {
-    display: flex;
-    flex-direction: column;
-}
+        .modal.visible {
+            display: block;
+        }
 
-/* Modal Content */
-.modal-content {
-    background: #ffffff;
-    color: black;
-    height: 100%;
-    width: 100%;
-    border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
+        /* Modal Content */
+        .modal-content {
+            background: #ffffff;
+            color: black;
+            border-radius: 10px;
+            padding: 20px;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-/* Tabs */
-.tab-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-}
+        /* Tabs */
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
 
-.tab {
-    padding: 10px 20px;
-    margin: 5px;
-    background: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    flex: 1;
-    max-width: 120px;
-    text-align: center;
-}
+        .tab {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            flex: 1;
+            max-width: 120px;
+            text-align: center;
+        }
 
-.tab.active {
-    background: #2E7D32;
-}
+        .tab.active {
+            background: #2E7D32;
+        }
 
-/* Grid */
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 10px;
-    overflow-y: auto; /* Allow scrolling */
-    flex-grow: 1;
-}
+        /* Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            overflow-y: auto; /* Allow scrolling */
+            flex-grow: 1;
+            height: 400px; /* Ensure grid fits modal */
+        }
 
-.grid-item {
-    position: relative;
-    border: 2px solid transparent;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    background: #f4f4f4;
-}
+        .grid-item {
+            position: relative;
+            border: 2px solid transparent;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            background: #f4f4f4;
+        }
 
-.grid-item.selected {
-    border-color: green;
-}
+        .grid-item.selected {
+            border-color: green;
+        }
 
-.grid-item img {
-    width: 100%;
-    height: auto;
-}
+        .grid-item img {
+            width: 100%;
+            height: auto;
+        }
 
-.grid-item .tick {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 20px;
-    height: 20px;
-    background: url('assets/tick-icon.png') no-repeat center;
-    background-size: cover;
-    display: none;
-}
+        .grid-item .tick {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            background: url('assets/tick-icon.png') no-repeat center;
+            background-size: cover;
+            display: none;
+        }
 
-.grid-item.selected .tick {
-    display: block;
-}
+        .grid-item.selected .tick {
+            display: block;
+        }
 
-/* Modal Close Button */
-.close-modal {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #F44336;
-    color: white;
-    border: none;
-    font-size: 18px;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-}
+        /* Modal Close Button */
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #F44336;
+            color: white;
+            border: none;
+            font-size: 18px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
 
-.close-modal:hover {
-    background-color: #D32F2F;
-}
+        .close-modal:hover {
+            background-color: #D32F2F;
+        }
 
-/* Customise Avatar Button */
-#customise-avatar-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #008CBA;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
+        /* Customise Avatar Button */
+        #customise-avatar-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
-#customise-avatar-button:hover {
-    background-color: #005f73;
-}
+        #customise-avatar-button:hover {
+            background-color: #005f73;
+        }
     </style>
 </head>
 <body>
     <div class="profile-container">
-        <h1>Your Profile</h1>
         <!-- Avatar Section -->
         <div class="avatar-section">
             <h2>Avatar</h2>
             <div id="avatar-container"></div>
             <button id="customise-avatar-button">Customise Avatar</button>
         </div>
-        <!-- Stats Section -->
-        <div class="stats-section">
-            <p id="synapse-points"><strong>Synapse Points (SP):</strong> Loading...</p>
-            <p id="badges"><strong>Badges:</strong> Loading...</p>
-        </div>
-        <button id="logout-button">Log Out</button>
-        <button class="back-button" onclick="location.href='home.html';">Back to Home</button>
-    </div>
-    <!-- Customisation Modal -->
-    <div id="customisation-modal" class="modal hidden">
-        <div class="modal-content">
-            <button id="close-modal-button" class="close-modal">×</button>
-            <h2>Customise Avatar</h2>
-            <!-- Tabs for Categories -->
-            <div class="tab-container">
-                <button data-category="hair" class="tab active">Hair</button>
-                <button data-category="skin" class="tab">Skin</button>
-                <button data-category="eyes" class="tab">Eyes</button>
-                <button data-category="face" class="tab">Face</button>
-                <button data-category="mouth" class="tab">Mouth</button>
-                <button data-category="shoes" class="tab">Shoes</button>
-                <button data-category="pants" class="tab">Pants</button>
-                <button data-category="tops" class="tab">Tops</button>
+
+        <!-- Customisation Modal -->
+        <div id="customisation-modal" class="modal">
+            <div class="modal-content">
+                <button id="close-modal-button" class="close-modal">×</button>
+                <h2>Customise Avatar</h2>
+                <div class="tab-container">
+                    <button data-category="hair" class="tab active">Hair</button>
+                    <button data-category="skin" class="tab">Skin</button>
+                    <button data-category="eyes" class="tab">Eyes</button>
+                    <button data-category="face" class="tab">Face</button>
+                    <button data-category="mouth" class="tab">Mouth</button>
+                    <button data-category="shoes" class="tab">Shoes</button>
+                    <button data-category="pants" class="tab">Pants</button>
+                    <button data-category="tops" class="tab">Tops</button>
+                </div>
+                <div id="customisation-grid" class="grid-container"></div>
             </div>
-            <!-- Grid for Customisation Options -->
-            <div id="customisation-grid" class="grid-container"></div>
         </div>
     </div>
+
     <script type="module" src="profile.js"></script>
 </body>
 </html>
