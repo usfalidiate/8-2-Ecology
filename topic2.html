@@ -16,14 +16,35 @@
 
         /* Background Styling */
         .background {
-            background: url('your-image.jpg') no-repeat center center fixed;
+            background: url('/assets/daintreeBG1.jpg') no-repeat center center fixed;
             background-size: cover;
             width: 100%;
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+        }
+
+        /* Navigation Buttons Container */
+        .nav-buttons {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .nav-button:hover {
+            background-color: #45a049;
         }
 
         /* Lesson Buttons Container */
@@ -33,6 +54,7 @@
             justify-content: center;
             gap: 15px;
             max-width: 80%;
+            margin-top: 20px;
         }
 
         /* Lesson Button Styling */
@@ -53,7 +75,15 @@
 </head>
 <body>
     <div class="background">
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="location.href='profile.html';">Profile</button>
+            <button class="nav-button" onclick="location.href='home.html';">Back to Home</button>
+        </div>
+
         <h1>Topic 2</h1>
+
+        <!-- Lesson Buttons -->
         <div class="lesson-buttons">
             <button class="lesson-button">Lesson 1</button>
             <button class="lesson-button">Lesson 2</button>
