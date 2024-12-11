@@ -17,29 +17,28 @@
 
         /* Background Styling */
         .background {
-            background: url('your-image.jpg') no-repeat center center fixed;
-            background-size: cover;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            background: url('your-image.jpg') no-repeat center center fixed; /* Sets the background image, centers it, and fixes it in place */
+            background-size: cover; /* Ensures the background image covers the entire element */
+            width: 100%; /* Sets the width of the background to 100% of its container */
+            height: 100%; /* Sets the height of the background to 100% of its container */
+            display: flex; /* Uses flexbox layout */
+            flex-direction: column; /* Arranges children in a column */
+            justify-content: center; /* Centers children vertically */
+            align-items: center; /* Centers children horizontally */
         }
 
         /* Profile Button */
         .profile-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 10;
+            position: absolute; /* Positions the button absolutely within its nearest positioned ancestor */
+            top: 10px; /* Positions the button 10px from the top of its container */
+            left: 10px; /* Positions the button 10px from the left of its container */
+            padding: 10px 20px; /* Adds padding inside the button */
+            font-size: 16px; /* Sets the font size of the button text */
+            background-color: #4CAF50; /* Sets the background color of the button */
+            color: white; /* Sets the text color of the button */
+            border: none; /* Removes the default border */
+            border-radius: 5px; /* Rounds the corners of the button */
+            cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
         }
         .profile-button:hover {
             background-color: #45a049;
@@ -48,24 +47,32 @@
         /* Topic Buttons Container */
         .topic-buttons {
             display: flex;
-            flex-wrap: wrap; /* Allows buttons to wrap into multiple rows */
-            justify-content: center; /* Centers the buttons horizontally */
-            align-items: center; /* Centers the buttons vertically in their row */
-            gap: 15px; /* Adds space between buttons */
-            max-width: 80%; /* Optional: limits the width of the button area */
+            flex-wrap: wrap; /* Allow buttons to wrap to the next line */
+            justify-content: center; /* Center the buttons horizontally */
+            gap: 20px; /* Add space between buttons */
+            padding: 20px; /* Add padding around the container */
         }
 
         /* Topic Button Styling */
         .topic-button {
-            width: 200px;
-            height: 60px;
+            flex: 0 1 20vw; /* Allow the button to grow and shrink, with a base width of 20vw */
+            min-width: 200px; /* Minimum width to ensure readability */
+            height: 10vw; /* Fixed height */
             background-color: #FF5722;
             color: white;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 1.5vw; /* Responsive font size */
             font-weight: bold;
+            padding: 10px; /* Add padding for better spacing */
+            text-align: center; /* Center the text */
+            overflow: hidden; /* Hide overflow */
+            white-space: normal; /* Allow text to wrap */
+            display: flex; /* Use flexbox for button content */
+            align-items: center; /* Center content vertically */
+            justify-content: center; /* Center content horizontally */
+            text-overflow: ellipsis; /* Add ellipsis (...) for overflow text */
         }
         .topic-button:hover {
             background-color: #E64A19;
@@ -79,14 +86,14 @@
 
         <!-- Topic Buttons -->
         <div class="topic-buttons">
-            <button class="topic-button" onclick="location.href='topic1.html';">Topic 1</button>
-            <button class="topic-button" onclick="location.href='topic2.html';">Topic 2</button>
-            <button class="topic-button" onclick="location.href='topic3.html';">Topic 3</button>
-            <button class="topic-button" onclick="location.href='topic4.html';">Topic 4</button>
-            <button class="topic-button" onclick="location.href='topic5.html';">Topic 5</button>
-            <button class="topic-button" onclick="location.href='topic6.html';">Topic 6</button>
-            <button class="topic-button" onclick="location.href='topic7.html';">Topic 7</button>
-            <button class="topic-button" onclick="location.href='topic8.html';">Topic 8</button>
+            <button class="topic-button" onclick="location.href='topic1.html';">Topic 1: Student Research Project</button>
+            <button class="topic-button" onclick="location.href='topic2.html';">Topic 2: Ecology</button>
+            <button class="topic-button" onclick="location.href='topic3.html';">Topic 3: The Earth</button>
+            <button class="topic-button" onclick="location.href='topic4.html';">Topic 4: Forces</button>
+            <button class="topic-button" onclick="location.href='topic5.html';">Topic 5: Elements, Compounds and Chemical Reactions</button>
+            <button class="topic-button" onclick="location.href='topic6.html';">Topic 6: Inside the Human Body</button>
+            <button class="topic-button" onclick="location.href='topic7.html';">Topic 7: Resources</button>
+            <button class="topic-button" onclick="location.href='topic8.html';">Assessment</button>
         </div>
     </div>
 </body>
