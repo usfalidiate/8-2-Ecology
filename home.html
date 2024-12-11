@@ -46,36 +46,66 @@
 
         /* Topic Buttons Container */
         .topic-buttons {
-            display: flex;
-            flex-wrap: wrap; /* Allow buttons to wrap to the next line */
-            justify-content: center; /* Center the buttons horizontally */
-            gap: 20px; /* Add space between buttons */
-            padding: 20px; /* Add padding around the container */
+            display: grid;
+            gap: 1rem; /* Add space between buttons */
+            padding: 1rem; /* Add padding around the container */
+        }
+
+        /* Responsive Grid Layout */
+        @media (max-width: 379px) {
+            .topic-buttons {
+                grid-template-columns: 1fr; /* Single column */
+            }
+        }
+
+        @media (min-width: 380px) and (max-width: 540px) {
+            .topic-buttons {
+                grid-template-columns: repeat(2, 1fr); /* Two columns */
+            }
+        }
+
+        @media (min-width: 541px) and (max-width: 750px) {
+            .topic-buttons {
+                grid-template-columns: repeat(3, 1fr); /* Three columns */
+            }
+        }
+
+        @media (min-width: 751px) {
+            .topic-buttons {
+                grid-template-columns: repeat(4, 1fr); /* Four columns */
+            }
         }
 
         /* Topic Button Styling */
         .topic-button {
-            flex: 0 1 20vw; /* Allow the button to grow and shrink, with a base width of 20vw */
-            min-width: 200px; /* Minimum width to ensure readability */
-            height: 10vw; /* Fixed height */
+            width: 100%; /* Full width of the grid cell */
+            height: 60px; /* Fixed height */
             background-color: #FF5722;
             color: white;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 1.5vw; /* Responsive font size */
+            font-size: 16px; /* Fixed font size */
             font-weight: bold;
             padding: 10px; /* Add padding for better spacing */
             text-align: center; /* Center the text */
             overflow: hidden; /* Hide overflow */
             white-space: normal; /* Allow text to wrap */
             display: flex; /* Use flexbox for button content */
-            align-items: center; /* Center content vertically */
-            justify-content: center; /* Center content horizontally */
-            text-overflow: ellipsis; /* Add ellipsis (...) for overflow text */
+            flex-direction: column; /* Arrange text in a column */
+            align-items: center; /* Center content horizontally */
+            justify-content: center; /* Center content vertically */
         }
         .topic-button:hover {
             background-color: #E64A19;
+        }
+
+        /* Smaller text for topic names */
+        .topic-name {
+            font-size: 0.8em; /* Smaller font size */
+            font-weight: normal; /* Normal font weight */
+            text-align: center; /* Center the text */
+            word-wrap: break-word; /* Wrap text if it gets too wide */
         }
     </style>
 </head>
@@ -86,13 +116,13 @@
 
         <!-- Topic Buttons -->
         <div class="topic-buttons">
-            <button class="topic-button" onclick="location.href='topic1.html';">Topic 1: Student Research Project</button>
-            <button class="topic-button" onclick="location.href='topic2.html';">Topic 2: Ecology</button>
-            <button class="topic-button" onclick="location.href='topic3.html';">Topic 3: The Earth</button>
-            <button class="topic-button" onclick="location.href='topic4.html';">Topic 4: Forces</button>
-            <button class="topic-button" onclick="location.href='topic5.html';">Topic 5: Elements, Compounds and Chemical Reactions</button>
-            <button class="topic-button" onclick="location.href='topic6.html';">Topic 6: Inside the Human Body</button>
-            <button class="topic-button" onclick="location.href='topic7.html';">Topic 7: Resources</button>
+            <button class="topic-button" onclick="location.href='topic1.html';">Topic 1<br><span class="topic-name">Student Research Project</span></button>
+            <button class="topic-button" onclick="location.href='topic2.html';">Topic 2<br><span class="topic-name">Ecology</span></button>
+            <button class="topic-button" onclick="location.href='topic3.html';">Topic 3<br><span class="topic-name">The Earth</span></button>
+            <button class="topic-button" onclick="location.href='topic4.html';">Topic 4<br><span class="topic-name">Forces</span></button>
+            <button class="topic-button" onclick="location.href='topic5.html';">Topic 5<br><span class="topic-name">Elements, Compounds and Chemical Reactions</span></button>
+            <button class="topic-button" onclick="location.href='topic6.html';">Topic 6<br><span class="topic-name">Inside the Human Body</span></button>
+            <button class="topic-button" onclick="location.href='topic7.html';">Topic 7<br><span class="topic-name">Resources</span></button>
             <button class="topic-button" onclick="location.href='topic8.html';">Assessment</button>
         </div>
     </div>
