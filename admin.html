@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+
+        .admin-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 80%;
+        }
+
+        .admin-container h2 {
+            margin-top: 0;
+        }
+
+        .admin-container label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px; 
+            height: 20px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #F44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .back-button:hover {
+            background-color: #D32F2F;
+        }
+
+        .collapsible {
+            background-color: #777;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        .active, .collapsible:hover {
+            background-color: #555;
+        }
+
+        .content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #f1f1f1;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h2>Admin Controls</h2>
+        <label>
+            Customise Avatar Button
+            <div class="toggle-switch">
+                <input type="checkbox" id="toggle-customise-avatar">
+                <span class="slider"></span>
+            </div>
+        </label>
+        <h3>Lesson Controls</h3>
+
+        <!-- Collapsible sections for each topic -->
+        <button type="button" class="collapsible">Topic 1</button>
+        <div class="content" id="topic1-controls-container"></div>
+
+        <button type="button" class="collapsible">Topic 2</button>
+        <div class="content" id="topic2-controls-container"></div>
+
+        <button type="button" class="collapsible">Topic 3</button>
+        <div class="content" id="topic3-controls-container"></div>
+
+        <button type="button" class="collapsible">Topic 4</button>
+        <div class="content" id="topic4-controls-container"></div>
+
+        <button type="button" class="collapsible">Topic 5</button>
+        <div class="content" id="topic5-controls-container"></div>
+
+        <button type="button" class="collapsible">Topic 6</button>
+        <div class="content" id="topic6-controls-container"></div>
+
+        <button type="button" class="collapsible">Topic 7</button>
+        <div class="content" id="topic7-controls-container"></div>
+
+        <button type="button" class="collapsible">Topic 8</button>
+        <div class="content" id="topic8-controls-container"></div>
+
+        <button class="back-button" onclick="location.href='home.html';">Back to Home</button>
+    </div>
+
+    <script type="module">
+        import { db, auth } from "./firebase-config.js";
+        import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            // Define number of lessons per topic
+            const NUM_LESSONS_TOPIC1 = 15;
+            const NUM_LESSONS_TOPIC2 = 15;
+            const NUM_LESSONS_TOPIC3 = 15;
+            const NUM_LESSONS_TOPIC4 = 15;
+            const NUM_LESSONS_TOPIC5 = 15;
+            const NUM_LESSONS_TOPIC6 = 15;
+            const NUM_LESSONS_TOPIC7 = 15;
+            const NUM_LESSONS_TOPIC8 = 15;
+
+            const topic1ControlsContainer = document.querySelector('#topic1-controls-container');
+            const topic2ControlsContainer = document.querySelector('#topic2-controls-container');
+            const topic3ControlsContainer = document.querySelector('#topic3-controls-container');
+            const topic4ControlsContainer = document.querySelector('#topic4-controls-container');
+            const topic5ControlsContainer = document.querySelector('#topic5-controls-container');
+            const topic6ControlsContainer = document.querySelector('#topic6-controls-container');
+            const topic7ControlsContainer = document.querySelector('#topic7-controls-container');
+            const topic8ControlsContainer = document.querySelector('#topic8-controls-container');
+
+            // Function to create toggle switches dynamically
+            function createToggleSwitch(topic, lesson) {
+                const normalizedTopic = topic.toLowerCase().replace(/\s/g, '');
+                const label = document.createElement('label');
+                label.innerHTML = `
+                    ${topic} Lesson ${lesson}
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="toggle-${normalizedTopic}-lesson${lesson}">
+                        <span class="slider"></span>
+                    </div>
+                `;
+                return label;
+            }
+
+            // Append toggles for each topic
+            for (let i = 1; i <= NUM_LESSONS_TOPIC1; i++) {
+                topic1ControlsContainer.appendChild(createToggleSwitch('Topic 1', i));
+            }
+            for (let i = 1; i <= NUM_LESSONS_TOPIC2; i++) {
+                topic2ControlsContainer.appendChild(createToggleSwitch('Topic 2', i));
+            }
+            for (let i = 1; i <= NUM_LESSONS_TOPIC3; i++) {
+                topic3ControlsContainer.appendChild(createToggleSwitch('Topic 3', i));
+            }
+            for (let i = 1; i <= NUM_LESSONS_TOPIC4; i++) {
+                topic4ControlsContainer.appendChild(createToggleSwitch('Topic 4', i));
+            }
+            for (let i = 1; i <= NUM_LESSONS_TOPIC5; i++) {
+                topic5ControlsContainer.appendChild(createToggleSwitch('Topic 5', i));
+            }
+            for (let i = 1; i <= NUM_LESSONS_TOPIC6; i++) {
+                topic6ControlsContainer.appendChild(createToggleSwitch('Topic 6', i));
+            }
+            for (let i = 1; i <= NUM_LESSONS_TOPIC7; i++) {
+                topic7ControlsContainer.appendChild(createToggleSwitch('Topic 7', i));
+            }
+            for (let i = 1; i <= NUM_LESSONS_TOPIC8; i++) {
+                topic8ControlsContainer.appendChild(createToggleSwitch('Topic 8', i));
+            }
+
+            // Add event listeners for each topic
+            function addEventListenersForTopic(topicName, numLessons) {
+                const normalizedTopic = topicName.toLowerCase().replace(/\s/g, '');
+                for (let i = 1; i <= numLessons; i++) {
+                    const toggle = document.getElementById(`toggle-${normalizedTopic}-lesson${i}`);
+                    if (toggle) {
+                        toggle.addEventListener('change', function() {
+                            console.log(`${topicName} Lesson ${i} toggled. New state: ${this.checked}`);
+                            const isChecked = this.checked;
+                            saveAdminSettings({ [`${normalizedTopic}Lesson${i}Enabled`]: isChecked });
+                        });
+                    }
+                }
+            }
+
+            // Add event listeners for each topic
+            addEventListenersForTopic('Topic 1', NUM_LESSONS_TOPIC1);
+            addEventListenersForTopic('Topic 2', NUM_LESSONS_TOPIC2);
+            addEventListenersForTopic('Topic 3', NUM_LESSONS_TOPIC3);
+            addEventListenersForTopic('Topic 4', NUM_LESSONS_TOPIC4);
+            addEventListenersForTopic('Topic 5', NUM_LESSONS_TOPIC5);
+            addEventListenersForTopic('Topic 6', NUM_LESSONS_TOPIC6);
+            addEventListenersForTopic('Topic 7', NUM_LESSONS_TOPIC7);
+            addEventListenersForTopic('Topic 8', NUM_LESSONS_TOPIC8);
+
+            // Collapsible sections
+            const collapsibles = document.querySelectorAll('.collapsible');
+            collapsibles.forEach(collapsible => {
+                collapsible.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            });
+
+            // Load the saved states on page load
+            async function loadAdminSettings() {
+                try {
+                    const adminRef = doc(db, "admin", "settings");
+                    const adminDoc = await getDoc(adminRef);
+                    if (adminDoc.exists()) {
+                        const settings = adminDoc.data();
+                        document.getElementById('toggle-customise-avatar').checked = settings.customiseAvatarEnabled;
+
+                        function loadTopicStates(topicName, numLessons) {
+                            const normalizedTopic = topicName.toLowerCase().replace(/\s/g, '');
+                            for (let i = 1; i <= numLessons; i++) {
+                                const toggle = document.getElementById(`toggle-${normalizedTopic}-lesson${i}`);
+                                if (toggle) {
+                                    toggle.checked = settings[`${normalizedTopic}Lesson${i}Enabled`];
+                                }
+                            }
+                        }
+
+                        loadTopicStates('Topic 1', NUM_LESSONS_TOPIC1);
+                        loadTopicStates('Topic 2', NUM_LESSONS_TOPIC2);
+                        loadTopicStates('Topic 3', NUM_LESSONS_TOPIC3);
+                        loadTopicStates('Topic 4', NUM_LESSONS_TOPIC4);
+                        loadTopicStates('Topic 5', NUM_LESSONS_TOPIC5);
+                        loadTopicStates('Topic 6', NUM_LESSONS_TOPIC6);
+                        loadTopicStates('Topic 7', NUM_LESSONS_TOPIC7);
+                        loadTopicStates('Topic 8', NUM_LESSONS_TOPIC8);
+
+                    } else {
+                        console.log("No admin settings found.");
+                    }
+                } catch (error) {
+                    console.error("Error loading settings:", error);
+                }
+            }
+
+            window.addEventListener('load', loadAdminSettings);
+        });
+
+        // Save the state to Firestore
+        async function saveAdminSettings(settings) {
+            try {
+                const adminRef = doc(db, "admin", "settings");
+                await setDoc(adminRef, settings, { merge: true });
+                console.log("Settings saved successfully.");
+            } catch (error) {
+                console.error("Error saving settings:", error);
+            }
+        }
+    </script>
+    
+</body>
+</html>

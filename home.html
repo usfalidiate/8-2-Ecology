@@ -107,10 +107,71 @@
             text-align: center; /* Center the text */
             word-wrap: break-word; /* Wrap text if it gets too wide */
         }
+
+        /* Invisible Button */
+        .invisible-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            opacity: 0;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal input {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .modal button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal button:hover {
+            background-color: #45a049;
+        }
+
+        .modal .close-button {
+            background-color: #F44336;
+            margin-top: 10px;
+        }
+
+        .modal .close-button:hover {
+            background-color: #D32F2F;
+        }
     </style>
 </head>
 <body>
     <div class="background">
+        <!-- Invisible Button -->
+        <button class="invisible-button" id="secret-button"></button>
+
         <!-- Profile Button -->
         <button class="profile-button" onclick="location.href='profile.html';">Profile</button>
 
@@ -126,5 +187,52 @@
             <button class="topic-button" onclick="location.href='topic8.html';">Assessment</button>
         </div>
     </div>
+
+    <!-- Password Modal -->
+    <div class="modal" id="password-modal">
+        <h2>Admin Login</h2>
+        <form id="password-form">
+            <input type="text" id="username" name="username" placeholder="Username" autocomplete="username" style="display: none;">
+            <input type="password" id="password" placeholder="Enter Password" autocomplete="new-password">
+            <button type="submit" id="login-button">Login</button>
+            <button type="button" class="close-button" id="close-modal-button">Close</button>
+        </form>
+    </div>
+
+    <script>
+        const secretButton = document.getElementById('secret-button');
+        const passwordModal = document.getElementById('password-modal');
+        const passwordForm = document.getElementById('password-form');
+        const closeModalButton = document.getElementById('close-modal-button');
+
+        secretButton.addEventListener('click', () => {
+            passwordModal.classList.add('active');
+        });
+
+        closeModalButton.addEventListener('click', () => {
+            passwordModal.classList.remove('active');
+        });
+
+        passwordForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+
+            // Replace this with your actual password
+            const correctPassword = 'admin';
+
+            if (password === correctPassword) {
+                window.location.href = 'admin.html';
+            } else {
+                alert('Incorrect password. Please try again.');
+            }
+        });
+
+        // Optional: Close the modal when clicking outside of it
+        window.addEventListener('click', (event) => {
+            if (event.target === passwordModal) {
+                passwordModal.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
