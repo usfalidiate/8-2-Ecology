@@ -4,62 +4,247 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lesson 1</title>
-    
-    <style>
-        /* General Reset */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Background Styling */
-        .background {
-            background: url('assets/daintreeBG1.jpg') no-repeat center center fixed;
-            background-size: cover;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Navigation Buttons Container */
-        .nav-buttons {
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .nav-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        .nav-button:hover {
-            background-color: #45a049;
-        }
-    </style>
-
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
     <div class="background">
-        
-    <div class="nav-buttons">
-        <button class="nav-button" onclick="location.href='../../home.html';">Back to Home</button>
-        <button class="nav-button" onclick="location.href='../../topic1.html';">Back to Topic</button>
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="location.href='../../home.html';">Back to Home</button>
+            <button class="nav-button" onclick="location.href='../../topic1.html';">Back to Topic</button>
+        </div>
+
+        <div class="lessonInfo">
+            <h1>Lesson 1</h1>
+            <h2 id="learning-intentions">Learning Intention: Loading...</h2>
+            <h3 id="success-criteria">Success Criteria: Loading...</h3>
+            <div class="mustShouldCouldDiv">
+                <h4 id="tasks">Tasks: Loading...</h4>
+            </div>
+        </div>
+
+        <div class="submitButtonDiv">
+            <button class="submitMustButton" id="must-do-btn">I have finished all Must Do Success Criteria.</button>
+            <button class="submitShouldButton" id="should-do-btn">I have finished all Should Do Success Criteria.</button>
+            <button class="submitCouldButton" id="could-do-btn">I have finished all Could Do Success Criteria.</button>
+        </div>
+
+        <div class="lessonContent">
+            <p id="lesson-content">Lesson content goes here...</p>
+        </div>
+
+        <!-- Popup notification -->
+        <div id="popup" class="popup hidden"></div>
     </div>
 
-        <h1>Lesson 1</h1>
-    </div>
+    <script type="module">
+        import { auth, db } from "../../firebase-config.js";
+        import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+
+        function showPopup(message, success) {
+            const popup = document.getElementById('popup');
+            popup.textContent = message;
+            popup.className = `popup ${success ? 'success' : 'error'}`;
+            popup.classList.remove('hidden');
+            console.log(`Popup: ${message} - ${success ? 'Success' : 'Error'}`);
+            setTimeout(() => popup.classList.add('hidden'), 3000);
+        }
+
+        function addCheckmark(button) {
+            const imagePath = '../../assets/misc/checked.png'; // Ensure correct path
+            button.style.backgroundImage = `url('${imagePath}')`;
+            button.style.backgroundRepeat = 'no-repeat';
+            button.style.backgroundPosition = 'bottom right';
+            button.style.backgroundSize = '20px 20px'; // Scale the image if necessary
+            button.style.zIndex = '1'; // Ensure button stays on top of other elements
+            button.classList.add('button-pressed'); // Add visual feedback class
+            console.log(`Checkmark added: ${imagePath} on button ${button.id}`);
+        }
+
+
+        function removeCheckmark(button) {
+            button.style.backgroundImage = '';
+            button.classList.remove('button-pressed'); // Remove the class for visual feedback
+            console.log(`Checkmark removed from button: ${button.id}`);
+        }
+
+
+        function toggleCheckmark(button, add) {
+            if (add) {
+                console.log(`Adding checkmark to button: ${button.id}`);
+                addCheckmark(button);
+            } else {
+                console.log(`Removing checkmark from button: ${button.id}`);
+                removeCheckmark(button);
+            }
+        }
+
+
+        async function setupButton(buttonId, taskKey, points, topicKey, userDoc) {
+            const button = document.getElementById(buttonId);
+
+            // Fetch the latest data from Firestore on each interaction
+            const fetchLatestData = async () => {
+                const latestDoc = await getDoc(userDoc);
+                return latestDoc.data();
+            };
+
+            // Initial setup: fetch and update the button state
+            const userData = await fetchLatestData();
+            const completedTasks = userData.completedTasks || {};
+            const topicTasks = completedTasks[topicKey] || {};
+
+            // Check if the task is completed
+            const isCompleted = topicTasks[taskKey]?.completed || false;
+
+            // Update button appearance
+            if (isCompleted) {
+                addCheckmark(button);
+            }
+
+            // Add event listener to handle button clicks
+            button.addEventListener('click', async () => {
+                console.log(`Button clicked: ${button.id}`);
+
+                try {
+                    // Fetch the latest Firestore data before updating
+                    const userData = await fetchLatestData();
+                    const completedTasks = userData.completedTasks || {};
+                    const topicTasks = completedTasks[topicKey] || {};
+
+                    // Determine if the task is already completed
+                    const isCompleted = topicTasks[taskKey]?.completed || false;
+
+                    // Get the current timestamp
+                    const timestamp = Date.now();
+
+                    // Update task state with completed and timestamp
+                    const updatedTask = isCompleted
+                        ? null
+                        : { completed: true, timestamp };
+
+                    // Update the topic tasks
+                    const updatedTopicTasks = {
+                        ...topicTasks,
+                        [taskKey]: updatedTask,
+                    };
+
+                    // Remove the task if it’s being unmarked
+                    if (!updatedTask) {
+                        delete updatedTopicTasks[taskKey];
+                    }
+
+                    // Update the completedTasks structure
+                    const updatedCompletedTasks = {
+                        ...completedTasks,
+                        [topicKey]: updatedTopicTasks,
+                    };
+
+                    // Update Firestore
+                    await updateDoc(userDoc, {
+                        synapsePoints: (userData.synapsePoints || 0) + (isCompleted ? -points : points),
+                        completedTasks: updatedCompletedTasks,
+                    });
+
+                    // Update UI
+                    toggleCheckmark(button, !isCompleted);
+                    showPopup(`Synapse Points ${isCompleted ? 'removed' : 'saved'} successfully!`, true);
+
+                    // Debugging logs
+                    console.log(`Updated task:`, updatedTask);
+                    console.log(`Updated completedTasks structure:`, updatedCompletedTasks);
+                } catch (error) {
+                    console.error('Error updating Firestore:', error);
+                    showPopup('Failed to update progress.', false);
+                }
+            });
+        }
+
+
+
+
+        async function loadLessonData(user) {
+            try {
+                const response = await fetch('topic1Data.json');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                console.log('Lesson data loaded successfully:', data);
+
+                const lesson = data.lessons.find(lesson => lesson.lesson === 1);
+                if (!lesson) throw new Error('Lesson not found in topic1Data.json');
+                console.log('Lesson details:', lesson);
+
+                // Populate Lesson Data
+                document.getElementById('learning-intentions').innerHTML = `Learning Intention(s): ${lesson.learningIntentions}`;
+                document.getElementById('success-criteria').innerHTML = `Success Criteria: ${lesson.successCriteria}`;
+                document.getElementById('tasks').innerHTML = `
+                    <div class="mustActivityDiv">Must Do: (${lesson.mustDo.synapsePoints} SP) ${lesson.mustDo.successCriteria}</div>
+                    <div class="shouldActivityDiv">Should Do: (${lesson.shouldDo.synapsePoints} SP) ${lesson.shouldDo.successCriteria}</div>
+                    <div class="couldActivityDiv">Could Do: (${lesson.couldDo.synapsePoints} SP) ${lesson.couldDo.successCriteria}</div>
+                `;
+
+                const userDoc = doc(db, 'users', user.uid);
+
+                // Attach Event Listeners
+                setupButton('must-do-btn', `lesson1-must`, lesson.mustDo.synapsePoints, 'topic1', userDoc);
+                setupButton('should-do-btn', `lesson1-should`, lesson.shouldDo.synapsePoints, 'topic1', userDoc);
+                setupButton('could-do-btn', `lesson1-could`, lesson.couldDo.synapsePoints, 'topic1', userDoc);
+            } catch (error) {
+                console.error('Error loading lesson data:', error);
+                showPopup('Failed to load lesson data.', false);
+            }
+        }
+
+
+        // Listen for authentication state changes
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('User is logged in:', user.uid);
+                loadLessonData(user);
+            } else {
+                console.warn('No user is logged in.');
+                showPopup('You must be logged in to track progress.', false);
+            }
+        });
+    </script>
+
+    <style>
+        .popup {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+            z-index: 1000;
+        }
+        .popup.hidden {
+            display: none;
+        }
+        .popup.success {
+            background-color: #4caf50;
+        }
+        .popup.error {
+            background-color: #f44336;
+        }
+        button {
+            position: relative; /* Enable positioning for z-index */
+            z-index: 1;         /* Ensure button stays on top of other elements */
+            overflow: visible;  /* Ensure content isn’t clipped */
+        }
+
+        button.button-pressed {
+            background-color: #4caf50; /* Green background */
+            color: white;             /* White text */
+            font-weight: bold;        /* Bold text */
+            border: 2px solid #388e3c; /* Darker green border */
+        }
+        button:hover:not(.button-pressed) {
+            background-color: #f0f0f0; /* Light gray on hover */
+            border: 2px solid #ccc;    /* Light gray border */
+        }
+
+    </style>
 </body>
 </html>

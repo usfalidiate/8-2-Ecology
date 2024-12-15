@@ -218,16 +218,75 @@
             pointer-events: none;
             cursor: not-allowed;
         }
+
+        /* Notification Styles */
+        #notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+
+        #notification.success {
+            background-color: #4CAF50;
+        }
+
+        #notification.error {
+            background-color: #F44336;
+        }
+
+        .collapsible-container {
+            width: 100%;
+        }
+
+        .collapsible-button {
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .collapsible-button:hover {
+            background-color: #2E7D32;
+        }
+
+        .collapsible-content {
+            display: none;
+            margin-top: 10px;
+        }
+
     </style>
 </head>
 <body>
     <div class="profile-container">
         <div class="avatar-section">
-            <h2>Avatar</h2>
+            <h2 id="user-name">Loading...</h2>
             <div id="avatar-container"></div>
             <button id="customise-avatar-button">Customise Avatar</button>
             <p id="synapse-points"><strong>Synapse Points (SP):</strong> Loading...</p>
             <p id="badges"><strong>Badges:</strong> Loading...</p>
+            <!-- Form Section -->
+            <div class="collapsible-container">
+                <button id="toggle-form-section" class="collapsible-button">Edit Profile</button>
+                <div class="form-section collapsible-content">
+                    <input type="text" id="first-name" placeholder="First Name">
+                    <input type="text" id="last-name" placeholder="Last Name">
+                    <input type="text" id="display-name" placeholder="Display Name">
+                    <button id="save-names-button">Save Names</button>
+                </div>
+            </div>
+            
             <button id="logout-button" class="action-button">Log Out</button>
             <button class="back-button" onclick="location.href='home.html';">Back to Home</button>            
         </div>
@@ -251,155 +310,230 @@
         </div>
     </div>
 
+    <div id="notification"></div>
+
     <script type="module">
         import { db, auth } from "./firebase-config.js";
         import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
-        let currentAvatarConfig = {};
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstNameInput = document.getElementById('first-name');
+            const lastNameInput = document.getElementById('last-name');
+            const displayNameInput = document.getElementById('display-name');
+            const saveNamesButton = document.getElementById('save-names-button');
+            const notification = document.getElementById('notification');
+            const toggleButton = document.getElementById("toggle-form-section");
+            const collapsibleContent = document.querySelector(".collapsible-content");
 
-        const modal = document.getElementById("customisation-modal");
-        const customiseButton = document.getElementById("customise-avatar-button");
-        const closeModalButton = document.getElementById("close-modal-button");
+            let currentAvatarConfig = {};
 
-        customiseButton.addEventListener("click", () => {
-            modal.classList.add("visible");
-        });
 
-        closeModalButton.addEventListener("click", () => {
-            modal.classList.remove("visible");
-        });
+            // Select all tabs (category buttons)
+                const tabs = document.querySelectorAll(".tab");
 
-        async function loadCustomisationOptions(category) {
-            try {
-                const response = await fetch("assets/customisation-options.json");
-                const options = await response.json();
-                return options[category] || [];
-            } catch (error) {
-                console.error("Error loading customisation options:", error);
-                return [];
-            }
-        }
+            // Add click event listener to each tab
+            tabs.forEach(tab => {
+                tab.addEventListener("click", (event) => {
+                    // Remove 'active' class from all tabs
+                    tabs.forEach(t => t.classList.remove("active"));
+                    // Add 'active' class to the clicked tab
+                    tab.classList.add("active");
 
-        async function displayCustomisationOptions(category) {
-            const gridContainer = document.getElementById("customisation-grid");
-            gridContainer.innerHTML = "";
-            const options = await loadCustomisationOptions(category);
+                    // Get the category from the data attribute of the clicked tab
+                    const category = tab.dataset.category;
 
-            options.forEach((option) => {
-                const gridItem = document.createElement("div");
-                gridItem.classList.add("grid-item");
-                gridItem.dataset.file = option.file;
-
-                const img = document.createElement("img");
-                img.src = `assets/${category}/${option.file}`;
-                gridItem.appendChild(img);
-
-                const tick = document.createElement("div");
-                tick.classList.add("tick");
-                gridItem.appendChild(tick);
-
-                if (currentAvatarConfig[category] === `assets/${category}/${option.file}`) {
-                    gridItem.classList.add("selected");
-                }
-
-                gridItem.addEventListener("click", () => {
-                    currentAvatarConfig[category] = `assets/${category}/${option.file}`;
-                    updateAvatar(currentAvatarConfig);
-                    saveAvatarConfig();
-                    document.querySelectorAll(".grid-item").forEach((item) => item.classList.remove("selected"));
-                    gridItem.classList.add("selected");
+                    // Display customisation options for the selected category
+                    displayCustomisationOptions(category);
                 });
-
-                gridContainer.appendChild(gridItem);
             });
-        }
 
-        document.querySelectorAll(".tab").forEach((tab) => {
-            tab.addEventListener("click", () => {
-                document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
-                tab.classList.add("active");
-                displayCustomisationOptions(tab.dataset.category);
+
+            // Modal and customisation buttons
+            const modal = document.getElementById("customisation-modal");
+            const customiseButton = document.getElementById("customise-avatar-button");
+            const closeModalButton = document.getElementById("close-modal-button");
+
+            // Open customisation modal
+            customiseButton.addEventListener("click", () => {
+                modal.classList.add("visible");
             });
-        });
 
-        async function saveAvatarConfig() {
-            try {
-                const user = auth.currentUser;
-                if (!user) return;
-                const userRef = doc(db, "users", user.uid);
-                await updateDoc(userRef, { avatarConfig: currentAvatarConfig });
-                console.log("Avatar configuration saved successfully!");
-            } catch (error) {
-                console.error("Error saving avatar configuration:", error.message);
+            // Close customisation modal
+            closeModalButton.addEventListener("click", () => {
+                modal.classList.remove("visible");
+            });
+
+            // Toggle name div
+            toggleButton.addEventListener("click", () => {
+                const isVisible = collapsibleContent.style.display === "block";
+                collapsibleContent.style.display = isVisible ? "none" : "block";
+                toggleButton.textContent = isVisible ? "Edit Profile" : "Hide Profile Form";
+            });
+
+            // Show notification
+            function showNotification(message, type = 'success') {
+                notification.textContent = message;
+                notification.className = type;
+                notification.style.display = 'block';
+
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
             }
-        }
 
-        function updateAvatar(config) {
-            const avatarContainer = document.getElementById("avatar-container");
-            avatarContainer.innerHTML = "";
-
-            const defaultConfig = { base: "assets/base/Avatar.png" };
-            const mergedConfig = { ...defaultConfig, ...config };
-
-            Object.entries(mergedConfig).forEach(([layer, src]) => {
-                const img = document.createElement("img");
-                img.src = src;
-                img.style.position = "absolute";
-                img.style.width = "100%";
-                img.style.height = "100%";
-                img.style.zIndex = getLayerZIndex(layer);
-                avatarContainer.appendChild(img);
-            });
-        }
-
-        function getLayerZIndex(layer) {
-            const order = ["base", "skin", "pants", "tops", "face", "mouth", "eyes", "hair", "shoes"];
-            return order.indexOf(layer) + 1;
-        }
-
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
+            async function loadUserNames() {
                 try {
+                    const user = auth.currentUser;
+                    if (!user) return;
+                    
                     const userRef = doc(db, "users", user.uid);
-                    const userData = await getDoc(userRef);
+                    const userDoc = await getDoc(userRef);
 
-                    if (userData.exists()) {
-                        currentAvatarConfig = userData.data().avatarConfig || {};
-                        updateAvatar(currentAvatarConfig);
-                        displayCustomisationOptions("hair"); 
+                    if (userDoc.exists()) {
+                        const { firstName = '', lastName = '', displayName = '' } = userDoc.data();
+                        const userNameElement = document.getElementById('user-name');
+                        userNameElement.textContent = `${firstName} ${lastName} (${displayName})`;
                     } else {
-                        console.error("User data not found.");
+                        console.log("No user data found.");
                     }
                 } catch (error) {
-                    console.error("Error fetching user data:", error.message);
+                    console.error("Error loading user names:", error);
+                    const userNameElement = document.getElementById('user-name');
+                    userNameElement.textContent = "Error Loading Name";
                 }
-            } else {
-                console.log("No user signed in. Redirecting to login...");
-                window.location.href = "login.html";
             }
-        });
 
-        // Load the admin settings from Firestore to toggle the avatar button state
-        async function loadAdminSettings() {
-            try {
-                const adminRef = doc(db, "admin", "settings");
-                const adminDoc = await getDoc(adminRef);
-                if (adminDoc.exists()) {
-                    const settings = adminDoc.data();
-                    if (settings.customiseAvatarEnabled === false) {
-                        customiseButton.classList.add('disabled');
-                    } else {
-                        customiseButton.classList.remove('disabled');
+
+            // Save user names to Firestore
+            async function saveUserNames() {
+                try {
+                    const user = auth.currentUser;
+                    if (!user) return;
+                    const userRef = doc(db, "users", user.uid);
+                    await updateDoc(userRef, {
+                        firstName: firstNameInput.value,
+                        lastName: lastNameInput.value,
+                        displayName: displayNameInput.value
+                    });
+                    showNotification("Names saved successfully, will be updated on page reload!", "success");
+                } catch (error) {
+                    console.error("Error saving user names:", error);
+                    showNotification("Failed to save names.", "error");
+                }
+            }
+
+            saveNamesButton.addEventListener('click', saveUserNames);
+            loadUserNames();
+
+            // Load customisation options based on category
+            async function loadCustomisationOptions(category) {
+                try {
+                    const response = await fetch("assets/customisation-options.json");
+                    const options = await response.json();
+                    return options[category] || [];
+                } catch (error) {
+                    console.error("Error loading customisation options:", error);
+                    return [];
+                }
+            }
+
+            // Display options in the grid for the selected category
+            async function displayCustomisationOptions(category) {
+                const gridContainer = document.getElementById("customisation-grid");
+                gridContainer.innerHTML = "";
+                const options = await loadCustomisationOptions(category);
+
+                options.forEach((option) => {
+                    const gridItem = document.createElement("div");
+                    gridItem.classList.add("grid-item");
+                    gridItem.dataset.file = option.file;
+
+                    const img = document.createElement("img");
+                    img.src = `assets/${category}/${option.file}`;
+                    gridItem.appendChild(img);
+
+                    const tick = document.createElement("div");
+                    tick.classList.add("tick");
+                    gridItem.appendChild(tick);
+
+                    if (currentAvatarConfig[category] === `assets/${category}/${option.file}`) {
+                        gridItem.classList.add("selected");
+                    }
+
+                    gridItem.addEventListener("click", () => {
+                        currentAvatarConfig[category] = `assets/${category}/${option.file}`;
+                        updateAvatar(currentAvatarConfig);
+                        saveAvatarConfig();
+                        document.querySelectorAll(".grid-item").forEach((item) => item.classList.remove("selected"));
+                        gridItem.classList.add("selected");
+                    });
+
+                    gridContainer.appendChild(gridItem);
+                });
+            }
+
+            // Update avatar on screen based on configuration
+            function updateAvatar(config) {
+                const avatarContainer = document.getElementById("avatar-container");
+                avatarContainer.innerHTML = "";
+
+                const defaultConfig = { base: "assets/base/Avatar.png" };
+                const mergedConfig = { ...defaultConfig, ...config };
+
+                Object.entries(mergedConfig).forEach(([layer, src]) => {
+                    const img = document.createElement("img");
+                    img.src = src;
+                    img.style.position = "absolute";
+                    img.style.width = "100%";
+                    img.style.height = "100%";
+                    img.style.zIndex = getLayerZIndex(layer);
+                    avatarContainer.appendChild(img);
+                });
+            }
+
+            // Save avatar configuration to Firestore
+            async function saveAvatarConfig() {
+                try {
+                    const user = auth.currentUser;
+                    if (!user) return;
+                    const userRef = doc(db, "users", user.uid);
+                    await updateDoc(userRef, { avatarConfig: currentAvatarConfig });
+                    console.log("Avatar configuration saved successfully!");
+                } catch (error) {
+                    console.error("Error saving avatar configuration:", error.message);
+                }
+            }
+
+            // Define Z-Index order for avatar layers
+            function getLayerZIndex(layer) {
+                const order = ["base", "skin", "pants", "tops", "face", "mouth", "eyes", "hair", "shoes"];
+                return order.indexOf(layer) + 1;
+            }
+
+            // Load user data and initialise avatar on auth state change
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    try {
+                        const userRef = doc(db, "users", user.uid);
+                        const userData = await getDoc(userRef);
+                        loadUserNames(); // Fetch and display the user's name
+
+                        if (userData.exists()) {
+                            currentAvatarConfig = userData.data().avatarConfig || {};
+                            updateAvatar(currentAvatarConfig);
+                            displayCustomisationOptions("hair"); 
+                        } else {
+                            console.error("User data not found.");
+                        }
+                    } catch (error) {
+                        console.error("Error fetching user data:", error.message);
                     }
                 } else {
-                    console.log("No admin settings found.");
+                    console.log("No user signed in. Redirecting to login...");
+                    window.location.href = "login.html";
                 }
-            } catch (error) {
-                console.error("Error loading admin settings:", error);
-            }
-        }
-
-        window.addEventListener('load', loadAdminSettings);
+            });
+        });
     </script>
 </body>
 </html>

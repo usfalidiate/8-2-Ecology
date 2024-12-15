@@ -182,6 +182,16 @@
             const topic7ControlsContainer = document.querySelector('#topic7-controls-container');
             const topic8ControlsContainer = document.querySelector('#topic8-controls-container');
 
+            // Add event listener for the "Customise Avatar" toggle switch
+            const customiseAvatarToggle = document.getElementById('toggle-customise-avatar');
+            customiseAvatarToggle.checked = true; // Set default state to on
+
+            customiseAvatarToggle.addEventListener('change', function() {
+                const isChecked = this.checked;
+                saveAdminSettings({ customiseAvatarEnabled: isChecked });
+            });
+
+
             // Function to create toggle switches dynamically
             function createToggleSwitch(topic, lesson) {
                 const normalizedTopic = topic.toLowerCase().replace(/\s/g, '');
@@ -268,7 +278,7 @@
                     const adminDoc = await getDoc(adminRef);
                     if (adminDoc.exists()) {
                         const settings = adminDoc.data();
-                        document.getElementById('toggle-customise-avatar').checked = settings.customiseAvatarEnabled;
+                        customiseAvatarToggle.checked = settings.customiseAvatarEnabled !== undefined ? settings.customiseAvatarEnabled : true;
 
                         function loadTopicStates(topicName, numLessons) {
                             const normalizedTopic = topicName.toLowerCase().replace(/\s/g, '');
