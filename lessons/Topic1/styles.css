@@ -1,192 +1,272 @@
+/* Import Modern Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
-        /* General Reset */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: Arial, sans-serif;
-            overflow-x: hidden; /* Prevents horizontal scrolling */
-        }
+/* General Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Montserrat', Arial, sans-serif;
+    overflow-x: hidden;
+    color: #ffffff;
+    background: radial-gradient(circle, #6b046b, #1c0122);
+}
 
-        /* Background Styling */
-        .background {
-            background: grey no-repeat center center fixed;
-            background-size: cover;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0px; /* Add padding to ensure content is not too close to the edges */
-            box-sizing: border-box; /* Include padding in the element's total width and height */
-        }
+/* Background */
+.background {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    box-sizing: border-box;
+}
 
-        /* Navigation Buttons Container */
-        .nav-buttons {
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            padding: 10px;
-            box-sizing: border-box;
-        }
+/* Navigation Buttons */
+.nav-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px;
+}
 
-        .nav-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
+.nav-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #ff69b4;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-        .nav-button:hover {
-            background-color: #45a049;
-        }
+.nav-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px #ff69b4;
+    background: #ff47a3;
+}
 
-        .submitMustButton {
-            padding: 10px;
-            font-size: 16px;
-            background-color: #e74f4f;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-            width: 33%;
-            margin: 20px;
+/* Header Styling */
+h1 {
+    font-size: 48px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffdd00;
+    text-shadow: 2px 2px 0px #000;
+}
 
-        }
-        .submitShouldButton {
-            padding: 10px;
-            font-size: 16px;
-            background-color: #e7aa4f;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-            width: 33%;
-            margin: 20px;
+h2 {
+    font-size: 24px;
+    color: #dcdcdc;
+    text-shadow: 1px 1px 0px #000;
+}
 
-        }
-        .submitCouldButton {
-            padding: 10px;
-            font-size: 16px;
-            background-color: #067b9c;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 33%;
-            margin: 20px;
-        }        
-        .mustShouldCouldDiv {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-top: 0px; /* Add margin to ensure spacing between sections */
-        }
-        
-        .submitButtonDiv {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-top: 0px; /* Add margin to ensure spacing between sections */
-            box-sizing: border-box;
-            padding: 20px;
-        }
+h3, h4 {
+    font-size: 20px;
+    color: #e0e0e0;
+    text-align: center;
+    margin: 0px;
+}
 
-        /* Header Styling */
-        h1 {
-            font-size: 32px;
-            color: white;
-            margin-top: 20px;
-            text-align: center; /* Center align the text */
-        }
+/* Tasks Section */
+.mustShouldCouldDiv {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin: 20px 0;
+}
 
-        h2 {
-            font-size: 24px;
-            color: #f5f5f5;
-            margin-top: 10px;
-            text-align: center; /* Center align the text */
-        }
+.taskDiv {
+    font-size: 20px;
+    color: #e0e0e0;
+    text-align: center;
+    margin: 0px;  
+    display: flex;
+}
 
-        h3 {
-            font-size: 20px;
-            color: #e0e0e0;
-            text-align: center; /* Center align the text */
-            margin: 0px;
-        }
 
-        h4 {
-            font-size: 18px;
-            color: #cccccc;
-            margin: 0px;
-            text-align: center; /* Center align the text */
-            display: flex;
-            justify-content: center;
-        }
 
-        /* Paragraph Styling */
-        #lesson-content {
-            font-size: 16px;
-            color: #ffffff;
-            margin-top: 20px;
-            text-align: center; /* Center align the text */
-            width: 90%;
-            max-width: 800px; /* Limit the width for better readability */
-        }
+/* Activity Div Styling */
+.activityDiv {
+    width: 30%;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #ffffff;
+    /* cursor: pointer; */
+    transition: all 0.2s ease-in-out;
+}
 
-        /* Task List Styling */
-        #tasks {
-            font-size: 16px;
-            color: #dddddd;
-            line-height: 1.5;
-            width: 100%;
-        }
+/*.activityDiv:hover {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    transform: scale(1.05);
+}
 
-        .lessonInfo {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 0px;
-            padding: 0px 20px;
-            width: 100%;
-            box-sizing: border-box;
-        }
+.activityDiv:active, .activityDiv.button-pressed {
+    background-color: #4caf50;
+    box-shadow: 0 0 10px #4caf50;
+    color: #ffffff;
+    transform: scale(0.98);
+} */
 
-        .lessonContent {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;            
-            padding: 20px;
-            width: 100%;
-        }
+.mustActivityDiv {
+    border: 2px solid #ff4757; /* Red border for Must Do */
+}
 
-        .mustActivityDiv {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            width: 33%;
-            align-items: center;
-        }
-        .shouldActivityDiv {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            width: 33%;
-        }
-        .couldActivityDiv {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            width: 33%;
-        }
-        .successCriteriaDiv {
-            display: none;
-        }
-    
+.shouldActivityDiv {
+    border: 2px solid #ffa502; /* Orange border for Should Do */
+}
+
+.couldActivityDiv {
+    border: 2px solid #3742fa; /* Blue border for Could Do */
+}
+
+/* Learning Intention Styling */
+#learning-intentions {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffdd00; /* Yellow for emphasis */
+    margin: 20px;
+    text-align: center;
+}
+
+/* Add Smooth Scaling for Click Feedback */
+.activityDiv.button-pressed {
+    background-color: #2ed573; /* Visual feedback when pressed */
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+
+/* Lesson Content */
+.lessonContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px;
+    width: 100%;
+}
+
+#lesson-content {
+    font-size: 16px;
+    color: #ffffff;
+    margin-top: 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 800px;
+}
+
+/* Buttons for Tasks */
+.submitButtonDiv {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Completion Buttons */
+.submitMustButton, .submitShouldButton, .submitCouldButton {
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    background: #333;
+    transition: all 0.2s ease;
+    position: relative; /* For checkmark positioning */
+}
+
+.submitMustButton:hover, .submitShouldButton:hover, .submitCouldButton:hover {
+    background: #555;
+}
+
+button.button-pressed {
+    background-color: #4caf50;
+    box-shadow: 0 0 10px #4caf50;
+    color: white;
+}
+
+button.button-pressed::after {
+    content: '✔';
+    position: absolute;
+    right: 15px;
+    font-size: 20px;
+    color: #fff;
+}
+
+
+/* External Links */
+.external-links {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.external-link {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    background: #2f3542;
+    color: #ffdd00;
+    border: 2px solid #ffdd00;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 30%;
+}
+
+.external-link:hover {
+    background: #ffdd00;
+    color: #2f3542;
+    transform: scale(1.1);
+}
+
+/* Popup Notification */
+.popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ff4757;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.popup.success {
+    background-color: #2ed573;
+}
+
+/* Pressed Button State */
+button.button-pressed {
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+    border: 2px solid #388e3c;
+}
+
+button:hover:not(.button-pressed) {
+    background-color: #f0f0f0;
+    border: 2px solid #ccc;
+}

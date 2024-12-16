@@ -16,11 +16,15 @@
         <div class="lessonInfo">
             <h1>Lesson 1</h1>
             <h2 id="learning-intentions">Learning Intention: Loading...</h2>
-            <h3 id="success-criteria">Success Criteria: Loading...</h3>
-            <div class="mustShouldCouldDiv">
-                <h4 id="tasks">Tasks: Loading...</h4>
-            </div>
+            <div class="taskDiv" id="tasks">Tasks: Loading...</div>
         </div>
+
+        <div class="external-links">
+            <button id="link1-btn" class="external-link">Loading...</button>
+            <button id="link2-btn" class="external-link">Loading...</button>
+            <button id="link3-btn" class="external-link">Loading...</button>
+        </div>
+        
 
         <div class="submitButtonDiv">
             <button class="submitMustButton" id="must-do-btn">I have finished all Must Do Success Criteria.</button>
@@ -28,9 +32,7 @@
             <button class="submitCouldButton" id="could-do-btn">I have finished all Could Do Success Criteria.</button>
         </div>
 
-        <div class="lessonContent">
-            <p id="lesson-content">Lesson content goes here...</p>
-        </div>
+
 
         <!-- Popup notification -->
         <div id="popup" class="popup hidden"></div>
@@ -174,26 +176,60 @@
                 if (!lesson) throw new Error('Lesson not found in topic1Data.json');
                 console.log('Lesson details:', lesson);
 
+                // Extract and display learning intentions
+                const learningIntentionTexts = lesson.learningIntentions.map(intentionId => {
+                    const intention = data.learningIntentions.find(li => li.id === intentionId);
+                    if (!intention) throw new Error(`Learning intention ${intentionId} not found`);
+                    return `${intention.id}: ${intention.text}`;
+                }).join('<br>');
+
+                document.getElementById('learning-intentions').innerHTML = `Learning Intention(s):<br>${learningIntentionTexts}`;
+
                 // Populate Lesson Data
-                document.getElementById('learning-intentions').innerHTML = `Learning Intention(s): ${lesson.learningIntentions}`;
-                document.getElementById('success-criteria').innerHTML = `Success Criteria: ${lesson.successCriteria}`;
                 document.getElementById('tasks').innerHTML = `
-                    <div class="mustActivityDiv">Must Do: (${lesson.mustDo.synapsePoints} SP) ${lesson.mustDo.successCriteria}</div>
-                    <div class="shouldActivityDiv">Should Do: (${lesson.shouldDo.synapsePoints} SP) ${lesson.shouldDo.successCriteria}</div>
-                    <div class="couldActivityDiv">Could Do: (${lesson.couldDo.synapsePoints} SP) ${lesson.couldDo.successCriteria}</div>
+                    <div class="activityDiv">
+                        <div class="mustActivityDiv">Must Do: (${lesson.mustDo.synapsePoints} SP) ${lesson.mustDo.successCriteria}</div>
+                    </div>
+                    <div class="activityDiv">
+                        <div class="shouldActivityDiv">Should Do: (${lesson.shouldDo.synapsePoints} SP) ${lesson.shouldDo.successCriteria}</div>
+                    </div>
+                    <div class="activityDiv">
+                        <div class="couldActivityDiv">Could Do: (${lesson.couldDo.synapsePoints} SP) ${lesson.couldDo.successCriteria}</div>
+                    </div>
                 `;
 
                 const userDoc = doc(db, 'users', user.uid);
 
-                // Attach Event Listeners
+                // Attach Event Listeners for Task Buttons
                 setupButton('must-do-btn', `lesson1-must`, lesson.mustDo.synapsePoints, 'topic1', userDoc);
                 setupButton('should-do-btn', `lesson1-should`, lesson.shouldDo.synapsePoints, 'topic1', userDoc);
                 setupButton('could-do-btn', `lesson1-could`, lesson.couldDo.synapsePoints, 'topic1', userDoc);
+
+                // External Links
+                const externalLinks = [
+                    { id: 'link1-btn', url: lesson.mustDo.URL, label: 'Must Do Link' },
+                    { id: 'link2-btn', url: lesson.shouldDo.URL, label: 'Should Do Link' },
+                    { id: 'link3-btn', url: lesson.couldDo.URL, label: 'Could Do Link' },
+                ];
+
+                externalLinks.forEach(link => {
+                    const button = document.getElementById(link.id);
+                    button.textContent = link.label;
+                    button.addEventListener('click', () => {
+                        window.open(link.url, '_blank');
+                    });
+                });
             } catch (error) {
                 console.error('Error loading lesson data:', error);
                 showPopup('Failed to load lesson data.', false);
             }
         }
+
+
+
+
+
+
 
 
         // Listen for authentication state changes
@@ -208,43 +244,6 @@
         });
     </script>
 
-    <style>
-        .popup {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 10px 15px;
-            border-radius: 5px;
-            color: white;
-            font-size: 14px;
-            z-index: 1000;
-        }
-        .popup.hidden {
-            display: none;
-        }
-        .popup.success {
-            background-color: #4caf50;
-        }
-        .popup.error {
-            background-color: #f44336;
-        }
-        button {
-            position: relative; /* Enable positioning for z-index */
-            z-index: 1;         /* Ensure button stays on top of other elements */
-            overflow: visible;  /* Ensure content isn’t clipped */
-        }
 
-        button.button-pressed {
-            background-color: #4caf50; /* Green background */
-            color: white;             /* White text */
-            font-weight: bold;        /* Bold text */
-            border: 2px solid #388e3c; /* Darker green border */
-        }
-        button:hover:not(.button-pressed) {
-            background-color: #f0f0f0; /* Light gray on hover */
-            border: 2px solid #ccc;    /* Light gray border */
-        }
-
-    </style>
 </body>
 </html>
