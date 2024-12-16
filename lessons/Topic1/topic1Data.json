@@ -1,5 +1,6 @@
 {
     "topic": "Topic 1",
+    "numberOfLessons": 15,
     "learningIntentions": [
       { "id": "LI1", "text": "Placeholder for Learning Intention 1" },
       { "id": "LI2", "text": "Placeholder for Learning Intention 2" },
@@ -37,7 +38,7 @@
       },
       {
         "lesson": 2,
-        "learningIntentions": ["LI2", "LI3"],
+        "learningIntentions": ["LI2"],
         "successCriteria": "This is the success criteria for Lesson 2",
         "mustDo": {
           "successCriteria": "This is the must do activity for Lesson 2",
@@ -71,7 +72,7 @@
       },
       {
         "lesson": 4,
-        "learningIntentions": ["LI4", "LI5"],
+        "learningIntentions": ["LI4"],
         "successCriteria": "This is the success criteria for Lesson 4",
         "mustDo": {
           "successCriteria": "This is the must do activity for Lesson 4",
@@ -273,7 +274,6 @@
           "synapsePoints": 5
         }
       }
-    ],
-    "numberOfLessons": 15
+    ]
   }
   
