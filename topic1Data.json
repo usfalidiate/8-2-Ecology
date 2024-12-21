@@ -1,5 +1,5 @@
 {
-    "topic": "Topic 1",
+    "topic": "Topic 1 - Placeholder Title",
     "numberOfLessons": 15,
     "learningIntentions": [
       { "id": "LI1", "text": "Placeholder for Learning Intention 1" },
@@ -21,27 +21,30 @@
     "lessons": [
       {
         "lesson": 1,
+        "lessonTitle": ["Lesson 1 - Placeholder Title"],
         "learningIntentions": ["LI1"],
         "successCriteria": "This is the success criteria for Lesson 1",
         "mustDo": {
           "successCriteria": "This is the must do activity for Lesson 1",
-          "synapsePoints": 1,
+          "synapsePoints": 100,
           "URL": "https://classroom.google.com/c/NjU4Mzc2Mzc0NzI3/a/NzQwNDk3NTU1Mjcw/details"
         },
         "shouldDo": {
           "successCriteria": "This is the should do activity for Lesson 1",
-          "synapsePoints": 7,
+          "synapsePoints": 70,
           "URL": "http://placeholderURL.com"
         },
         "couldDo": {
           "successCriteria": "This is the could do activity for Lesson 1",
-          "synapsePoints": 5,
+          "synapsePoints": 50,
           "URL": "http://placeholderURL.com"
         }
       },
       {
         "lesson": 2,
         "learningIntentions": ["LI2"],
+        "lessonTitle": ["Lesson 2 - Placeholder Title"],
+
         "successCriteria": "This is the success criteria for Lesson 2",
         "mustDo": {
           "successCriteria": "This is the must do activity for Lesson 2",
@@ -61,6 +64,8 @@
       },
       {
         "lesson": 3,
+        "lessonTitle": ["Lesson 3 - Placeholder Title"],
+
         "learningIntentions": ["LI3", "LI4"],
         "successCriteria": "This is the success criteria for Lesson 3",
         "mustDo": {
@@ -81,6 +86,8 @@
       },
       {
         "lesson": 4,
+        "lessonTitle": ["Lesson 4 - Placeholder Title"],
+
         "learningIntentions": ["LI4"],
         "successCriteria": "This is the success criteria for Lesson 4",
         "mustDo": {
@@ -101,6 +108,8 @@
       },
       {
         "lesson": 5,
+        "lessonTitle": ["Lesson 5 - Placeholder Title"],
+
         "learningIntentions": ["LI5", "LI6"],
         "successCriteria": "This is the success criteria for Lesson 5",
         "mustDo": {
@@ -121,6 +130,8 @@
       },
       {
         "lesson": 6,
+        "lessonTitle": ["Lesson 6 - Placeholder Title"],
+
         "learningIntentions": ["LI6", "LI7"],
         "successCriteria": "This is the success criteria for Lesson 6",
         "mustDo": {
@@ -141,6 +152,8 @@
       },
       {
         "lesson": 7,
+        "lessonTitle": ["Lesson 7 - Placeholder Title"],
+
         "learningIntentions": ["LI7", "LI8"],
         "successCriteria": "This is the success criteria for Lesson 7",
         "mustDo": {
@@ -161,6 +174,8 @@
       },
       {
         "lesson": 8,
+        "lessonTitle": ["Lesson 8 - Placeholder Title"],
+
         "learningIntentions": ["LI8", "LI9"],
         "successCriteria": "This is the success criteria for Lesson 8",
         "mustDo": {
@@ -181,6 +196,8 @@
       },
       {
         "lesson": 9,
+        "lessonTitle": ["Lesson 9 - Placeholder Title"],
+
         "learningIntentions": ["LI9", "LI10"],
         "successCriteria": "This is the success criteria for Lesson 9",
         "mustDo": {
@@ -201,6 +218,8 @@
       },
       {
         "lesson": 10,
+        "lessonTitle": ["Lesson 10 - Placeholder Title"],
+
         "learningIntentions": ["LI10", "LI11"],
         "successCriteria": "This is the success criteria for Lesson 10",
         "mustDo": {
@@ -221,6 +240,8 @@
       },
       {
         "lesson": 11,
+        "lessonTitle": ["Lesson 11 - Placeholder Title"],
+
         "learningIntentions": ["LI11", "LI12"],
         "successCriteria": "This is the success criteria for Lesson 11",
         "mustDo": {
@@ -241,6 +262,8 @@
       },
       {
         "lesson": 12,
+        "lessonTitle": ["Lesson 12 - Placeholder Title"],
+
         "learningIntentions": ["LI12", "LI13"],
         "successCriteria": "This is the success criteria for Lesson 12",
         "mustDo": {
@@ -261,6 +284,8 @@
       },
       {
         "lesson": 13,
+        "lessonTitle": ["Lesson 13 - Placeholder Title"],
+
         "learningIntentions": ["LI13", "LI14"],
         "successCriteria": "This is the success criteria for Lesson 13",
         "mustDo": {
@@ -281,6 +306,8 @@
       },
       {
         "lesson": 14,
+        "lessonTitle": ["Lesson 14 - Placeholder Title"],
+
         "learningIntentions": ["LI14", "LI15"],
         "successCriteria": "This is the success criteria for Lesson 14",
         "mustDo": {
@@ -301,6 +328,8 @@
       },
       {
         "lesson": 15,
+        "lessonTitle": ["Lesson 15 - Placeholder Title"],
+
         "learningIntentions": ["LI15"],
         "successCriteria": "This is the success criteria for Lesson 15",
         "mustDo": {

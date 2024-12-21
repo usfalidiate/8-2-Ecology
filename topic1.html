@@ -3,154 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Topic 1</title>
-    <style>
-        /* General Reset */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: Arial, sans-serif;
-        }
+    <title>Science</title>
+    <link rel="stylesheet" href="styles.css">
 
-        /* Background Styling */
-        .background {
-            background-color: black; /* Base black background */
-            background: 
-                linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), /* Optional dark overlay */
-                url('assets/BGs/Topic1BG.png') no-repeat center center fixed; /* Image background */
-            background-size: cover;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-
-        /* Navigation Buttons Container */
-        .nav-buttons {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .nav-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .nav-button:hover {
-            background-color: #45a049;
-        }
-
-        /* Lesson Buttons Container */
-        .lesson-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            max-width: 80%;
-            margin-top: 20px;
-        }
-
-        /* Lesson Button Styling */
-        .lesson-button {
-            width: 120px;
-            height: 50px;
-            background-color: #008CBA;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .lesson-button:hover {
-            background-color: #005f73;
-        }
-
-        /* Disabled state styling */
-        .disabled {
-            opacity: 0.5;
-            pointer-events: none; 
-            cursor: not-allowed;
-        }
-
-        h1 {
-            color: white;
-            font-size: 48px;
-        }
-
-    </style>
 </head>
 <body>
     <div class="background">
         <!-- Navigation Buttons -->
-        <div class="nav-buttons">
-            <button class="nav-button" onclick="location.href='home.html';">Back to Home</button>
-            <button class="nav-button" onclick="location.href='profile.html';">Profile</button>
+        <div class="navButtonsDiv">
+            <button class="topicNavButton" onclick="location.href='home.html';">Home</button>
+            <button class="topicNavButton" onclick="location.href='accessibility.html';">Accessibility</button>
+            <button class="topicNavButton" onclick="location.href='profile.html';">Profile</button>
         </div>
 
-        <h1>Topic 1</h1>
+        <h1 class="topicH1" id="topic-title">Placeholder Title</h1>
 
         <!-- Lesson Buttons -->
-        <div class="lesson-buttons">
-            <button class="lesson-button" data-lesson-id="lesson1" onclick="location.href='lessons/topic1/lesson1.html';">Lesson 1</button>
-            <button class="lesson-button" data-lesson-id="lesson2" onclick="location.href='lessons/topic1/lesson2.html';">Lesson 2</button>
-            <button class="lesson-button" data-lesson-id="lesson3" onclick="location.href='lessons/topic1/lesson3.html';">Lesson 3</button>
-            <button class="lesson-button" data-lesson-id="lesson4" onclick="location.href='lessons/topic1/lesson4.html';">Lesson 4</button>
-            <button class="lesson-button" data-lesson-id="lesson5" onclick="location.href='lessons/topic1/lesson5.html';">Lesson 5</button>
-            <button class="lesson-button" data-lesson-id="lesson6" onclick="location.href='lessons/topic1/lesson6.html';">Lesson 6</button>
-            <button class="lesson-button" data-lesson-id="lesson7" onclick="location.href='lessons/topic1/lesson7.html';">Lesson 7</button>
-            <button class="lesson-button" data-lesson-id="lesson8" onclick="location.href='lessons/topic1/lesson8.html';">Lesson 8</button>
-            <button class="lesson-button" data-lesson-id="lesson9" onclick="location.href='lessons/topic1/lesson9.html';">Lesson 9</button>
-            <button class="lesson-button" data-lesson-id="lesson10" onclick="location.href='lessons/topic1/lesson10.html';">Lesson 10</button>
-            <button class="lesson-button" data-lesson-id="lesson11" onclick="location.href='lessons/topic1/lesson11.html';">Lesson 11</button>
-            <button class="lesson-button" data-lesson-id="lesson12" onclick="location.href='lessons/topic1/lesson12.html';">Lesson 12</button>
-            <button class="lesson-button" data-lesson-id="lesson13" onclick="location.href='lessons/topic1/lesson13.html';">Lesson 13</button>
-            <button class="lesson-button" data-lesson-id="lesson14" onclick="location.href='lessons/topic1/lesson14.html';">Lesson 14</button>
-            <button class="lesson-button" data-lesson-id="lesson15" onclick="location.href='lessons/topic1/lesson15.html';">Lesson 15</button>
-        </div>
+        <div class="lesson-buttons" id="lesson-buttons-container"></div>
+
     </div>
     <script type="module">
         import { db } from "./firebase-config.js";
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-
-        // If a setting for a lesson doesn't exist, we assume it's enabled by default.
-        // Adjust logic as necessary.
-        
+    
+        // Single constant for topic number
+        const TOPIC_NUMBER = 1; // Update this value for different topics
+    
+        // Function to load admin settings and enable/disable lesson buttons
         async function loadAdminSettings() {
             try {
                 const adminRef = doc(db, "admin", "settings");
                 const adminDoc = await getDoc(adminRef);
+    
+                const lessonButtons = document.querySelectorAll('.lesson-button');
                 if (adminDoc.exists()) {
                     const settings = adminDoc.data();
-                    const lessonButtons = document.querySelectorAll('.lesson-button');
                     lessonButtons.forEach(button => {
-                        const lessonId = button.getAttribute('data-lesson-id'); 
-                        // We have toggles like topic1Lesson1Enabled, topic1Lesson2Enabled in admin.
-                        // We'll construct the field name:
-                        const fieldName = `topic1${lessonId.charAt(0).toUpperCase() + lessonId.slice(1)}Enabled`;
-                        // Example: lesson1 -> topic1Lesson1Enabled
+                        const lessonId = button.getAttribute('data-lesson-id');
+                        const fieldName = `topic${TOPIC_NUMBER}${lessonId.charAt(0).toUpperCase() + lessonId.slice(1)}Enabled`;
                         const isEnabled = settings[fieldName];
-
-                        // If the setting is not explicitly true, we disable the button by default.
+    
+                        // Enable or disable buttons
                         if (isEnabled === true) {
-                            // Enabled
                             button.classList.remove('disabled');
                         } else {
-                            // Disabled by default (either false or undefined)
                             button.classList.add('disabled');
-}
-
-
+                        }
                     });
                 } else {
                     console.log("No admin settings found. Assuming all lessons enabled.");
@@ -159,8 +57,56 @@
                 console.error("Error loading admin settings:", error);
             }
         }
+    
+        // Function to load lesson data and update button text
+        async function loadLessonData() {
+            try {
+                // Use TOPIC_NUMBER for the file path
+                const response = await fetch(`topic${TOPIC_NUMBER}Data.json`);
+                if (!response.ok) throw new Error('Failed to load lesson data');
 
-        window.addEventListener('load', loadAdminSettings);
+                const data = await response.json();
+                const lessons = data.lessons;
+
+                // Update the topic title
+                const topicTitleElement = document.getElementById('topic-title');
+                if (topicTitleElement) {
+                    topicTitleElement.textContent = data.topic;
+                }
+
+                // Get the lesson buttons container
+                const lessonButtonsContainer = document.getElementById('lesson-buttons-container');
+                lessonButtonsContainer.innerHTML = ""; // Clear any existing content
+
+                // Generate buttons dynamically
+                lessons.forEach(lessonData => {
+                    // Create a new button element
+                    const button = document.createElement('button');
+                    button.classList.add('lesson-button');
+                    button.setAttribute('data-lesson-id', `lesson${lessonData.lesson}`);
+                    button.onclick = () => location.href = `lessons/topic${TOPIC_NUMBER}/lesson${lessonData.lesson}.html`;
+
+                    // Use lessonTitle for button text
+                    const lessonTitle = lessonData.lessonTitle ? lessonData.lessonTitle[0] : `Lesson ${lessonData.lesson}`;
+                    button.textContent = lessonTitle;
+
+                    // Append the button to the container
+                    lessonButtonsContainer.appendChild(button);
+                });
+
+            } catch (error) {
+                console.error('Error loading lesson data:', error);
+            }
+        }
+
+    
+        // Run both functions on page load
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadLessonData(); // Load lesson text first
+            await loadAdminSettings(); // Then enable/disable buttons
+        });
     </script>
+    
+    
 </body>
 </html>

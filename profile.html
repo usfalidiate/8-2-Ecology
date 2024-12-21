@@ -4,308 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
-    <style>
-        /* General Reset */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .profile-container {
-            display: flex;
-            justify-content: space-between; 
-            align-items: flex-start;
-            gap: 20px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            width: 90%;
-            max-width: 1200px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .avatar-section {
-            width: 100%;
-            text-align: center;
-        }
-
-        #avatar-container {
-            position: relative;
-            width: 100%;
-            height: 480px;
-            margin: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: transparent;
-        }
-
-        #avatar-container img {
-            position: relative;
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .modal {
-            display: none; 
-            width: 45%; 
-        }
-
-        .modal.visible {
-            display: block;
-        }
-
-        .modal-content {
-            background: #ffffff;
-            color: black;
-            border-radius: 10px;
-            padding: 20px;
-            height: 100%;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;   
-        }
-
-        .tab-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            margin: 5px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            flex: 1;
-            max-width: 120px;
-            text-align: center;
-        }
-
-        .tab.active {
-            background: #2E7D32;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-
-        .grid-item {
-            position: relative;
-            border: 2px solid transparent;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            background: #f4f4f4;
-        }
-
-        .grid-item.selected {
-            border-color: green;
-        }
-
-        .grid-item img {
-            width: 100%;
-            height: auto;
-        }
-
-        .grid-item .tick {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 20px;
-            height: 20px;
-            background-size: cover;
-            display: none;
-        }
-
-        .grid-item.selected .tick {
-            display: block;
-        }
-
-        .close-modal {
-            position: relative;
-            top: 10px;
-            background-color: #F44336;
-            color: white;
-            border: none;
-            font-size: 18px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-        }
-
-        .close-modal:hover {
-            background-color: #D32F2F;
-        }
-
-        #customise-avatar-button {
-            display: block; 
-            margin: 20px auto; 
-            padding: 10px 20px;
-            background-color: #008CBA;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        #customise-avatar-button:hover {
-            background-color: #005f73;
-        }
-
-        .stats-section {
-            margin-top: 20px;
-            text-align: center;
-            width: 45%; 
-        }
-
-        .stats-section p {
-            margin: 10px 0;
-            font-size: 18px;
-        }
-
-        .action-button {
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #e63946;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .action-button:hover {
-            background-color: #d62828;
-        }
-
-        .back-button {
-            background-color: #F44336;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .back-button:hover {
-            background-color: #D32F2F;
-        }
-
-        /* Disabled state styling */
-        .disabled {
-            opacity: 0.5;
-            pointer-events: none;
-            cursor: not-allowed;
-        }
-
-        /* Notification Styles */
-        #notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: none;
-            z-index: 1000;
-        }
-
-        #notification.success {
-            background-color: #4CAF50;
-        }
-
-        #notification.error {
-            background-color: #F44336;
-        }
-
-        .collapsible-container {
-            width: 100%;
-        }
-
-        .collapsible-button {
-            text-align: left;
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .collapsible-button:hover {
-            background-color: #2E7D32;
-        }
-
-        .collapsible-content {
-            display: none;
-            margin-top: 10px;
-        }
-
-    </style>
-</head>
+    <link rel="stylesheet" href="styles.css">
+    </head>
 <body>
-    <div class="profile-container">
-        <div class="avatar-section">
-            <h2 id="user-name">Loading...</h2>
-            <div id="avatar-container"></div>
-            <button id="customise-avatar-button">Customise Avatar</button>
-            <p id="synapse-points"><strong>Synapse Points (SP):</strong> Loading...</p>
-            <p id="badges"><strong>Badges:</strong> Loading...</p>
-            <!-- Form Section -->
-            <div class="collapsible-container">
-                <button id="toggle-form-section" class="collapsible-button">Edit Profile</button>
-                <div class="form-section collapsible-content">
-                    <input type="text" id="first-name" placeholder="First Name">
-                    <input type="text" id="last-name" placeholder="Last Name">
-                    <input type="text" id="display-name" placeholder="Display Name">
-                    <button id="save-names-button">Save Names</button>
-                </div>
-            </div>
-            
-            <button id="logout-button" class="action-button">Log Out</button>
-            <button class="back-button" onclick="location.href='home.html';">Back to Home</button>            
+    <div class="background">
+        <div class="navButtonsDiv">
+            <button class="topicNavButton" onclick="location.href='home.html';">Home</button>  
+            <button class="topicNavButton" onclick="location.href='accessibility.html';">Accessibility</button>
         </div>
+        <div class="profile-container">
+            <div class="avatar-section">
+                <div class="collapsible-container">
+                    <button id="toggle-form-section" class="collapsible-button">Edit Names</button>
+                    <div class="form-section collapsible-content">
+                        <input type="text" id="first-name" placeholder="First Name">
+                        <input type="text" id="last-name" placeholder="Last Name">
+                        <input type="text" id="display-name" placeholder="Display Name">
+                        <button id="save-names-button">Save Names</button>
+                        <button id="logout-button">Log Out</button>
 
-        <div id="customisation-modal" class="modal">
-            <div class="modal-content">
-                <h2>Customise Avatar</h2>
-                <div class="tab-container">
-                    <button data-category="hair" class="tab active">Hair</button>
-                    <button data-category="skin" class="tab">Skin</button>
-                    <button data-category="eyes" class="tab">Eyes</button>
-                    <button data-category="face" class="tab">Face</button>
-                    <button data-category="mouth" class="tab">Mouth</button>
-                    <button data-category="shoes" class="tab">Shoes</button>
-                    <button data-category="pants" class="tab">Pants</button>
-                    <button data-category="tops" class="tab">Tops</button>
+                    </div>
                 </div>
-                <div id="customisation-grid" class="grid-container"></div>
-                <button id="close-modal-button" class="close-modal">×</button>
+                <h2 id="user-name">Loading...</h2>
+                <p id="synapse-points"><strong>Synapse Points (SP):</strong> Loading...</p>
+                <p id="badges"><strong>Badges:</strong> Loading...</p>
+                <div id="avatar-container"></div>
+                <button id="customise-avatar-button">Customise Avatar</button>
+
+
+            </div>
+    
+            <div id="customisation-modal" class="profileModal">
+                <div class="profileModalContent">
+                    <h2>Customise Avatar</h2>
+                    <div class="tab-container">
+                        <button data-category="hair" class="profileTab active">Hair</button>
+                        <button data-category="skin" class="profileTab">Skin</button>
+                        <button data-category="eyes" class="profileTab">Eyes</button>
+                        <button data-category="face" class="profileTab">Face</button>
+                        <button data-category="mouth" class="profileTab">Mouth</button>
+                        <button data-category="shoes" class="profileTab">Shoes</button>
+                        <button data-category="pants" class="profileTab">Pants</button>
+                        <button data-category="tops" class="profileTab">Tops</button>
+                    </div>
+                    <div id="customisation-grid" class="grid-container"></div>
+                    <button id="close-modal-button" class="close-modal">×</button>
+                </div>
             </div>
         </div>
     </div>
@@ -329,7 +73,7 @@
 
 
             // Select all tabs (category buttons)
-                const tabs = document.querySelectorAll(".tab");
+                const tabs = document.querySelectorAll(".profileTab");
 
             // Add click event listener to each tab
             tabs.forEach(tab => {

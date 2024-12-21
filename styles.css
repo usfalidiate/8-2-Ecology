@@ -1,0 +1,1242 @@
+/* Import Modern Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* General Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Montserrat', Arial, sans-serif;
+    overflow-x: hidden;
+    color: #ffffff;
+    background: radial-gradient(circle, #6b046b, #1c0122);
+}
+
+/* Background */
+.background {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    border: 2px solid #ffdd00;
+    border-radius: 3px;
+}
+
+/* Navigation Buttons */
+.topicNavButtons {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px;
+    gap: 20px;
+}
+
+.topicNavButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #ff69b4;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.topicNavButton:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px #ff69b4;
+    background: #ff47a3;
+}
+
+/*Login Styling*/
+.login-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.tab {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: #f0f0f0;
+    cursor: pointer;
+}
+
+.tab button.active {
+    background: #007bff;
+    color: white;
+}
+
+.form {
+    display: none;
+}
+
+.form.active {
+    display: block;
+}
+
+input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+}
+
+
+
+
+
+/*Profile Styling*/
+.profileBackground {
+    padding: 20px;
+
+}
+
+.profile-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    width: 90%;
+    max-width: 1200px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.avatar-section {
+    width: 100%;
+    text-align: center;
+}
+
+#avatar-container {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+#avatar-container img {
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.profileModal {
+    display: none; 
+    width: 45%; 
+}
+
+.profileModal.visible {
+    display: block;
+}
+
+.profileModalContent {
+    background: #ffffff;
+    color: black;
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;   
+}
+
+.tab-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.profileTab {
+    padding: 10px 20px;
+    margin: 5px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    flex: 1;
+    max-width: 120px;
+    text-align: center;
+}
+
+.tab.active {
+    background: #2E7D32;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.grid-item {
+    position: relative;
+    border: 2px solid transparent;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    background: #f4f4f4;
+}
+
+.grid-item.selected {
+    border-color: green;
+}
+
+.grid-item img {
+    width: 100%;
+    height: auto;
+}
+
+.grid-item .tick {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background-size: cover;
+    display: none;
+}
+
+.grid-item.selected .tick {
+    display: block;
+}
+
+.close-modal {
+    position: relative;
+    top: 10px;
+    background-color: #F44336;
+    color: white;
+    border: none;
+    font-size: 18px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    background-color: #D32F2F;
+}
+
+#customise-avatar-button {
+    display: block; 
+    margin: 20px auto; 
+    padding: 10px 20px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#customise-avatar-button:hover {
+    background-color: #005f73;
+}
+
+.stats-section {
+    margin-top: 20px;
+    text-align: center;
+    width: 45%; 
+}
+
+.stats-section p {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.action-button {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #e63946;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.action-button:hover {
+    background-color: #d62828;
+}
+
+
+/* Disabled state styling */
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* Notification Styles */
+#notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: none;
+    z-index: 1000;
+}
+
+#notification.success {
+    background-color: #4CAF50;
+}
+
+#notification.error {
+    background-color: #F44336;
+}
+
+.collapsible-container {
+    width: 100%;
+}
+
+.collapsible-button {
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+}
+
+.collapsible-button:hover {
+    background-color: #2E7D32;
+}
+
+.collapsible-content {
+    display: none;
+    margin-top: 10px;
+}
+
+
+
+
+/* Topic Styling*/
+/* Background Styling */
+.topicBackground {
+    background-color: black; /* Base black background */
+    background: 
+        radial-gradient(circle, #6b046b, #1c0122); /* Optional dark overlay */
+        /*url('assets/BGs/Topic1BG.png') no-repeat center center fixed;  Image background */
+    background-size: cover;
+    width: 100%;
+    /* height: 100%; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+
+/* Navigation Buttons Container */
+.navButtonsDiv {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    box-sizing: border-box;
+
+}
+
+.nav-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.nav-button:hover {
+    background-color: #45a049;
+}
+
+/* Lesson Buttons Container */
+.lesson-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: flex-start;
+    gap: 15px;
+    width: 70%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/* Lesson Button Styling */
+.lesson-button {
+    width: 100%;
+    height: 50px;
+    background: radial-gradient(circle, #6b046b, #1c0122);
+    color: #ffee00;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    text-align: left;
+    padding: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+
+}
+.lesson-button:hover {
+    background: linear-gradient(135deg, #FF5722, #FF9800); /* Reverse gradient */
+    transform: scale(1.05); /* Scale up on hover */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.7);
+    color: #1c0122;
+    border-radius: 10px;        
+}
+
+
+.topicH1 {
+    color: white;
+    font-size: 40px;
+    text-transform: uppercase;
+    font-weight: 900;
+}
+
+
+/*Home Styling*/
+/* Home Background Styling */
+.homeBackground {
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), 
+        url('assets/BGs/ClassKoglinYearEight.png') no-repeat center center fixed;
+    background-size: cover; /* Ensures the background image covers the entire element */
+    width: 100%; /* Sets the width of the background to 100% of its container */
+    height: 100%; /* Sets the height of the background to 100% of its container */
+    display: flex; /* Uses flexbox layout */
+    flex-direction: column; /* Arranges children in a column */
+    justify-content: center; /* Centers children vertically */
+    align-items: center; /* Centers children horizontally */
+}
+
+/* Profile Button */
+.profile-button {
+    /*position: absolute;  Positions the button absolutely within its nearest positioned ancestor */
+    top: 10px; /* Positions the button 10px from the top of its container */
+    right: 10px; /* Positions the button 10px from the left of its container */
+    padding: 10px 20px; /* Adds padding inside the button */
+    font-size: 16px; /* Sets the font size of the button text */
+    background-color: #4CAF50; /* Sets the background color of the button */
+    color: white; /* Sets the text color of the button */
+    border: none; /* Removes the default border */
+    border-radius: 5px; /* Rounds the corners of the button */
+    cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
+}
+.profile-button:hover {
+    background-color: #45a049;
+}
+
+/* Topic Buttons Container */
+.topicButtons {
+    display: grid;
+    gap: 1rem; /* Add space between buttons */
+    padding: 1rem; /* Add padding around the container */
+}
+
+/* Responsive Grid Layout */
+@media (max-width: 379px) {
+    .topicButtons {
+        grid-template-columns: 1fr; /* Single column */
+    }
+}
+
+@media (min-width: 380px) and (max-width: 540px) {
+    .topicButtons {
+        grid-template-columns: repeat(2, 1fr); /* Two columns */
+    }
+}
+
+@media (min-width: 541px) and (max-width: 750px) {
+    .topicButtons {
+        grid-template-columns: repeat(3, 1fr); /* Three columns */
+    }
+}
+
+@media (min-width: 751px) {
+    .topicButtons {
+        grid-template-columns: repeat(4, 1fr); /* Four columns */
+    }
+}
+
+/* Topic Button Styling */
+.topic-button {
+    width: 100%; /* Full width of the grid cell */
+    height: 90px; /* Fixed height */
+    background: radial-gradient(circle, #6b046b, #1c0122);
+    color: #ffee00;
+    border: none;
+    border-radius: 10px 10px 0px 0px; /* Rounded corners on top */
+    cursor: pointer;
+    font-size: 16px; /* Fixed font size */
+    font-weight: bold;
+    padding: 10px; /* Add padding for better spacing */
+    text-align: center; /* Center the text */
+    overflow: hidden; /* Hide overflow */
+    white-space: normal; /* Allow text to wrap */
+    display: flex; /* Use flexbox for button content */
+    flex-direction: column; /* Arrange text in a column */
+    align-items: center; /* Center content horizontally */
+    justify-content: center; /* Center content vertically */
+    transition: all 0.2s ease-in-out;
+
+}
+
+.topic-button:hover {
+    background: linear-gradient(135deg, #FF5722, #FF9800); /* Reverse gradient */
+    transform: scale(1.05); /* Scale up on hover */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.7);
+    color: #1c0122;
+    border-radius: 15px;
+}
+
+/* Lesson Progress Styling */
+.lesson-progress {
+    width: 100%; /* Full width of the grid cell */
+    height: 20px; /* Fixed height */
+    background-color: #f1c0b1;
+    color: #333; /* Dark text color */
+    border-radius: 5px; /* Rounded corners */
+    text-align: center; /* Center the text */
+    font-size: 14px; /* Smaller font size */
+    line-height: 20px; /* Center text vertically */
+    margin-bottom: 0px; /* Adjust margin to sit directly under the topic button */
+    border-radius: 0px 0px 10px 10px;
+
+} 
+
+.topic-button:hover {
+    background-color: #E64A19;
+}
+
+/* Smaller text for topic names */
+.topic-name {
+    font-size: 0.8em; /* Smaller font size */
+    font-weight: normal; /* Normal font weight */
+    text-align: center; /* Center the text */
+    word-wrap: break-word; /* Wrap text if it gets too wide */
+}
+
+/* Invisible Button */
+.invisible-button {
+    /* position: absolute; */
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    opacity: 0;
+}
+
+/* Modal Styling */
+.homeModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.homeModal.active {
+    display: block;
+}
+
+.homeModal input {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.homeModal button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.homeModal button:hover {
+    background-color: #45a049;
+}
+
+.homeModal .close-button {
+    background-color: #F44336;
+    margin-top: 10px;
+}
+
+.homeModal .close-button:hover {
+    background-color: #D32F2F;
+}
+
+.accessibility-button {
+    /*position: absolute;  Positions the button absolutely within its nearest positioned ancestor */
+    top: 10px; /* Positions the button 10px from the top of its container */
+    padding: 10px 20px; /* Adds padding inside the button */
+    font-size: 16px; /* Sets the font size of the button text */
+    background-color: #4CAF50; /* Sets the background color of the button */
+    color: white; /* Sets the text color of the button */
+    border: none; /* Removes the default border */
+    border-radius: 5px; /* Rounds the corners of the button */
+    cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
+    justify-self: center; /* Centers the button horizontally */
+}
+.acessibility-button:hover {
+    background-color: #45a049;
+}
+
+.topButtonsDiv {
+    position: fixed; /* Fixes the div at the top of the page */
+    top: 0; /* Aligns the div to the top */
+    left: 0; /* Aligns the div to the left */
+    width: 100%; /* Ensures the div spans the full width of the page */
+    display: flex; /* Uses flexbox layout */
+    justify-content: space-between; /* Distributes space between buttons */
+    padding: 10px; /* Adds padding inside the div */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    background-color: transparent; /* Adds a transparent background */
+    z-index: 1000; /* Ensures the div stays on top of other elements */
+}
+
+.button-progress-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+
+
+/* Header Styling */
+h1 {
+    font-size: 48px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffdd00;
+    text-shadow: 2px 2px 0px #000;
+}
+
+h2 {
+    font-size: 56px;
+    color: #dcdcdc;
+    text-shadow: 1px 1px 0px #000;
+    margin: 0px;
+}
+
+h3, h4 {
+    font-size: 20px;
+    color: #e0e0e0;
+    text-align: center;
+    margin: 0px;
+}
+
+
+
+
+
+
+
+
+/* Admin */
+.admin-container {
+    background-color: rgb(0, 0, 0);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 80%;
+}
+
+.admin-container h2 {
+    margin-top: 0;
+}
+
+.admin-container label {
+    display: block;
+    margin: 10px 0;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px; 
+    height: 20px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.back-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #F44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.back-button:hover {
+    background-color: #D32F2F;
+}
+
+.collapsible {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.active, .collapsible:hover {
+    background-color: #555;
+}
+
+.content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
+}
+/* Tasks Section */
+.mustShouldCouldDiv {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.taskDiv {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.LIHeading {
+    font-size: 36px;
+    text-transform: uppercase;
+}
+
+
+/* Fortnite-Inspired Activity Div Styling */
+.activityDiv {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    width: 30%;
+    padding: 10px 10px 10px; /* Add bottom padding to make room for SP */
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #ffffff;
+    position: relative;
+    background: linear-gradient(135deg, #1a1a1a, #333333); /* Dark gradient background */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    margin: 10px;
+    transition: transform 0.3s ease;
+}
+
+.activityTextDiv {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+
+
+/* Synapse Points Styling */
+.synapsePoints {
+    /* position: absolute; */
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    font-size: 42px; /* Larger font */
+    color: #ffd700; /* Shimmering gold */
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.8), 0 0 10px rgba(255, 215, 0, 0.6);
+    animation: shimmer 1.5s infinite alternate;
+    font-weight: 700;
+}
+
+/* Shimmer Animation */
+@keyframes shimmer {
+    0% {
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.8), 0 0 10px rgba(255, 215, 0, 0.6);
+    }
+    100% {
+        text-shadow: 0 0 10px rgba(255, 215, 0, 1), 0 0 20px rgba(255, 215, 0, 0.8);
+    }
+}
+
+
+
+/* Learning Intention Styling */
+#learning-intentions {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffdd00; /* Yellow for emphasis */
+    margin: 20px;
+    text-align: center;
+}
+
+
+
+.lessonInfo {
+    width: 100%;
+}
+
+/* Lesson Content */
+.lessonContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px;
+    width: 100%;
+}
+
+#lesson-content {
+    font-size: 16px;
+    color: #ffffff;
+    margin-top: 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 800px;
+}
+
+/* Buttons for Tasks */
+.submitButtonDiv {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Completion Buttons */
+.submitMustButton {
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative; /* For checkmark positioning */
+    border: 2px solid #ff4757; /* Red border for Must Do */
+    width: 30%;
+    background: linear-gradient(135deg, #1a1a1a, #333333); /* Dark gradient background */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+}
+
+.submitMustButton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); /* Golden glow */
+}
+
+/* Completion Buttons */
+.submitShouldButton {
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative; /* For checkmark positioning */
+    border: 2px solid #ffa502; /* Orange border for Should Do */
+    width: 30%;
+    background: linear-gradient(135deg, #1a1a1a, #333333); /* Dark gradient background */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+
+}
+
+.submitShouldButton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); /* Golden glow */
+}
+/* Completion Buttons */
+.submitCouldButton {
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative; /* For checkmark positioning */
+    border: 2px solid #3742fa; /* Blue border for Could Do */
+    width: 30%;
+    background: linear-gradient(135deg, #1a1a1a, #333333); /* Dark gradient background */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+
+}
+
+.submitCouldButton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); /* Golden glow */
+}
+
+
+
+/* .button.button-pressed {
+    background-color: #4caf50;
+    box-shadow: 0 0 10px #4caf50;
+    color: white;
+} */
+
+button.button-pressed::after {
+    content: '✔';
+    position: absolute;
+    right: 15px;
+    font-size: 20px;
+    color: #fff;
+    
+}
+
+/* Pressed Button State */
+button.button-pressed {
+    background: #4caf50;
+    color: white;
+    font-weight: bold;
+    border: 2px solid #388e3c;
+}
+
+
+/* External Links */
+.external-links {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+
+.external-link {
+    background: #2f3542;
+    color: #ffdd00;
+    border: 2px solid #ffdd00;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 30%;
+    border: 2px solid #ff4757; /* Red border for Must Do */
+
+}
+.external-link-must {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffdd00;
+    border: 2px solid #ffdd00;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 30%;
+    border: 2px solid #ff4757; /* Red border for Must Do */
+    background: linear-gradient(135deg, #1a1a1a, #333333); /* Dark gradient background */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+}
+
+.external-link-should {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #1a1a1a, #333333); /* Dark gradient background */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+    color: #ffdd00;
+    border: 2px solid #ffdd00;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 30%;
+    border: 2px solid #ffa502; /* Orange border for Should Do */
+
+}
+
+.external-link-could {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffdd00;
+    border: 2px solid #ffdd00;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 30%;
+    border: 2px solid #3742fa; /* Blue border for Could Do */
+    background: linear-gradient(135deg, #1a1a1a, #333333); /* Dark gradient background */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+}
+.external-link-must:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); /* Golden glow */
+}
+.external-link-should:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); /* Golden glow */
+}
+.external-link-could:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); /* Golden glow */
+}
+
+/* Popup Notification */
+.popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ff4757;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.popup.success {
+    background-color: #2ed573;
+}
+
+
+
+/* button:hover:not(.button-pressed) {
+    background-color: #f0f0f0;
+    border: 2px solid #ccc;
+} */
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+    opacity: 0;
+}
+
+@keyframes successAnimation {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.completed-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 128, 0, 0.5); /* Semi-transparent green */
+    color: #fff;
+    font-size: 32px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    pointer-events: none; /* Prevents blocking clicks */
+    border-radius: 15px;
+    overflow: hidden;
+    animation: successAnimation 0.6s ease-out; /* Add success animation */
+}
+
+@keyframes pulseButton {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.activity-pressed {
+    background-color: #4caf50;
+    box-shadow: 0 0 15px #4caf50;
+    color: white;
+    font-weight: bold;
+    animation: pulseButton 0.3s ease-in-out; /* Button pulse animation */
+}
+
+
+button.activityDiv {
+    all: unset; /* Reset browser button styles completely */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+    background: linear-gradient(135deg, #1a1a1a, #333333); /* Same background */
+    transition: transform 0.3s ease;
+    color: #ffffff; /* Text color */
+    position: relative; /* For future overlays */
+    box-sizing: border-box;
+    width: 30%;
+}
+
+/* Hover Effect */
+button.activityDiv:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); /* Golden glow */
+}
+
+/* Active Effect - Prevent screen-wide effects */
+button.activityDiv:active {
+    transform: scale(0.95);
+    box-shadow: none;
+    background: linear-gradient(135deg, #1a1a1a, #292929); /* Slightly darker */
+}
+
+/* Focus Effect Removal */
+button.activityDiv:focus {
+    outline: none;
+}
+
+/* Retain class-based borders */
+.mustActivityDiv {
+    border: 3px solid #ff4757; /* Red for Must Do */
+}
+
+.shouldActivityDiv {
+    border: 3px solid #ffa502; /* Orange for Should Do */
+}
+
+.couldActivityDiv {
+    border: 3px solid #3742fa; /* Blue for Could Do */
+}
+
+.tilted-text {
+    display: inline-block; /* Allows rotation without affecting layout */
+    transform: rotate(-30deg); /* Tilt the text 30 degrees */
+    font-weight: bold; /* Keep it bold for emphasis */
+    color: #fff; /* White text */
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Add subtle shadow for readability */
+}

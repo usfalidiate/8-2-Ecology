@@ -4,13 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lesson 1</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../../styles.css" />
 </head>
 <body>
     <div class="background">
-        <div class="nav-buttons">
-            <button class="nav-button" onclick="location.href='../../home.html';">Back to Home</button>
-            <button class="nav-button" onclick="location.href='../../topic1.html';">Back to Topic</button>
+        <div class="navButtonsDiv">
+            <button class="topicNavButton" onclick="location.href='../../home.html';">Home</button>
+            <button class="topicNavButton" onclick="location.href='../../accessibility.html';">Accessibility</button>
+            <button class="topicNavButton" onclick="location.href='../../profile.html';">Profile</button>
+            <button class="topicNavButton" onclick="location.href='../../topic1.html';">Back to Topic</button>
         </div>
 
         <div class="lessonInfo">
@@ -20,17 +22,13 @@
         </div>
 
         <div class="external-links">
-            <button id="link1-btn" class="external-link">Loading...</button>
-            <button id="link2-btn" class="external-link">Loading...</button>
-            <button id="link3-btn" class="external-link">Loading...</button>
+            <button id="link1-btn" class="external-link-must">Loading...</button>
+            <button id="link2-btn" class="external-link-should">Loading...</button>
+            <button id="link3-btn" class="external-link-could">Loading...</button>
         </div>
         
 
-        <div class="submitButtonDiv">
-            <button class="submitMustButton" id="must-do-btn">I have finished all Must Do Success Criteria.</button>
-            <button class="submitShouldButton" id="should-do-btn">I have finished all Should Do Success Criteria.</button>
-            <button class="submitCouldButton" id="could-do-btn">I have finished all Could Do Success Criteria.</button>
-        </div>
+
 
 
 
@@ -53,19 +51,13 @@
         }
 
         function addCheckmark(button) {
-            const imagePath = '../../assets/misc/checked.png'; // Ensure correct path
-            button.style.backgroundImage = `url('${imagePath}')`;
-            button.style.backgroundRepeat = 'no-repeat';
-            button.style.backgroundPosition = 'bottom right';
-            button.style.backgroundSize = '20px 20px'; // Scale the image if necessary
-            button.style.zIndex = '1'; // Ensure button stays on top of other elements
+
             button.classList.add('button-pressed'); // Add visual feedback class
-            console.log(`Checkmark added: ${imagePath} on button ${button.id}`);
+            // console.log(`Checkmark added: ${imagePath} on button ${button.id}`);
         }
 
 
         function removeCheckmark(button) {
-            button.style.backgroundImage = '';
             button.classList.remove('button-pressed'); // Remove the class for visual feedback
             console.log(`Checkmark removed from button: ${button.id}`);
         }
@@ -82,79 +74,63 @@
         }
 
 
-        async function setupButton(buttonId, taskKey, points, topicKey, userDoc) {
-            const button = document.getElementById(buttonId);
+        async function setupActivity(elementId, taskKey, points, topicKey, userDoc) {
+            const element = document.getElementById(elementId);
 
-            // Fetch the latest data from Firestore on each interaction
+            // Fetch the latest data from Firestore
             const fetchLatestData = async () => {
                 const latestDoc = await getDoc(userDoc);
                 return latestDoc.data();
             };
 
-            // Initial setup: fetch and update the button state
             const userData = await fetchLatestData();
             const completedTasks = userData.completedTasks || {};
             const topicTasks = completedTasks[topicKey] || {};
-
-            // Check if the task is completed
             const isCompleted = topicTasks[taskKey]?.completed || false;
 
-            // Update button appearance
             if (isCompleted) {
-                addCheckmark(button);
+                markAsCompleted(element);
             }
 
-            // Add event listener to handle button clicks
-            button.addEventListener('click', async () => {
-                console.log(`Button clicked: ${button.id}`);
-
+            element.addEventListener('click', async () => {
                 try {
-                    // Fetch the latest Firestore data before updating
                     const userData = await fetchLatestData();
                     const completedTasks = userData.completedTasks || {};
                     const topicTasks = completedTasks[topicKey] || {};
-
-                    // Determine if the task is already completed
                     const isCompleted = topicTasks[taskKey]?.completed || false;
 
-                    // Get the current timestamp
                     const timestamp = Date.now();
+                    const updatedTask = isCompleted ? null : { completed: true, timestamp };
 
-                    // Update task state with completed and timestamp
-                    const updatedTask = isCompleted
-                        ? null
-                        : { completed: true, timestamp };
-
-                    // Update the topic tasks
                     const updatedTopicTasks = {
                         ...topicTasks,
                         [taskKey]: updatedTask,
                     };
+                    if (!updatedTask) delete updatedTopicTasks[taskKey];
 
-                    // Remove the task if it’s being unmarked
-                    if (!updatedTask) {
-                        delete updatedTopicTasks[taskKey];
-                    }
-
-                    // Update the completedTasks structure
                     const updatedCompletedTasks = {
                         ...completedTasks,
                         [topicKey]: updatedTopicTasks,
                     };
 
                     // Update Firestore
+                    const newSynapsePoints = (userData.synapsePoints || 0) + (isCompleted ? -points : points);
                     await updateDoc(userDoc, {
-                        synapsePoints: (userData.synapsePoints || 0) + (isCompleted ? -points : points),
+                        synapsePoints: newSynapsePoints,
                         completedTasks: updatedCompletedTasks,
                     });
 
-                    // Update UI
-                    toggleCheckmark(button, !isCompleted);
-                    showPopup(`Synapse Points ${isCompleted ? 'removed' : 'saved'} successfully!`, true);
+                    // Update UI based on completed status
+                    if (isCompleted) {
+                        element.classList.remove('activity-pressed');
+                        const overlay = element.querySelector('.completed-overlay');
+                        if (overlay) overlay.remove();
+                    } else {
+                        markAsCompleted(element);
+                    }
 
-                    // Debugging logs
-                    console.log(`Updated task:`, updatedTask);
-                    console.log(`Updated completedTasks structure:`, updatedCompletedTasks);
+                    // Display updated Synapse Points in the popup
+                    showPopup(`Synapse Points ${isCompleted ? 'removed' : 'saved'} successfully! Total: ${newSynapsePoints} SP`, true);
                 } catch (error) {
                     console.error('Error updating Firestore:', error);
                     showPopup('Failed to update progress.', false);
@@ -164,10 +140,30 @@
 
 
 
+        function markAsCompleted(element) {
+            // Check if the overlay already exists
+            if (!element.querySelector('.completed-overlay')) {
+                const overlay = document.createElement('div');
+                overlay.innerHTML = '<span class="tilted-text">COMPLETED</span>';
+                overlay.className = 'completed-overlay';
+                element.appendChild(overlay);
+            }
+
+            // Add the animation class to the button
+            element.classList.add('activity-pressed');
+
+            // Remove the pulse animation after it finishes to allow re-trigger
+            setTimeout(() => {
+                element.classList.remove('activity-pressed');
+            }, 600);
+        }
+
+
+
 
         async function loadLessonData(user) {
             try {
-                const response = await fetch('topic1Data.json');
+                const response = await fetch('../../topic1Data.json');
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
                 console.log('Lesson data loaded successfully:', data);
@@ -183,27 +179,49 @@
                     return `${intention.id}: ${intention.text}`;
                 }).join('<br>');
 
-                document.getElementById('learning-intentions').innerHTML = `Learning Intention(s):<br>${learningIntentionTexts}`;
+                document.getElementById('learning-intentions').innerHTML = `<div class="LIHeading"> ${learningIntentionTexts} </div>`;
 
                 // Populate Lesson Data
                 document.getElementById('tasks').innerHTML = `
-                    <div class="activityDiv">
-                        <div class="mustActivityDiv">Must Do: (${lesson.mustDo.synapsePoints} SP) ${lesson.mustDo.successCriteria}</div>
+                <button class="activityDiv mustActivityDiv" id="must-do-div">
+                    <div class="activityTextDiv"> 
+                        Must Do
+                        <br/><br/>
+                        ${lesson.mustDo.successCriteria} 
                     </div>
-                    <div class="activityDiv">
-                        <div class="shouldActivityDiv">Should Do: (${lesson.shouldDo.synapsePoints} SP) ${lesson.shouldDo.successCriteria}</div>
+                    <div class="synapsePoints">${lesson.mustDo.synapsePoints} SP</div>
+                </button>
+
+                <button class="activityDiv shouldActivityDiv" id="should-do-div">
+                    <div class="activityTextDiv"> 
+                        Should Do
+                        <br/><br/>
+                        ${lesson.shouldDo.successCriteria} 
                     </div>
-                    <div class="activityDiv">
-                        <div class="couldActivityDiv">Could Do: (${lesson.couldDo.synapsePoints} SP) ${lesson.couldDo.successCriteria}</div>
+                    <div class="synapsePoints">${lesson.shouldDo.synapsePoints} SP</div>
+                </button>
+
+                <button class="activityDiv couldActivityDiv" id="could-do-div">
+                    <div class="activityTextDiv"> 
+                        Could Do
+                        <br/><br/>
+                        ${lesson.couldDo.successCriteria} 
                     </div>
-                `;
+                    <div class="synapsePoints">${lesson.couldDo.synapsePoints} SP</div>
+                </button>
+
+
+            `;
+
 
                 const userDoc = doc(db, 'users', user.uid);
 
                 // Attach Event Listeners for Task Buttons
-                setupButton('must-do-btn', `lesson1-must`, lesson.mustDo.synapsePoints, 'topic1', userDoc);
-                setupButton('should-do-btn', `lesson1-should`, lesson.shouldDo.synapsePoints, 'topic1', userDoc);
-                setupButton('could-do-btn', `lesson1-could`, lesson.couldDo.synapsePoints, 'topic1', userDoc);
+                setupActivity('must-do-div', `lesson1-must`, lesson.mustDo.synapsePoints, 'topic1', userDoc);
+                setupActivity('should-do-div', `lesson1-should`, lesson.shouldDo.synapsePoints, 'topic1', userDoc);
+                setupActivity('could-do-div', `lesson1-could`, lesson.couldDo.synapsePoints, 'topic1', userDoc);
+
+
 
                 // External Links
                 const externalLinks = [
