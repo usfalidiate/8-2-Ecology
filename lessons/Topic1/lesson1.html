@@ -7,14 +7,13 @@
     <link rel="stylesheet" href="../../styles.css" />
 </head>
 <body>
+    <div class="navButtonsDiv">
+        <button class="navButton" onclick="location.href='../../home.html';"> <img src="../../assets/icons/house-solid.svg" alt="Home" class="buttonIcon"> </button>
+        <button class="navButton" onclick="location.href='../../accessibility.html';"><img src="../../assets/icons/universal-access-solid.svg" alt="Accessibility" class="buttonIcon"></button>
+        <button class="navButton" onclick="location.href='../../profile.html';"><img src="../../assets/icons/user-solid.svg" alt="User" class="buttonIcon"></button>
+           <button class="navButton" onclick="location.href='../../topic1.html';"> <img src="../../assets/icons/left-long-solid.svg" alt="Back" class="buttonIcon"> </button>
+    </div>
     <div class="background">
-        <div class="navButtonsDiv">
-            <button class="topicNavButton" onclick="location.href='../../home.html';">Home</button>
-            <button class="topicNavButton" onclick="location.href='../../accessibility.html';">Accessibility</button>
-            <button class="topicNavButton" onclick="location.href='../../profile.html';">Profile</button>
-            <button class="topicNavButton" onclick="location.href='../../topic1.html';">Back to Topic</button>
-        </div>
-
         <div class="lessonInfo">
             <h1>Lesson 1</h1>
             <h2 id="learning-intentions">Learning Intention: Loading...</h2>
@@ -179,7 +178,7 @@
                     return `${intention.id}: ${intention.text}`;
                 }).join('<br>');
 
-                document.getElementById('learning-intentions').innerHTML = `<div class="LIHeading"> ${learningIntentionTexts} </div>`;
+                document.getElementById('learning-intentions').innerHTML = `<div class="h1"> ${learningIntentionTexts} </div>`;
 
                 // Populate Lesson Data
                 document.getElementById('tasks').innerHTML = `
@@ -245,7 +244,28 @@
 
 
 
+        onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userDocRef = doc(db, "users", user.uid);
+            try {
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists() && userDoc.data().fontPreference) {
+                    const isDyslexic = userDoc.data().fontPreference === "dyslexic";
+                    updateFont(isDyslexic);
+                }
+            } catch (error) {
+                console.error("Error fetching font preference:", error);
+            }
+        }
+    });
 
+    function updateFont(useDyslexic) {
+        if (useDyslexic) {
+            document.body.classList.add("dyslexic-font");
+        } else {
+            document.body.classList.remove("dyslexic-font");
+        }
+    }
 
 
 

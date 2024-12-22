@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Reader</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="screenReaderContainer" class="screen-reader-container" style="display: none;">
+        <h3>Screen Reader Controls</h3>
+        <button class="screen-reader-control" onclick="startScreenReader()">Start</button>
+        <button class="screen-reader-control" onclick="stopScreenReader()">Stop</button>
+        <label for="screenReaderVolume">Volume:</label>
+        <input id="screenReaderVolume" type="range" min="0" max="100" value="50" onchange="setScreenReaderVolume(this.value)">
+        <label for="screenReaderVoice">Voice:</label>
+        <select id="screenReaderVoice" onchange="setScreenReaderVoice(this.value)"></select>
+    </div>
+
+    <script type="module">
+        import { auth, db } from "./firebase-config.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+    
+        let screenReader;
+    
+        // Initialize screen reader
+        function initializeScreenReader() {
+            screenReader = window.speechSynthesis;
+            const voiceSelect = document.getElementById("screenReaderVoice");
+    
+            const populateVoices = () => {
+                const voices = screenReader.getVoices();
+                voiceSelect.innerHTML = "";
+                voices.forEach((voice, index) => {
+                    const option = document.createElement("option");
+                    option.value = index;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            };
+    
+            populateVoices();
+            if (screenReader.onvoiceschanged !== undefined) {
+                screenReader.onvoiceschanged = populateVoices;
+            }
+        }
+    
+        // Define functions and attach them to `window`
+        window.startScreenReader = function () {
+            const text = document.body.textContent || document.body.innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voiceIndex = document.getElementById("screenReaderVoice").value;
+            const volume = document.getElementById("screenReaderVolume").value / 100;
+    
+            utterance.voice = screenReader.getVoices()[voiceIndex];
+            utterance.volume = volume;
+            screenReader.speak(utterance);
+        };
+    
+        window.stopScreenReader = function () {
+            if (screenReader.speaking) {
+                screenReader.cancel();
+                console.log("Screen Reader stopped.");
+            }
+        };
+    
+        window.setScreenReaderVolume = function (value) {
+            console.log(`Volume set to: ${value}`);
+        };
+    
+        window.setScreenReaderVoice = function (value) {
+            console.log(`Voice set to: ${value}`);
+        };
+    
+        // Fetch and toggle visibility based on user preference
+        window.toggleScreenReader = function (visible) {
+            const container = document.getElementById("screenReaderContainer");
+            container.style.display = visible ? "block" : "none";
+        };
+    
+        // Load and set screen reader preference
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDocRef = doc(db, "users", user.uid);
+                try {
+                    const userDoc = await getDoc(userDocRef);
+                    if (userDoc.exists() && userDoc.data().screenReaderVisible !== undefined) {
+                        toggleScreenReader(userDoc.data().screenReaderVisible);
+                    }
+                } catch (error) {
+                    console.error("Error fetching screen reader preference:", error);
+                }
+            }
+        });
+    
+        // Initialize screen reader on page load
+        document.addEventListener("DOMContentLoaded", initializeScreenReader);
+    </script>
+    
+</body>
+</html>

@@ -1,5 +1,7 @@
 /* Import Modern Font */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=OpenDyslexic&display=swap');
+
 
 /* General Reset */
 body, html {
@@ -16,40 +18,79 @@ body, html {
 /* Background */
 .background {
     width: 100%;
-    height: 100%;
+    height: 91%;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
-    border: 2px solid #ffdd00;
+    /* border: 2px solid #ffdd00; */
     border-radius: 3px;
 }
 
+/* Home Background Styling */
+.homeBackground {
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+        /* url('assets/BGs/ClassKoglinYearEight.png') no-repeat bottom;
+        background-size: 100px 100px; */
+        width: 100%;
+        height: 91%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* justify-content: space-around; */
+        padding: 20px;
+        box-sizing: border-box;
+        /* border: 2px solid #ffdd00; */
+        border-radius: 3px;
+}
+
+.buttonIcon {
+    width: 25px; /* Adjust size as needed */
+    height: 25px;
+    vertical-align: middle; /* Align with text (if any) */
+}
+
 /* Navigation Buttons */
-.topicNavButtons {
+/* Navigation Buttons Container */
+.navButtonsDiv {
     width: 100%;
     display: flex;
-    justify-content: flex-start;
-    padding: 10px;
-    gap: 20px;
+    /* justify-content: space-between; */
+    padding: 10px 20px;
+    box-sizing: border-box;
+    height: 9%;
+    gap: 5px;
 }
 
-.topicNavButton {
-    padding: 10px 20px;
+.navButton {
+    /* margin: 10px; */
     font-size: 16px;
-    background: #ff69b4;
+    background: #ff47a3;
     color: white;
     border: none;
-    border-radius: 30px;
+    /* border-radius: 30px; */
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 50px;
+    height: 50px;
+    align-content: center;
 }
 
-.topicNavButton:hover {
+.navButton:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 10px #ff69b4;
-    background: #ff47a3;
+    box-shadow: 0 0 10px #f7a1cc;
+    background: #f490c2;
+}
+
+.accessibilityDiv {
+    width: 90%;
+    height: 100%;
+    background-color: #ff47a3;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
 }
 
 /*Login Styling*/
@@ -121,10 +162,6 @@ button:hover {
 
 
 /*Profile Styling*/
-.profileBackground {
-    padding: 20px;
-
-}
 
 .profile-container {
     display: flex;
@@ -365,44 +402,10 @@ button:hover {
 
 /* Topic Styling*/
 /* Background Styling */
-.topicBackground {
-    background-color: black; /* Base black background */
-    background: 
-        radial-gradient(circle, #6b046b, #1c0122); /* Optional dark overlay */
-        /*url('assets/BGs/Topic1BG.png') no-repeat center center fixed;  Image background */
-    background-size: cover;
-    width: 100%;
-    /* height: 100%; */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-sizing: border-box;
-    padding: 10px;
-}
 
 
-/* Navigation Buttons Container */
-.navButtonsDiv {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    box-sizing: border-box;
 
-}
 
-.nav-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.nav-button:hover {
-    background-color: #45a049;
-}
 
 /* Lesson Buttons Container */
 .lesson-buttons {
@@ -451,20 +454,191 @@ button:hover {
 }
 
 
-/*Home Styling*/
-/* Home Background Styling */
-.homeBackground {
-    background: 
-        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), 
-        url('assets/BGs/ClassKoglinYearEight.png') no-repeat center center fixed;
-    background-size: cover; /* Ensures the background image covers the entire element */
-    width: 100%; /* Sets the width of the background to 100% of its container */
-    height: 100%; /* Sets the height of the background to 100% of its container */
-    display: flex; /* Uses flexbox layout */
-    flex-direction: column; /* Arranges children in a column */
-    justify-content: center; /* Centers children vertically */
-    align-items: center; /* Centers children horizontally */
+.font-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
 }
+
+.font-toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+
+.font-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.font-toggle .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 25px;
+}
+
+.font-toggle .slider:before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(25px);
+}
+
+/* Dyslexic Font Style */
+/* Dyslexic Font Style */
+body.dyslexic-font, 
+body.dyslexic-font * {
+    font-family: 'OpenDyslexic', Arial, sans-serif !important;
+    /* font-size: 100%; */
+}
+
+
+body.dyslexic-font h1, body.dyslexic-font h2, body.dyslexic-font h3 {
+    font-size: 1.8rem; /* Adjust heading sizes */
+}
+
+/* .dyslexic-font {
+    font-family: 'OpenDyslexic', Arial, sans-serif !important;
+} */
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('assets/fonts/OpenDyslexic-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('assets/fonts/OpenDyslexic-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('assets/fonts/OpenDyslexic-Italic.otf') format('opentype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('assets/fonts/OpenDyslexic-Bold-Italic.otf') format('opentype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+.screen-reader-iframe {
+    /* position: fixed;
+    bottom: 20px;
+    right: 20px; */
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+
+
+.screen-reader-control {
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.screen-reader-control:hover {
+    background: #45a049;
+}
+
+.screen-reader-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.screen-reader-toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+
+.screen-reader-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.screen-reader-toggle .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 25px;
+}
+
+.screen-reader-toggle .slider:before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(25px);
+}
+
+/*Home Styling*/
+
 
 /* Profile Button */
 .profile-button {
@@ -487,7 +661,11 @@ button:hover {
 .topicButtons {
     display: grid;
     gap: 1rem; /* Add space between buttons */
-    padding: 1rem; /* Add padding around the container */
+    padding: 10px; /* Add padding around the container */
+    align-self: center;
+    flex-grow: 1; /* Take up remaining space */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
 }
 
 /* Responsive Grid Layout */
@@ -677,6 +855,8 @@ h1 {
     letter-spacing: 2px;
     color: #ffdd00;
     text-shadow: 2px 2px 0px #000;
+    padding: 10px;
+    margin: 0px;
 }
 
 h2 {
@@ -1239,4 +1419,5 @@ button.activityDiv:focus {
     font-weight: bold; /* Keep it bold for emphasis */
     color: #fff; /* White text */
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Add subtle shadow for readability */
+    font-size: 1.2rem;
 }

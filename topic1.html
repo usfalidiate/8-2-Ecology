@@ -8,23 +8,25 @@
 
 </head>
 <body>
+    <!-- Navigation Buttons -->
+    <div class="navButtonsDiv">
+        <button class="navButton" onclick="location.href='home.html';"> <img src="assets/icons/house-solid.svg" alt="Home" class="buttonIcon"> </button>
+        <button class="navButton" onclick="location.href='accessibility.html';"><img src="assets/icons/universal-access-solid.svg" alt="Accessibility" class="buttonIcon"></button>
+        <button class="navButton" onclick="location.href='profile.html';"><img src="assets/icons/user-solid.svg" alt="User" class="buttonIcon"></button>
+        <button class="navButton" onclick="location.href='home.html';"> <img src="assets/icons/left-long-solid.svg" alt="Back" class="buttonIcon"> </button>
+
+    </div>
     <div class="background">
-        <!-- Navigation Buttons -->
-        <div class="navButtonsDiv">
-            <button class="topicNavButton" onclick="location.href='home.html';">Home</button>
-            <button class="topicNavButton" onclick="location.href='accessibility.html';">Accessibility</button>
-            <button class="topicNavButton" onclick="location.href='profile.html';">Profile</button>
-        </div>
-
-        <h1 class="topicH1" id="topic-title">Placeholder Title</h1>
-
+        <h1 id="topic-title">Loading...</h1>
         <!-- Lesson Buttons -->
         <div class="lesson-buttons" id="lesson-buttons-container"></div>
 
     </div>
     <script type="module">
-        import { db } from "./firebase-config.js";
+        import { auth, db } from "./firebase-config.js";
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+
     
         // Single constant for topic number
         const TOPIC_NUMBER = 1; // Update this value for different topics
@@ -105,6 +107,29 @@
             await loadLessonData(); // Load lesson text first
             await loadAdminSettings(); // Then enable/disable buttons
         });
+
+        onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userDocRef = doc(db, "users", user.uid);
+            try {
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists() && userDoc.data().fontPreference) {
+                    const isDyslexic = userDoc.data().fontPreference === "dyslexic";
+                    updateFont(isDyslexic);
+                }
+            } catch (error) {
+                console.error("Error fetching font preference:", error);
+            }
+        }
+    });
+
+    function updateFont(useDyslexic) {
+        if (useDyslexic) {
+            document.body.classList.add("dyslexic-font");
+        } else {
+            document.body.classList.remove("dyslexic-font");
+        }
+    }
     </script>
     
     

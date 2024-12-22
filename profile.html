@@ -7,11 +7,14 @@
     <link rel="stylesheet" href="styles.css">
     </head>
 <body>
+    <div class="navButtonsDiv">
+        <button class="navButton" onclick="location.href='home.html';"> <img src="assets/icons/house-solid.svg" alt="Home" class="buttonIcon"> </button>
+        <button class="navButton" onclick="location.href='accessibility.html';"><img src="assets/icons/universal-access-solid.svg" alt="Accessibility" class="buttonIcon"></button>
+        <button class="navButton" onclick="location.href='profile.html';"><img src="assets/icons/user-solid.svg" alt="User" class="buttonIcon"></button>
+        <button class="navButton" onclick="location.href='home.html';"> <img src="assets/icons/left-long-solid.svg" alt="Back" class="buttonIcon"> </button>
+
+    </div>
     <div class="background">
-        <div class="navButtonsDiv">
-            <button class="topicNavButton" onclick="location.href='home.html';">Home</button>  
-            <button class="topicNavButton" onclick="location.href='accessibility.html';">Accessibility</button>
-        </div>
         <div class="profile-container">
             <div class="avatar-section">
                 <div class="collapsible-container">
@@ -59,6 +62,7 @@
     <script type="module">
         import { db, auth } from "./firebase-config.js";
         import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
         document.addEventListener('DOMContentLoaded', () => {
             const firstNameInput = document.getElementById('first-name');
@@ -278,6 +282,29 @@
                 }
             });
         });
+
+        onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userDocRef = doc(db, "users", user.uid);
+            try {
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists() && userDoc.data().fontPreference) {
+                    const isDyslexic = userDoc.data().fontPreference === "dyslexic";
+                    updateFont(isDyslexic);
+                }
+            } catch (error) {
+                console.error("Error fetching font preference:", error);
+            }
+        }
+    });
+
+    function updateFont(useDyslexic) {
+        if (useDyslexic) {
+            document.body.classList.add("dyslexic-font");
+        } else {
+            document.body.classList.remove("dyslexic-font");
+        }
+    }
     </script>
 </body>
 </html>

@@ -3,68 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>Koglin's Class</title>
     <link rel="stylesheet" href="styles.css" />
 
 </head>
 <body>
-    <div class="background">
-        <div class="navButtonsDiv">
-            <button class="topicNavButton" onclick="location.href='home.html';">Home</button>
-            <button class="topicNavButton" onclick="location.href='accessibility.html';">Accessibility</button>
-            <button class="topicNavButton" onclick="location.href='profile.html';">Profile</button>
-        </div>
+    <div class="navButtonsDiv">
+        <button class="navButton" onclick="location.href='home.html';"> <img src="assets/icons/house-solid.svg" alt="Home" class="buttonIcon"> </button>
+        <button class="navButton" onclick="location.href='accessibility.html';"><img src="assets/icons/universal-access-solid.svg" alt="Accessibility" class="buttonIcon"></button>
+        <button class="navButton" onclick="location.href='profile.html';"><img src="assets/icons/user-solid.svg" alt="User" class="buttonIcon"></button>
+    </div>
+    <div class="homeBackground">
+        <h1>Class Koglin</h1>
+
 
         <!-- Topic Buttons -->
         <div class="topicButtons">
             <!-- Topic 1 -->
             <div class="button-progress-container">             
                 <button class="topic-button" onclick="location.href='topic1.html';">Topic 1<br><span class="topic-name">Student Research Project</span></button>
-                <div class="lesson-progress">0/15 lessons completed</div>
+                <div class="lesson-progress">0/15 lessons</div>
             </div>
 
             <!-- Topic 2 -->
             <div class="button-progress-container">             
                 <button class="topic-button" onclick="location.href='topic2.html';">Topic 2<br><span class="topic-name">Ecology</span></button>
-                <div class="lesson-progress">0/12 lessons completed</div>
+                <div class="lesson-progress">0/12 lessons</div>
             </div>
 
             <!-- Topic 3 -->
             <div class="button-progress-container">             
                 <button class="topic-button" onclick="location.href='topic3.html';">Topic 3<br><span class="topic-name">The Earth</span></button>
-                <div class="lesson-progress">0/10 lessons completed</div>
+                <div class="lesson-progress">0/10 lessons</div>
             </div>
 
             <!-- Topic 4 -->
             <div class="button-progress-container">             
                 <button class="topic-button" onclick="location.href='topic4.html';">Topic 4<br><span class="topic-name">Forces</span></button>
-                <div class="lesson-progress">0/8 lessons completed</div>
+                <div class="lesson-progress">0/8 lessons</div>
             </div>
 
             <!-- Topic 5 -->
             <div class="button-progress-container">             
                 <button class="topic-button" onclick="location.href='topic5.html';">Topic 5<br><span class="topic-name">Elements, Compounds and Chemical Reactions</span></button>
-                <div class="lesson-progress">0/10 lessons completed</div>
+                <div class="lesson-progress">0/10 lessons</div>
             </div>
 
             <!-- Topic 6 -->
             <div class="button-progress-container">             
                 <button class="topic-button" onclick="location.href='topic6.html';">Topic 6<br><span class="topic-name">Inside the Human Body</span></button>
-                <div class="lesson-progress">0/9 lessons completed</div>
+                <div class="lesson-progress">0/9 lessons</div>
             </div>
 
             <!-- Topic 7 -->
             <div class="button-progress-container">             
                 <button class="topic-button" onclick="location.href='topic7.html';">Topic 7<br><span class="topic-name">Resources</span></button>
-                <div class="lesson-progress">0/7 lessons completed</div>
+                <div class="lesson-progress">0/7 lessons</div>
             </div>
 
             <!-- Topic 8 -->
             <div class="button-progress-container">             
                 <button class="topic-button" onclick="location.href='topic8.html';">Topic 8<br><span class="topic-name">Assessment</span></button>
-                <div class="lesson-progress">0/1 tasks completed</div>
+                <div class="lesson-progress">0/1 tasks</div>
             </div>
         </div>
+        <iframe src="screenReader.html" id="screenReaderIframe" class="screen-reader-iframe" style="display: none;"></iframe>
 
 
 
@@ -74,8 +77,10 @@
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
     
+
       
-        
+  
+
 
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -141,9 +146,62 @@
             ".button-progress-container:nth-child(1) .lesson-progress"
         );
         if (topic1Progress) {
-            topic1Progress.textContent = `${completed}/${total} lessons completed`;
+            topic1Progress.textContent = `${completed}/${total} lessons`;
         }
     }
+
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userDocRef = doc(db, "users", user.uid);
+            try {
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists() && userDoc.data().fontPreference) {
+                    const isDyslexic = userDoc.data().fontPreference === "dyslexic";
+                    updateFont(isDyslexic);
+                }
+            } catch (error) {
+                console.error("Error fetching font preference:", error);
+            }
+        }
+    });
+
+    function updateFont(useDyslexic) {
+        if (useDyslexic) {
+            document.body.classList.add("dyslexic-font");
+        } else {
+            document.body.classList.remove("dyslexic-font");
+        }
+    }
+
+    function toggleScreenReader(isVisible) {
+        const iframe = document.getElementById("screenReaderIframe");
+        if (!iframe) {
+            console.error("Screen reader iframe not found.");
+            return;
+        }
+        iframe.style.display = isVisible ? "block" : "none";
+    }
+
+
+    onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        try {
+            const userDoc = await getDoc(userDocRef);
+            if (userDoc.exists() && userDoc.data().screenReaderVisible !== undefined) {
+                toggleScreenReader(userDoc.data().screenReaderVisible);
+            }
+        } catch (error) {
+            console.error("Error fetching screen reader preference:", error);
+        }
+    }
+});
+
+
+
     </script>
+
+    
 </body>
 </html>

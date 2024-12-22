@@ -1,0 +1,56 @@
+{
+    "skin": [
+        { "file": "PaleSkin.png", "label": "Pale Skin" },
+        { "file": "DarkerSkin.png", "label": "Darker Skin" }
+    ],
+    "pants": [
+        { "file": "DarkGreyPants.png", "label": "Dark Grey Pants" },
+        { "file": "BrownPants.png", "label": "Brown Pants" },
+        { "file": "BluePants.png", "label": "Blue Pants" },
+        { "file": "GreenPants.png", "label": "Green Pants" },
+        { "file": "IndigoPants.png", "label": "Indigo Pants" },
+        { "file": "OrangePants.png", "label": "Orange Pants" },
+        { "file": "RedPants.png", "label": "Red Pants" },
+        { "file": "VioletPants.png", "label": "Violet Pants" },
+        { "file": "YellowPants.png", "label": "Yellow Pants" }
+    ],
+    "tops": [
+        { "file": "GreenTop.png", "label": "Green Top" },
+        { "file": "OrangeTop.png", "label": "Orange Top" },
+        { "file": "TurquoiseTop.png", "label": "Turquoise Top" },
+        { "file": "BlueTop.png", "label": "Blue Top" },
+        { "file": "IndigoTop.png", "label": "Indigo Top" },
+        { "file": "RedTop.png", "label": "Red Top" },
+        { "file": "VioletTop.png", "label": "Violet Top" },
+        { "file": "YellowTop.png", "label": "Yellow Top" },
+        { "file": "BlueWithRedStripesTop.png", "label": "Red with Blue Stripes Top" }
+    ],
+    "eyes": [
+        { "file": "BlueEyes.png", "label": "Blue Eyes" },
+        { "file": "GreenEyes.png", "label": "Green Eyes" }
+
+    ],
+    "mouth": [
+        { "file": "RedMouth.png", "label": "Red Mouth" }
+    ],
+    "face": [
+        { "file": "BlueEyesPinkMouthFace.png", "label": "Blue Eyes and Pink Mouth Face" }
+    ],
+    "hair": [
+        { "file": "ShortBrownHair.png", "label": "Short Brown Hair" },
+        { "file": "LongBlackHair.png", "label": "Long Black Hair" },
+        { "file": "ShortYellowHair.png", "label": "Short Yellow Hair" },
+        { "file": "LongYellowHair.png", "label": "Long Yellow Hair" }
+    ],
+    "shoes": [
+        { "file": "RedShoes.png", "label": "Red Shoes" },
+        { "file": "BlueShoes.png", "label": "Blue Shoes" },
+        { "file": "GreenShoes.png", "label": "Green Shoes" },
+        { "file": "GreyShoes.png", "label": "Grey Shoes" },
+        { "file": "IndigoShoes.png", "label": "Indigo Shoes" },
+        { "file": "OrangeShoes.png", "label": "Orange Shoes" },
+        { "file": "PinkShoes.png", "label": "Pink Shoes" },
+        { "file": "VioletShoes.png", "label": "Violet Shoes" },
+        { "file": "YellowShoes.png", "label": "Yellow Shoes" }
+    ]
+}
