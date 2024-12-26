@@ -27,12 +27,12 @@
         "mustDo": {
           "successCriteria": "This is the must do activity for Lesson 1",
           "synapsePoints": 100,
-          "URL": "https://classroom.google.com/c/NjU4Mzc2Mzc0NzI3/a/NzQwNDk3NTU1Mjcw/details"
+          "URL": "http://127.0.0.1:5500/lessons/Topic1/lesson1MustDo.html"
         },
         "shouldDo": {
           "successCriteria": "This is the should do activity for Lesson 1",
           "synapsePoints": 70,
-          "URL": "http://placeholderURL.com"
+          "URL": "https://classroom.google.com/c/NjU4Mzc2Mzc0NzI3/a/NzQwNDk3NTU1Mjcw/details"
         },
         "couldDo": {
           "successCriteria": "This is the could do activity for Lesson 1",

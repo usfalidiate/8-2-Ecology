@@ -1421,3 +1421,12 @@ button.activityDiv:focus {
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Add subtle shadow for readability */
     font-size: 1.2rem;
 }
+
+#difficulty-slider {
+    width: 300px;
+}
+#doc-viewer {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+}
+

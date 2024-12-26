@@ -1,178 +1,368 @@
 {
     "skin": [
         {
-            "file": "DarkerSkin.png",
-            "label": "Darkerskin"
+            "file": "skinRainbowColorBlue.png",
+            "label": "Skinrainbowcolorblue",
+            "tier": 1,
+            "cost": 50
         },
         {
-            "file": "PaleSkin.png",
-            "label": "Paleskin"
+            "file": "skinRainbowColorGreen.png",
+            "label": "Skinrainbowcolorgreen",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinRainbowColorIndigo.png",
+            "label": "Skinrainbowcolorindigo",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinRainbowColorOrange.png",
+            "label": "Skinrainbowcolororange",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinRainbowColorRed.png",
+            "label": "Skinrainbowcolorred",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinRainbowColorViolet.png",
+            "label": "Skinrainbowcolorviolet",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinRainbowColorYellow.png",
+            "label": "Skinrainbowcoloryellow",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinTone1.png",
+            "label": "Skintone1",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinTone2.png",
+            "label": "Skintone2",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinTone3.png",
+            "label": "Skintone3",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinTone4.png",
+            "label": "Skintone4",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinTone5.png",
+            "label": "Skintone5",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinTone6.png",
+            "label": "Skintone6",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "skinTone7.png",
+            "label": "Skintone7",
+            "tier": 1,
+            "cost": 50
         }
     ],
     "pants": [
         {
             "file": "BluePants.png",
-            "label": "Bluepants"
+            "label": "Bluepants",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "BrownPants.png",
-            "label": "Brownpants"
+            "label": "Brownpants",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "DarkGreyPants.png",
-            "label": "Darkgreypants"
+            "label": "Darkgreypants",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "GreenPants.png",
-            "label": "Greenpants"
+            "label": "Greenpants",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "IndigoPants.png",
-            "label": "Indigopants"
+            "label": "Indigopants",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "OrangePants.png",
-            "label": "Orangepants"
+            "label": "Orangepants",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "RedPants.png",
-            "label": "Redpants"
+            "label": "Redpants",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "VioletPants.png",
-            "label": "Violetpants"
+            "label": "Violetpants",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "YellowPants.png",
-            "label": "Yellowpants"
+            "label": "Yellowpants",
+            "tier": 1,
+            "cost": 50
         }
     ],
     "tops": [
         {
             "file": "BlueTop.png",
-            "label": "Bluetop"
+            "label": "Bluetop",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "BlueWithRedStripesTop.png",
-            "label": "Bluewithredstripestop"
+            "label": "Bluewithredstripestop",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "darkCharcoalWithSmileyFaceTop.png",
-            "label": "Darkcharcoalwithsmileyfacetop"
+            "label": "Darkcharcoalwithsmileyfacetop",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "darkGreyWithCertifiedSmartyTextTop.png",
-            "label": "Darkgreywithcertifiedsmartytexttop"
+            "label": "Darkgreywithcertifiedsmartytexttop",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "darkRedWithReindeerTop.png",
+            "label": "Darkredwithreindeertop",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "GreenTop.png",
-            "label": "Greentop"
+            "label": "Greentop",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "IndigoTop.png",
-            "label": "Indigotop"
+            "label": "Indigotop",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "OrangeTop.png",
-            "label": "Orangetop"
+            "label": "Orangetop",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "orangeWithRedArmsTop.png",
-            "label": "Orangewithredarmstop"
+            "label": "Orangewithredarmstop",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "purpleWithPinkDotsTop.png",
+            "label": "Purplewithpinkdotstop",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "RedTop.png",
-            "label": "Redtop"
+            "label": "Redtop",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "TurquoiseTop.png",
-            "label": "Turquoisetop"
+            "label": "Turquoisetop",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "VioletTop.png",
-            "label": "Violettop"
+            "label": "Violettop",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "YellowTop.png",
-            "label": "Yellowtop"
+            "label": "Yellowtop",
+            "tier": 1,
+            "cost": 50
         }
     ],
     "eyes": [
         {
             "file": "BlueEyes.png",
-            "label": "Blueeyes"
+            "label": "Blueeyes",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "GreenEyes.png",
-            "label": "Greeneyes"
+            "label": "Greeneyes",
+            "tier": 1,
+            "cost": 50
         }
     ],
     "mouth": [
         {
             "file": "RedMouth.png",
-            "label": "Redmouth"
+            "label": "Redmouth",
+            "tier": 1,
+            "cost": 50
         }
     ],
     "face": [
         {
             "file": "BlueEyesPinkMouthFace.png",
-            "label": "Blueeyespinkmouthface"
+            "label": "Blueeyespinkmouthface",
+            "tier": 1,
+            "cost": 50
         }
     ],
     "hair": [
         {
             "file": "LongBlackHair.png",
-            "label": "Longblackhair"
+            "label": "Longblackhair",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "LongYellowHair.png",
-            "label": "Longyellowhair"
+            "label": "Longyellowhair",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "noHair.png",
+            "label": "Nohair",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "ShortBrownHair.png",
-            "label": "Shortbrownhair"
+            "label": "Shortbrownhair",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "ShortYellowHair.png",
-            "label": "Shortyellowhair"
+            "label": "Shortyellowhair",
+            "tier": 1,
+            "cost": 50
         }
     ],
     "shoes": [
         {
             "file": "BlueShoes.png",
-            "label": "Blueshoes"
+            "label": "Blueshoes",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "GreenShoes.png",
-            "label": "Greenshoes"
+            "label": "Greenshoes",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "GreyShoes.png",
-            "label": "Greyshoes"
+            "label": "Greyshoes",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "IndigoShoes.png",
-            "label": "Indigoshoes"
+            "label": "Indigoshoes",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "OrangeShoes.png",
-            "label": "Orangeshoes"
+            "label": "Orangeshoes",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "PinkShoes.png",
-            "label": "Pinkshoes"
+            "label": "Pinkshoes",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "RedShoes.png",
-            "label": "Redshoes"
+            "label": "Redshoes",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "VioletShoes.png",
-            "label": "Violetshoes"
+            "label": "Violetshoes",
+            "tier": 1,
+            "cost": 50
         },
         {
             "file": "YellowShoes.png",
-            "label": "Yellowshoes"
+            "label": "Yellowshoes",
+            "tier": 1,
+            "cost": 50
+        }
+    ],
+    "masks": [
+        {
+            "file": "noMask.png",
+            "label": "Nomask",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "yellowMaskWithSmileyFace.png",
+            "label": "Yellowmaskwithsmileyface",
+            "tier": 1,
+            "cost": 50
+        },
+        {
+            "file": "yellowMaskWithSmileyFaceSlim.png",
+            "label": "Yellowmaskwithsmileyfaceslim",
+            "tier": 1,
+            "cost": 50
         }
     ]
 }

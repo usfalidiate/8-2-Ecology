@@ -5,7 +5,7 @@ import json
 base_dir = "assets"
 
 # List of categories (subfolders) to scan
-categories = ["skin", "pants", "tops", "eyes", "mouth", "face", "hair", "shoes"]
+categories = ["skin", "pants", "tops", "eyes", "mouth", "face", "hair", "shoes", "masks"]
 
 # Dictionary to hold all options
 customisation_options = {}
@@ -17,7 +17,9 @@ for category in categories:
         files = [
             {
                 "file": file,
-                "label": file.replace('.png', '').replace('_', ' ').title()
+                "label": file.replace('.png', '').replace('_', ' ').title(),
+                "tier": 1,
+                "cost": 50
             }
             for file in os.listdir(category_path) if file.endswith('.png')
         ]

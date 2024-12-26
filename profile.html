@@ -39,12 +39,13 @@
     
             <div id="customisation-modal" class="profileModal">
                 <div class="profileModalContent">
-                    <h2>Customise Avatar</h2>
+                    <h2>Customise</h2>
                     <div class="tab-container">
                         <button data-category="hair" class="profileTab active">Hair</button>
                         <button data-category="skin" class="profileTab">Skin</button>
                         <button data-category="eyes" class="profileTab">Eyes</button>
                         <button data-category="face" class="profileTab">Face</button>
+                        <button data-category="masks" class="profileTab">Masks</button>
                         <button data-category="mouth" class="profileTab">Mouth</button>
                         <button data-category="shoes" class="profileTab">Shoes</button>
                         <button data-category="pants" class="profileTab">Pants</button>
@@ -254,7 +255,7 @@
 
             // Define Z-Index order for avatar layers
             function getLayerZIndex(layer) {
-                const order = ["base", "skin", "pants", "tops", "face", "mouth", "eyes", "hair", "shoes"];
+                const order = ["base", "skin", "pants", "tops", "face", "mouth", "eyes", "hair", "shoes", "masks"];
                 return order.indexOf(layer) + 1;
             }
 
