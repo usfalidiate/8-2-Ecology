@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="background">
+        <h1 id="topic-title">Loading...</h1>
+        <!-- Lesson Buttons -->
+        <div class="lesson-buttons" id="lesson-buttons-container"></div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from "./firebase-config.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import { applyFontPreference } from './accessibility.js';
+    
+        // Extract the topic number from the URL query string
+        const urlParams = new URLSearchParams(window.location.search);
+        const topicNumber = urlParams.get("topic");
+    
+        if (!topicNumber) {
+            console.error("No topic number provided in URL");
+            document.body.innerHTML = "<h1>Error: No topic specified</h1>";
+        } else {
+            console.log(`Topic number from URL: ${topicNumber}`);
+        }
+    
+        // Fetch and display topic data
+        async function loadTopicData(topicNumber) {
+            console.log(`Loading data for topic: ${topicNumber}`);
+            try {
+                const response = await fetch(`/json/topic${topicNumber}Data.json`);
+                if (!response.ok) throw new Error("Failed to load topic data");
+    
+                const data = await response.json();
+                console.log("Topic data fetched:", data);
+    
+                // Update the topic title
+                const topicTitleElement = document.getElementById("topic-title");
+                topicTitleElement.textContent = data.topic;
+    
+                // Generate lesson buttons
+                const lessonButtonsContainer = document.getElementById("lesson-buttons-container");
+                lessonButtonsContainer.innerHTML = ""; // Clear existing content
+    
+                data.lessons.forEach((lessonData) => {
+                    console.log("Adding button for lesson:", lessonData);
+                    const button = document.createElement("button");
+                    button.classList.add("lesson-button");
+                    button.setAttribute("data-lesson-id", lessonData.lesson);
+                    button.textContent = lessonData.lessonTitle ? lessonData.lessonTitle[0] : `Lesson ${lessonData.lesson}`;
+                    button.onclick = () => location.href = `lesson.html?topic=${topicNumber}&lesson=${lessonData.lesson}`;
+                    lessonButtonsContainer.appendChild(button);
+                });
+            } catch (error) {
+                console.error("Error loading topic data:", error);
+            }
+        }
+    
+        // Fetch admin settings and enable/disable lesson buttons
+        async function loadAdminSettings(topicNumber) {
+            console.log(`Loading admin settings for topic: ${topicNumber}`);
+            try {
+                const adminRef = doc(db, "admin", "settings");
+                const adminDoc = await getDoc(adminRef);
+    
+                if (adminDoc.exists()) {
+                    const settings = adminDoc.data();
+                    console.log("Admin settings fetched:", settings);
+    
+                    const lessonButtons = document.querySelectorAll(".lesson-button");
+    
+                    lessonButtons.forEach((button) => {
+                        const lessonId = button.getAttribute("data-lesson-id");
+                        const fieldName = `topic${topicNumber}Lesson${lessonId}`;
+                        const isEnabled = settings[fieldName];
+                        console.log(`Checking field: ${fieldName}, isEnabled: ${isEnabled}`);
+    
+                        // Enable or disable buttons
+                        if (isEnabled === true) {
+                            button.classList.remove("disabled");
+                            button.disabled = false; // Ensure button is clickable
+                            console.log(`Lesson ${lessonId} enabled`);
+                        } else {
+                            button.classList.add("disabled");
+                            button.disabled = true; // Ensure button is not clickable
+                            console.log(`Lesson ${lessonId} disabled`);
+                        }
+                    });
+                } else {
+                    console.log("No admin settings found. All lessons remain disabled.");
+                }
+            } catch (error) {
+                console.error("Error loading admin settings:", error);
+            }
+        }
+    
+
+    
+        // Load topic data and admin settings
+        window.addEventListener("DOMContentLoaded", async () => {
+            console.log("DOMContentLoaded event triggered");
+            if (topicNumber) {
+                await loadTopicData(topicNumber);
+                await loadAdminSettings(topicNumber);
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const navContainer = document.getElementById("navbar-container");
+            fetch("navbar.html")
+                .then(response => response.text())
+                .then(html => {
+                    navContainer.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error("Error loading navigation bar:", error);
+                });
+        });
+
+        applyFontPreference(auth, db);
+
+
+
+    </script>
+    
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
-    "topic": "Topic 1 - Placeholder Title",
-    "numberOfLessons": 15,
+    "topic": "Topic 2 - Placeholder Title",
+    "numberOfLessons": 14,
     "learningIntentions": [
       { "id": "LI1", "text": "Placeholder for Learning Intention 1" },
       { "id": "LI2", "text": "Placeholder for Learning Intention 2" },
@@ -15,8 +15,7 @@
       { "id": "LI11", "text": "Placeholder for Learning Intention 11" },
       { "id": "LI12", "text": "Placeholder for Learning Intention 12" },
       { "id": "LI13", "text": "Placeholder for Learning Intention 13" },
-      { "id": "LI14", "text": "Placeholder for Learning Intention 14" },
-      { "id": "LI15", "text": "Placeholder for Learning Intention 15" }
+      { "id": "LI14", "text": "Placeholder for Learning Intention 14" }
     ],
     "lessons": [
       {
@@ -322,28 +321,6 @@
         },
         "couldDo": {
           "successCriteria": "This is the could do activity for Lesson 14",
-          "synapsePoints": 5,
-          "URL": "http://placeholderURL.com"
-        }
-      },
-      {
-        "lesson": 15,
-        "lessonTitle": ["Lesson 15 - Placeholder Title"],
-
-        "learningIntentions": ["LI15"],
-        "successCriteria": "This is the success criteria for Lesson 15",
-        "mustDo": {
-          "successCriteria": "This is the must do activity for Lesson 15",
-          "synapsePoints": 1,
-          "URL": "http://placeholderURL.com"
-        },
-        "shouldDo": {
-          "successCriteria": "This is the should do activity for Lesson 15",
-          "synapsePoints": 7,
-          "URL": "http://placeholderURL.com"
-        },
-        "couldDo": {
-          "successCriteria": "This is the could do activity for Lesson 15",
           "synapsePoints": 5,
           "URL": "http://placeholderURL.com"
         }

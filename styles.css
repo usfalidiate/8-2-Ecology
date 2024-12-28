@@ -28,10 +28,22 @@ body, html {
     border-radius: 3px;
 }
 
+.profileBackground {
+    width: 100%;
+    height: 91%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    /* border: 2px solid #ffdd00; */
+    border-radius: 3px;
+    /* background: radial-gradient(circle, #6b046b, #1c0122); */
+}
+
 /* Home Background Styling */
 .homeBackground {
-    background: 
-        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+    /* background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)); */
         /* url('assets/BGs/ClassKoglinYearEight.png') no-repeat bottom;
         background-size: 100px 100px; */
         width: 100%;
@@ -169,16 +181,19 @@ button:hover {
     align-items: flex-start;
     gap: 20px;
     padding: 20px;
-    background: rgba(0, 0, 0, 0.7);
+    /* background: rgba(0, 0, 0, 0.7); */
     border-radius: 10px;
     width: 90%;
     max-width: 1200px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); */
 }
 
 .avatar-section {
     width: 100%;
     text-align: center;
+    position: sticky;
+        top: 20px;
+            /* Position it at the top of the viewport */
 }
 
 #avatar-container {
@@ -209,8 +224,7 @@ button:hover {
 }
 
 .profileModalContent {
-    background: #ffffff;
-    color: black;
+    background: radial-gradient(circle, #6b046b, #1c0122);    color: black;
     border-radius: 10px;
     padding: 20px;
     height: 100%;
@@ -245,7 +259,7 @@ button:hover {
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 10px;
     overflow-y: auto;
     flex-grow: 1;
@@ -283,38 +297,26 @@ button:hover {
     display: block;
 }
 
-.close-modal {
-    position: relative;
-    top: 10px;
-    background-color: #F44336;
-    color: white;
+.close-modal-custom {
+    /* position: relative; */
+    /* top: 10px; */
+    background-color: rgb(93, 4, 110);
+    color: white(0, 0, 0);
     border: none;
-    font-size: 18px;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    font-size: 15px;
+    border-radius: 10px;
+    width: 40%;
+    height: 30px;
     cursor: pointer;
+    padding: 5px;
+    align-self: flex-end;
 }
 
 .close-modal:hover {
     background-color: #D32F2F;
 }
 
-#customise-avatar-button {
-    display: block; 
-    margin: 20px auto; 
-    padding: 10px 20px;
-    background-color: #008CBA;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
 
-#customise-avatar-button:hover {
-    background-color: #005f73;
-}
 
 .stats-section {
     margin-top: 20px;
@@ -391,6 +393,8 @@ button:hover {
 .collapsible-button:hover {
     background-color: #2E7D32;
 }
+
+
 
 .collapsible-content {
     display: none;
@@ -689,17 +693,17 @@ input:checked + .slider:before {
 
 @media (min-width: 751px) {
     .topicButtons {
-        grid-template-columns: repeat(4, 1fr); /* Four columns */
+        grid-template-columns: repeat(3, 1fr); /* Four columns */
     }
 }
 
 /* Topic Button Styling */
 .topic-button {
     width: 100%; /* Full width of the grid cell */
-    height: 90px; /* Fixed height */
-    background: radial-gradient(circle, #6b046b, #1c0122);
+    height: 120px; /* Fixed height */
+    background: radial-gradient(circle, #6b046b, #530265);
     color: #ffee00;
-    border: none;
+    /* border: solid 1px black; */
     border-radius: 10px 10px 0px 0px; /* Rounded corners on top */
     cursor: pointer;
     font-size: 16px; /* Fixed font size */
@@ -745,10 +749,11 @@ input:checked + .slider:before {
 
 /* Smaller text for topic names */
 .topic-name {
-    font-size: 0.8em; /* Smaller font size */
-    font-weight: normal; /* Normal font weight */
+    font-size: 1.0em; /* Smaller font size */
+    font-weight: 700; /* Normal font weight */
     text-align: center; /* Center the text */
     word-wrap: break-word; /* Wrap text if it gets too wide */
+    text-transform: uppercase; /* Uppercase text */
 }
 
 /* Invisible Button */
@@ -843,6 +848,8 @@ input:checked + .slider:before {
     flex-direction: column;
     align-items: center;
     overflow: hidden;
+    border: solid 1px white;
+    border-radius: 10px;
 }
 
 
@@ -861,14 +868,22 @@ h1 {
 
 h2 {
     font-size: 56px;
-    color: #dcdcdc;
+    color: #ffdd00;
     text-shadow: 1px 1px 0px #000;
     margin: 0px;
 }
 
-h3, h4 {
+h3 {
+    font-size: 30px;
+    color: #ffdd00;
+    text-align: center;
+    margin: 0px;
+    text-transform: uppercase;
+}
+
+h4 {
     font-size: 20px;
-    color: #e0e0e0;
+    color: #ffdd00;
     text-align: center;
     margin: 0px;
 }
@@ -1430,3 +1445,133 @@ button.activityDiv:focus {
     border: 1px solid #ccc;
 }
 
+.locked {
+    position: relative;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.lock-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    padding: 5px 10px;
+    text-align: center;
+}
+
+#topics-container {
+    display: flex;
+    flex-direction: column;
+    /* Stack collapsible buttons vertically */
+    gap: 1rem;
+    /* Add space between buttons */
+    padding: 1rem;
+    /* Add padding inside the container */
+    margin: 1rem auto;
+    /* Center the container */
+    max-width: 400px;
+    /* Limit width for better layout */
+    background-color: #f9f9f9;
+    /* Light background color */
+    border-radius: 8px;
+    /* Rounded corners */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
+}
+
+#topics-container .collapsible {
+    background-color: #007bff;
+    /* Button color */
+    color: white;
+    /* Button text color */
+    border: none;
+    border-radius: 5px;
+    /* Rounded corners for buttons */
+    padding: 10px 15px;
+    /* Button padding */
+    font-size: 1rem;
+    /* Button font size */
+    text-align: left;
+    /* Align text to the left */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    width: 100%;
+    /* Stretch buttons to container width */
+    transition: background-color 0.3s;
+    /* Smooth hover effect */
+}
+
+#topics-container .collapsible:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}
+
+#topics-container .content {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    /* Add spacing between child elements */
+    padding: 10px 15px;
+    /* Add padding inside expanded content */
+    background-color: #8c2424;
+    /* Dark red background */
+    border: 1px solid #ddd;
+    /* Subtle border for content */
+    border-radius: 5px;
+    /* Match button corners */
+    margin-top: -1px;
+    /* Seamless connection to button */
+}
+
+#topics-container .content label {
+    display: block;
+    /* Ensure labels span the width */
+    width: 100%;
+}
+
+#topics-container .content label .toggle-switch {
+    margin-top: 5px;
+    /* Space between label text and toggle */
+}
+
+#topics-container .collapsible.active+.content {
+    display: flex;
+    /* Ensure content is shown when collapsible is active */
+}
+
+.editNamesLogoutDiv {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    background-color: none;
+    color: white;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.editNameButton {
+    text-align: center;
+    background: radial-gradient(circle, #6b046b, #3f034c);
+    color: #ffdd00;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+    width: 30%;
+    text-transform: capitalize;
+    font-weight: 700;
+    text-shadow: 0.5px 0.5px 0px black;
+    border: solid 1px white;
+}
+
+.editNameButton:hover {
+    background-color: #f91688;
+}

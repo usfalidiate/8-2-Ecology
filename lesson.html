@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="background">
+        <div class="lessonInfo">
+            <h1>Loading Lesson...</h1>
+            <h2 id="learning-intentions">Learning Intention: Loading...</h2>
+            <div class="taskDiv" id="tasks">Tasks: Loading...</div>
+        </div>
+
+        <div class="external-links">
+            <button id="link1-btn" class="external-link-must">Loading...</button>
+            <button id="link2-btn" class="external-link-should">Loading...</button>
+            <button id="link3-btn" class="external-link-could">Loading...</button>
+        </div>
+
+        <!-- Popup notification -->
+        <div id="popup" class="popup hidden"></div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from "./firebase-config.js";
+        import { setupActivity } from "./handleLevels.js";
+        import { applyFontPreference } from './accessibility.js';
+
+
+        async function loadLessonData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const topicId = urlParams.get('topic'); // Fetch the topic ID from the URL
+            const lessonNumber = urlParams.get('lesson'); // Fetch the lesson number from the URL
+
+            if (!topicId || !lessonNumber) {
+                console.error('Topic ID or Lesson Number missing in URL.');
+                document.querySelector('h1').textContent = 'Error Loading Lesson';
+                return;
+            }
+
+            try {
+                // Load topics metadata from topics.json
+                const topics = await fetch('/json/topics.json').then(res => res.json());
+                const topicMeta = topics.topics.find(t => t.id === parseInt(topicId));
+                if (!topicMeta) throw new Error(`Topic ${topicId} not found`);
+
+                // Load the specific topic data file (e.g., topic1Data.json)
+                const topicData = await fetch(topicMeta.file).then(res => res.json());
+                const lesson = topicData.lessons.find(l => l.lesson === parseInt(lessonNumber));
+                if (!lesson) throw new Error(`Lesson ${lessonNumber} not found`);
+
+                // Populate lesson title
+                document.querySelector('h1').textContent = lesson.lessonTitle;
+
+                // Populate Learning Intentions Section
+                document.getElementById('learning-intentions').innerHTML = lesson.learningIntentions
+                    .map(id => {
+                        const intention = topicData.learningIntentions.find(li => li.id === id);
+                        return intention ? intention.text : 'Unknown Learning Intention';
+                    })
+                    .join('<br>');
+
+                // Populate Tasks Section with Must, Should, and Could Do activities
+                document.getElementById('tasks').innerHTML = `
+                    <button class="activityDiv mustActivityDiv" id="must-do-div">
+                        <div class="activityTextDiv"> 
+                            Must Do
+                            <br/><br/>
+                            ${lesson.mustDo.successCriteria}
+                        </div>
+                        <div class="synapsePoints">${lesson.mustDo.synapsePoints} SP</div>
+                    </button>
+                    <button class="activityDiv shouldActivityDiv" id="should-do-div">
+                        <div class="activityTextDiv"> 
+                            Should Do
+                            <br/><br/>
+                            ${lesson.shouldDo.successCriteria}
+                        </div>
+                        <div class="synapsePoints">${lesson.shouldDo.synapsePoints} SP</div>
+                    </button>
+                    <button class="activityDiv couldActivityDiv" id="could-do-div">
+                        <div class="activityTextDiv"> 
+                            Could Do
+                            <br/><br/>
+                            ${lesson.couldDo.successCriteria}
+                        </div>
+                        <div class="synapsePoints">${lesson.couldDo.synapsePoints} SP</div>
+                    </button>
+                `;
+
+                // Populate External Links Section
+                document.getElementById('link1-btn').textContent = "Must Do Link";
+                document.getElementById('link1-btn').addEventListener('click', () => {
+                    window.open(lesson.mustDo.URL, '_blank');
+                });
+
+                document.getElementById('link2-btn').textContent = "Should Do Link";
+                document.getElementById('link2-btn').addEventListener('click', () => {
+                    window.open(lesson.shouldDo.URL, '_blank');
+                });
+
+                document.getElementById('link3-btn').textContent = "Could Do Link";
+                document.getElementById('link3-btn').addEventListener('click', () => {
+                    window.open(lesson.couldDo.URL, '_blank');
+                });
+
+                // Attach SP functionality to tasks using setupActivity
+                const topicKey = `topic${topicId}`; // Ensure topicKey is correctly formed
+                setupActivity('must-do-div', `${topicId}-lesson${lessonNumber}-must`, lesson.mustDo.synapsePoints, topicKey);
+                setupActivity('should-do-div', `${topicId}-lesson${lessonNumber}-should`, lesson.shouldDo.synapsePoints, topicKey);
+                setupActivity('could-do-div', `${topicId}-lesson${lessonNumber}-could`, lesson.couldDo.synapsePoints, topicKey);
+            } catch (error) {
+                console.error('Error loading lesson data:', error);
+                document.querySelector('h1').textContent = 'Error Loading Lesson';
+            }
+        }
+
+
+        // Ensure user authentication and load lesson data
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                loadLessonData();
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const navContainer = document.getElementById("navbar-container");
+            fetch("navbar.html")
+                .then(response => response.text())
+                .then(html => {
+                    navContainer.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error("Error loading navigation bar:", error);
+                });
+        });
+
+
+        applyFontPreference(auth, db);
+
+    </script>
+</body>
+</html>

@@ -2,7 +2,7 @@ import os
 import json
 
 # Base directory for assets
-base_dir = "assets"
+base_dir = "../assets"
 
 # List of categories (subfolders) to scan
 categories = ["skin", "pants", "tops", "eyes", "mouth", "face", "hair", "shoes", "masks"]
@@ -26,7 +26,7 @@ for category in categories:
         customisation_options[category] = files
 
 # Output file path
-output_file = os.path.join(base_dir, "customisation-options.json")
+output_file = os.path.join("../json/customisation-options.json")
 
 # Write the JSON data to a file
 with open(output_file, "w") as json_file:

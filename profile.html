@@ -7,39 +7,37 @@
     <link rel="stylesheet" href="styles.css">
     </head>
 <body>
-    <div class="navButtonsDiv">
-        <button class="navButton" onclick="location.href='home.html';"> <img src="assets/icons/house-solid.svg" alt="Home" class="buttonIcon"> </button>
-        <button class="navButton" onclick="location.href='accessibility.html';"><img src="assets/icons/universal-access-solid.svg" alt="Accessibility" class="buttonIcon"></button>
-        <button class="navButton" onclick="location.href='profile.html';"><img src="assets/icons/user-solid.svg" alt="User" class="buttonIcon"></button>
-        <button class="navButton" onclick="location.href='home.html';"> <img src="assets/icons/left-long-solid.svg" alt="Back" class="buttonIcon"> </button>
+    <div id="navbar-container"></div>
 
-    </div>
-    <div class="background">
+    <div class="profileBackground">
         <div class="profile-container">
             <div class="avatar-section">
+
+                <h1 id="user-name">Loading...</h1>
+                <p id="synapse-points"><strong>Synapse Points (SP):</strong> Loading...</p>
+                <p id="badges"><strong>Badges:</strong> Loading...</p>
+                <div id="avatar-container"></div>
+                <div class="editNamesLogoutDiv">
+                    <button id="customise-avatar-button" class="editNameButton" >Customise Avatar</button>
+                    <button id="toggle-form-section" class="editNameButton" >Edit Names</button>
+                    <button id="logout-button" class="editNameButton" > Log Out </button>
+                </div>
                 <div class="collapsible-container">
-                    <button id="toggle-form-section" class="collapsible-button">Edit Names</button>
                     <div class="form-section collapsible-content">
                         <input type="text" id="first-name" placeholder="First Name">
                         <input type="text" id="last-name" placeholder="Last Name">
                         <input type="text" id="display-name" placeholder="Display Name">
                         <button id="save-names-button">Save Names</button>
-                        <button id="logout-button">Log Out</button>
-
                     </div>
                 </div>
-                <h2 id="user-name">Loading...</h2>
-                <p id="synapse-points"><strong>Synapse Points (SP):</strong> Loading...</p>
-                <p id="badges"><strong>Badges:</strong> Loading...</p>
-                <div id="avatar-container"></div>
-                <button id="customise-avatar-button">Customise Avatar</button>
 
 
             </div>
     
             <div id="customisation-modal" class="profileModal">
                 <div class="profileModalContent">
-                    <h2>Customise</h2>
+                    <button id="close-modal-button" class="close-modal-custom"> Close </button>
+                    <h3>Customise</h3>
                     <div class="tab-container">
                         <button data-category="hair" class="profileTab active">Hair</button>
                         <button data-category="skin" class="profileTab">Skin</button>
@@ -52,7 +50,6 @@
                         <button data-category="tops" class="profileTab">Tops</button>
                     </div>
                     <div id="customisation-grid" class="grid-container"></div>
-                    <button id="close-modal-button" class="close-modal">×</button>
                 </div>
             </div>
         </div>
@@ -64,6 +61,8 @@
         import { db, auth } from "./firebase-config.js";
         import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import { applyFontPreference } from './accessibility.js';
+
 
         document.addEventListener('DOMContentLoaded', () => {
             const firstNameInput = document.getElementById('first-name');
@@ -116,7 +115,7 @@
             toggleButton.addEventListener("click", () => {
                 const isVisible = collapsibleContent.style.display === "block";
                 collapsibleContent.style.display = isVisible ? "none" : "block";
-                toggleButton.textContent = isVisible ? "Edit Profile" : "Hide Profile Form";
+                toggleButton.textContent = isVisible ? "Edit Names" : "Close Edit Names";
             });
 
             // Show notification
@@ -133,24 +132,36 @@
             async function loadUserNames() {
                 try {
                     const user = auth.currentUser;
-                    if (!user) return;
-                    
+                    if (!user) {
+                        console.log("No user is signed in.");
+                        return;
+                    }
+
+                    console.log(`Loading user data for: ${user.uid}`);
+
                     const userRef = doc(db, "users", user.uid);
                     const userDoc = await getDoc(userRef);
 
                     if (userDoc.exists()) {
-                        const { firstName = '', lastName = '', displayName = '' } = userDoc.data();
+                        const { firstName = '', lastName = '', displayName = '', synapsePoints = 0, tier = 1 } = userDoc.data();
+                        console.log(`Retrieved from Firestore: SP=${synapsePoints}, Tier=${tier}`);
+
+                        // Update UI
                         const userNameElement = document.getElementById('user-name');
                         userNameElement.textContent = `${firstName} ${lastName} (${displayName})`;
+
+                        document.getElementById("synapse-points").innerHTML = `<strong>Synapse Points (SP):</strong> ${synapsePoints}`;
+                        document.getElementById("badges").innerHTML = `<strong>Tier:</strong> ${tier}`;
                     } else {
-                        console.log("No user data found.");
+                        console.log("No user data found in Firestore.");
                     }
                 } catch (error) {
-                    console.error("Error loading user names:", error);
-                    const userNameElement = document.getElementById('user-name');
-                    userNameElement.textContent = "Error Loading Name";
+                    console.error("Error in loadUserNames:", error);
                 }
             }
+
+
+
 
 
             // Save user names to Firestore
@@ -177,7 +188,7 @@
             // Load customisation options based on category
             async function loadCustomisationOptions(category) {
                 try {
-                    const response = await fetch("assets/customisation-options.json");
+                    const response = await fetch("/json/customisation-options.json");
                     const options = await response.json();
                     return options[category] || [];
                 } catch (error) {
@@ -189,37 +200,67 @@
             // Display options in the grid for the selected category
             async function displayCustomisationOptions(category) {
                 const gridContainer = document.getElementById("customisation-grid");
-                gridContainer.innerHTML = "";
-                const options = await loadCustomisationOptions(category);
+                gridContainer.innerHTML = ""; // Clear existing items
 
-                options.forEach((option) => {
+                console.log(`Displaying customisation options for category: ${category}`);
+
+                // Load customisation options for the selected category
+                const options = await loadCustomisationOptions(category);
+                console.log(`Loaded ${options.length} options for category: ${category}`);
+
+                // Fetch the user's tier from Firestore
+                const userRef = doc(db, "users", auth.currentUser.uid);
+                const userDoc = await getDoc(userRef);
+                const userData = userDoc.data();
+                    if (!userData.tier) {
+                        console.warn(`Tier field is missing for user: ${auth.currentUser.uid}. Setting to default Tier 1.`);
+                    } else {
+                        console.log(`User tier retrieved from Firestore: ${userData.tier}`);
+                    }
+                    const tier = userData.tier || 1;
+
+
+                // Loop through each customisation option and create grid items
+                options.forEach(option => {
+                    console.log(`Processing option: ${option.label}, Required Tier: ${option.tier}`);
+                    
+                    // Create the grid item container
                     const gridItem = document.createElement("div");
                     gridItem.classList.add("grid-item");
                     gridItem.dataset.file = option.file;
 
+                    // Add the image for the customisation option
                     const img = document.createElement("img");
                     img.src = `assets/${category}/${option.file}`;
                     gridItem.appendChild(img);
 
-                    const tick = document.createElement("div");
-                    tick.classList.add("tick");
-                    gridItem.appendChild(tick);
-
-                    if (currentAvatarConfig[category] === `assets/${category}/${option.file}`) {
-                        gridItem.classList.add("selected");
+                    // Check if the option is locked (user's tier is below the required tier)
+                    if (tier < option.tier) {
+                        console.log(`Option ${option.label} is locked. User tier: ${tier}, Required tier: ${option.tier}`);
+                        const lockOverlay = document.createElement("div");
+                        lockOverlay.classList.add("lock-overlay");
+                        lockOverlay.textContent = `Tier ${option.tier} Required`;
+                        gridItem.appendChild(lockOverlay);
+                        gridItem.classList.add("locked");
+                    } else {
+                        console.log(`Option ${option.label} is unlocked.`);
+                        gridItem.addEventListener("click", () => {
+                            currentAvatarConfig[category] = `assets/${category}/${option.file}`;
+                            updateAvatar(currentAvatarConfig);
+                            saveAvatarConfig();
+                            document.querySelectorAll(".grid-item").forEach(item => item.classList.remove("selected"));
+                            gridItem.classList.add("selected");
+                        });
                     }
 
-                    gridItem.addEventListener("click", () => {
-                        currentAvatarConfig[category] = `assets/${category}/${option.file}`;
-                        updateAvatar(currentAvatarConfig);
-                        saveAvatarConfig();
-                        document.querySelectorAll(".grid-item").forEach((item) => item.classList.remove("selected"));
-                        gridItem.classList.add("selected");
-                    });
-
+                    // Append the grid item to the grid container
                     gridContainer.appendChild(gridItem);
                 });
             }
+
+          
+
+
 
             // Update avatar on screen based on configuration
             function updateAvatar(config) {
@@ -282,30 +323,46 @@
                     window.location.href = "login.html";
                 }
             });
+            const navContainer = document.getElementById("navbar-container");
+                fetch("navbar.html")
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error("Error loading navigation bar:", error);
+                    });
         });
 
-        onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const userDocRef = doc(db, "users", user.uid);
-            try {
-                const userDoc = await getDoc(userDocRef);
-                if (userDoc.exists() && userDoc.data().fontPreference) {
-                    const isDyslexic = userDoc.data().fontPreference === "dyslexic";
-                    updateFont(isDyslexic);
-                }
-            } catch (error) {
-                console.error("Error fetching font preference:", error);
-            }
-        }
-    });
+        document.addEventListener("DOMContentLoaded", () => {
+                const logoutButton = document.getElementById("logout-button");
+                console.log("logout.js loaded."); // Debug log to ensure the script runs
 
-    function updateFont(useDyslexic) {
-        if (useDyslexic) {
-            document.body.classList.add("dyslexic-font");
-        } else {
-            document.body.classList.remove("dyslexic-font");
-        }
-    }
+                if (!logoutButton) {
+                    console.error("Logout button not found in DOM.");
+                    return;
+                }
+
+                logoutButton.addEventListener("click", async () => {
+                    console.log("Logout button clicked."); // Debug log to confirm event trigger
+                    const userConfirmed = window.confirm("Are you sure you want to log out?");
+                    if (userConfirmed) {
+                        try {
+                            await signOut(auth);
+                            console.log("User signed out successfully.");
+                            window.location.href = "login.html"; // Redirect to login
+                        } catch (error) {
+                            console.error("Error during logout:", error.message);
+                        }
+                    } else {
+                        console.log("Logout canceled by user.");
+                    }
+                });
+            });
+
+
+        applyFontPreference(auth, db);
+
     </script>
 </body>
 </html>

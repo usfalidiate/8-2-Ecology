@@ -9,118 +9,71 @@
 </head>
 <body>
     <!-- Navigation Buttons -->
-    <div class="navButtonsDiv">
-        <button class="navButton" onclick="location.href='home.html';"> <img src="assets/icons/house-solid.svg" alt="Home" class="buttonIcon"> </button>
-        <button class="navButton" onclick="location.href='accessibility.html';"><img src="assets/icons/universal-access-solid.svg" alt="Accessibility" class="buttonIcon"></button>
-        <button class="navButton" onclick="location.href='profile.html';"><img src="assets/icons/user-solid.svg" alt="User" class="buttonIcon"></button>
-        <button class="navButton" onclick="location.href='home.html';"> <img src="assets/icons/left-long-solid.svg" alt="Back" class="buttonIcon"> </button>
+    <div id="navbar-container"></div>
+
+    <div class="background">
+        <h1>Accessibility</h1>
+        <div class="font-toggle-container">
+            <label class="font-toggle">
+                <input type="checkbox" id="font-toggle">
+                <span class="slider"></span>
+            </label>
+            <p>Enable Dyslexic Font</p>
+        </div>
+        <div class="screen-reader-toggle-container">
+            <label class="screen-reader-toggle">
+                <input type="checkbox" id="screen-reader-toggle">
+                <span class="slider"></span>
+            </label>
+            <p>Enable Screen Reader</p>
+        </div>
+        <iframe id="screenReader" src="/screenReader.html"
+            style="display: none; position: fixed; bottom: 10px; right: 10px; width: 300px; height: 150px; border: none; z-index: 1000;">
+        </iframe>
     </div>
-    <h1>Accessibility</h1>
-    <div class="font-toggle-container">
-        <label class="font-toggle">
-            <input type="checkbox" id="font-toggle">
-            <span class="slider"></span>
-        </label>
-        <p>Enable Dyslexic Font</p>
-    </div>
-    <div class="screen-reader-toggle-container">
-        <label class="screen-reader-toggle">
-            <input type="checkbox" id="screen-reader-toggle">
-            <span class="slider"></span>
-        </label>
-        <p>Enable Screen Reader</p>
-    </div>
-    <iframe
-        id="screenReader"
-        src="screenReader.html"
-        style="display: none; position: fixed; bottom: 10px; right: 10px; width: 300px; height: 150px; border: none; z-index: 1000;">
-    </iframe>
 </body>
 <script type="module">
     import { auth, db } from "./firebase-config.js";
-    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+    import {
+        loadPreferences,
+        updateFont,
+        saveFontPreference,
+        toggleScreenReader,
+        saveScreenReaderPreference,
+    } from "./accessibility.js";
 
     const fontToggle = document.getElementById("font-toggle");
     const screenReaderToggle = document.getElementById("screen-reader-toggle");
 
-    // Load user's preferences from Firestore
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const userDocRef = doc(db, "users", user.uid);
-            const userDoc = await getDoc(userDocRef);
+    // Load user's preferences
+    loadPreferences(auth, db, fontToggle, screenReaderToggle);
 
-            if (userDoc.exists()) {
-                const data = userDoc.data();
-
-                // Load font preference
-                if (data.fontPreference) {
-                    const isDyslexic = data.fontPreference === "dyslexic";
-                    fontToggle.checked = isDyslexic;
-                    updateFont(isDyslexic);
-                }
-
-                // Load screen reader preference
-                if (data.screenReaderVisible !== undefined) {
-                    const isScreenReaderVisible = data.screenReaderVisible;
-                    screenReaderToggle.checked = isScreenReaderVisible;
-                    toggleScreenReader(isScreenReaderVisible);
-                }
-            }
-        }
-    });
-
-    // Update font style based on toggle
-    function updateFont(useDyslexic) {
-        if (useDyslexic) {
-            document.body.classList.add("dyslexic-font");
-        } else {
-            document.body.classList.remove("dyslexic-font");
-        }
-    }
-
-    // Save font preference in Firestore
-    fontToggle.addEventListener("change", async () => {
+    // Save font preference
+    fontToggle.addEventListener("change", () => {
         const useDyslexic = fontToggle.checked;
         updateFont(useDyslexic);
-
-        const user = auth.currentUser;
-        if (user) {
-            const userDocRef = doc(db, "users", user.uid);
-            try {
-                await setDoc(userDocRef, { fontPreference: useDyslexic ? "dyslexic" : "default" }, { merge: true });
-                console.log("Font preference saved.");
-            } catch (error) {
-                console.error("Error saving font preference:", error);
-            }
-        }
+        saveFontPreference(auth, db, useDyslexic);
     });
 
-    // Update screen reader visibility
-    function toggleScreenReader(isVisible) {
-        const iframe = document.querySelector("iframe#screenReader");
-        if (!iframe) {
-            console.error("Screen reader iframe not found.");
-            return;
-        }
-        iframe.style.display = isVisible ? "block" : "none";
-    }
-
-    // Save screen reader preference in Firestore
-    screenReaderToggle.addEventListener("change", async () => {
+    // Save screen reader preference
+    screenReaderToggle.addEventListener("change", () => {
         const isVisible = screenReaderToggle.checked;
         toggleScreenReader(isVisible);
-
-        const user = auth.currentUser;
-        if (user) {
-            const userDocRef = doc(db, "users", user.uid);
-            try {
-                await setDoc(userDocRef, { screenReaderVisible: isVisible }, { merge: true });
-                console.log("Screen reader preference saved.");
-            } catch (error) {
-                console.error("Error saving screen reader preference:", error);
-            }
-        }
+        saveScreenReaderPreference(auth, db, isVisible);
     });
+
+    document.addEventListener("DOMContentLoaded", () => {
+    const navContainer = document.getElementById("navbar-container");
+    fetch("navbar.html")
+        .then(response => response.text())
+        .then(html => {
+            navContainer.innerHTML = html;
+        })
+        .catch(error => {
+            console.error("Error loading navigation bar:", error);
+        });
+});
+
 </script>
+
 </html>

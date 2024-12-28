@@ -5,126 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koglin's Class</title>
     <link rel="stylesheet" href="styles.css" />
-
 </head>
 <body>
-    <div class="navButtonsDiv">
-        <button class="navButton" onclick="location.href='home.html';"> <img src="assets/icons/house-solid.svg" alt="Home" class="buttonIcon"> </button>
-        <button class="navButton" onclick="location.href='accessibility.html';"><img src="assets/icons/universal-access-solid.svg" alt="Accessibility" class="buttonIcon"></button>
-        <button class="navButton" onclick="location.href='profile.html';"><img src="assets/icons/user-solid.svg" alt="User" class="buttonIcon"></button>
-    </div>
+    <div id="navbar-container"></div>
+
     <div class="homeBackground">
         <h1>Class Koglin</h1>
+        <!-- Dynamic Topic Buttons -->
+        <div class="topicButtons" id="topicButtonsContainer"></div>
+    </div>
+
+<script type="module">
+    import { auth, db } from "./firebase-config.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+    import { applyFontPreference } from './accessibility.js';
 
 
-        <!-- Topic Buttons -->
-        <div class="topicButtons">
-            <!-- Topic 1 -->
-            <div class="button-progress-container">             
-                <button class="topic-button" onclick="location.href='topic1.html';">Topic 1<br><span class="topic-name">Student Research Project</span></button>
-                <div class="lesson-progress">0/15 lessons</div>
-            </div>
-
-            <!-- Topic 2 -->
-            <div class="button-progress-container">             
-                <button class="topic-button" onclick="location.href='topic2.html';">Topic 2<br><span class="topic-name">Ecology</span></button>
-                <div class="lesson-progress">0/12 lessons</div>
-            </div>
-
-            <!-- Topic 3 -->
-            <div class="button-progress-container">             
-                <button class="topic-button" onclick="location.href='topic3.html';">Topic 3<br><span class="topic-name">The Earth</span></button>
-                <div class="lesson-progress">0/10 lessons</div>
-            </div>
-
-            <!-- Topic 4 -->
-            <div class="button-progress-container">             
-                <button class="topic-button" onclick="location.href='topic4.html';">Topic 4<br><span class="topic-name">Forces</span></button>
-                <div class="lesson-progress">0/8 lessons</div>
-            </div>
-
-            <!-- Topic 5 -->
-            <div class="button-progress-container">             
-                <button class="topic-button" onclick="location.href='topic5.html';">Topic 5<br><span class="topic-name">Elements, Compounds and Chemical Reactions</span></button>
-                <div class="lesson-progress">0/10 lessons</div>
-            </div>
-
-            <!-- Topic 6 -->
-            <div class="button-progress-container">             
-                <button class="topic-button" onclick="location.href='topic6.html';">Topic 6<br><span class="topic-name">Inside the Human Body</span></button>
-                <div class="lesson-progress">0/9 lessons</div>
-            </div>
-
-            <!-- Topic 7 -->
-            <div class="button-progress-container">             
-                <button class="topic-button" onclick="location.href='topic7.html';">Topic 7<br><span class="topic-name">Resources</span></button>
-                <div class="lesson-progress">0/7 lessons</div>
-            </div>
-
-            <!-- Topic 8 -->
-            <div class="button-progress-container">             
-                <button class="topic-button" onclick="location.href='topic8.html';">Topic 8<br><span class="topic-name">Assessment</span></button>
-                <div class="lesson-progress">0/1 tasks</div>
-            </div>
-        </div>
-        <iframe src="screenReader.html" id="screenReaderIframe" class="screen-reader-iframe" style="display: none;"></iframe>
-
-
-
-    <script type="module">
-        import { auth, db } from "./firebase-config.js";
-        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-
-    
-
-      
-  
-
-
-
-        document.addEventListener("DOMContentLoaded", () => {
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    console.log("User signed in:", user.uid);
-                    try {
-                        // Fetch total lessons and completed lessons
-                        const totalLessons = await fetchTotalLessons();
-                        const completedLessons = await fetchCompletedMustDoLessons(user.uid);
-                        updateLessonProgress(completedLessons, totalLessons);
-                    } catch (error) {
-                        console.error("Error fetching progress data:", error);
-                    }
-                } else {
-                    console.log("No user signed in. Redirecting to login...");
-                    window.location.href = "login.html";
+    document.addEventListener("DOMContentLoaded", () => {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                console.log("User signed in:", user.uid);
+                try {
+                    const topics = await fetchTopics();
+                    await generateTopicButtons(user.uid, topics);
+                } catch (error) {
+                    console.error("Error fetching topics:", error);
                 }
-            });
+            } else {
+                console.log("No user signed in. Redirecting to login...");
+                window.location.href = "login.html";
+            }
         });
+    });
 
-
-
-    // Fetch total lessons from topic1Data.json
-    async function fetchTotalLessons() {
+    // Fetch `topics.json`
+    async function fetchTopics() {
         try {
-            const response = await fetch("topic1Data.json");
-            if (!response.ok) throw new Error("Failed to load topic1Data.json");
+            const response = await fetch("/json/topics.json");
+            if (!response.ok) throw new Error("Failed to load topics.json");
             const data = await response.json();
-            return data.numberOfLessons || 0; // Return the number of lessons
+            return data.topics || [];
         } catch (error) {
-            console.error("Error fetching total lessons:", error);
-            return 0; // Default to 0 if fetching fails
+            console.error("Error fetching topics.json:", error);
+            return [];
         }
     }
 
-    // Fetch and count completed 'mustDo' tasks for Topic 1 from Firestore
-    async function fetchCompletedMustDoLessons(uid) {
+    // Generate topic buttons dynamically
+    async function generateTopicButtons(uid, topics) {
+        const container = document.getElementById("topicButtonsContainer");
+
+        for (const topic of topics) {
+            try {
+                const topicData = await fetchTopicData(topic.file);
+                const completedLessons = await fetchCompletedMustDoLessons(uid, topic.id);
+                const totalLessons = topicData.numberOfLessons || 0;
+
+                const buttonHTML = `
+                    <div class="button-progress-container">
+                        <button class="topic-button" onclick="location.href='topic.html?topic=${topic.id}';">
+                            <span class="topic-name">${topicData.topic}</span>
+                        </button>
+                        <div class="lesson-progress">${completedLessons}/${totalLessons} lessons</div>
+                    </div>
+                `;
+                container.innerHTML += buttonHTML;
+            } catch (error) {
+                console.error(`Error processing topic ${topic.id}:`, error);
+            }
+        }
+    }
+
+    // Fetch individual topic data (e.g., `topic1Data.json`)
+    async function fetchTopicData(file) {
+        try {
+            const response = await fetch(file);
+            if (!response.ok) throw new Error(`Failed to load ${file}`);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error(`Error fetching ${file}:`, error);
+            return { numberOfLessons: 0, topic: "Unknown Topic" };
+        }
+    }
+
+    // Fetch completed lessons for a specific topic from Firestore
+    async function fetchCompletedMustDoLessons(uid, topicId) {
         try {
             const userRef = doc(db, "users", uid);
             const userDoc = await getDoc(userRef);
 
             if (userDoc.exists()) {
-                const tasks = userDoc.data().completedTasks?.topic1 || {};
+                const tasks = userDoc.data().completedTasks?.[`topic${topicId}`] || {};
                 const completedCount = Object.keys(tasks).filter(key =>
                     key.includes("must") && tasks[key].completed === true
                 ).length;
@@ -134,74 +107,26 @@
                 return 0;
             }
         } catch (error) {
-            console.error("Error fetching Firestore data:", error);
+            console.error(`Error fetching Firestore data for topic ${topicId}:`, error);
             return 0;
         }
     }
 
-
-    // Update progress in the DOM
-    function updateLessonProgress(completed, total) {
-        const topic1Progress = document.querySelector(
-            ".button-progress-container:nth-child(1) .lesson-progress"
-        );
-        if (topic1Progress) {
-            topic1Progress.textContent = `${completed}/${total} lessons`;
-        }
-    }
-
-
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const userDocRef = doc(db, "users", user.uid);
-            try {
-                const userDoc = await getDoc(userDocRef);
-                if (userDoc.exists() && userDoc.data().fontPreference) {
-                    const isDyslexic = userDoc.data().fontPreference === "dyslexic";
-                    updateFont(isDyslexic);
-                }
-            } catch (error) {
-                console.error("Error fetching font preference:", error);
-            }
-        }
+    document.addEventListener("DOMContentLoaded", () => {
+        const navContainer = document.getElementById("navbar-container");
+        fetch("navbar.html")
+            .then(response => response.text())
+            .then(html => {
+                navContainer.innerHTML = html;
+            })
+            .catch(error => {
+                console.error("Error loading navigation bar:", error);
+            });
     });
 
-    function updateFont(useDyslexic) {
-        if (useDyslexic) {
-            document.body.classList.add("dyslexic-font");
-        } else {
-            document.body.classList.remove("dyslexic-font");
-        }
-    }
 
-    function toggleScreenReader(isVisible) {
-        const iframe = document.getElementById("screenReaderIframe");
-        if (!iframe) {
-            console.error("Screen reader iframe not found.");
-            return;
-        }
-        iframe.style.display = isVisible ? "block" : "none";
-    }
+    applyFontPreference(auth, db);
 
-
-    onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        const userDocRef = doc(db, "users", user.uid);
-        try {
-            const userDoc = await getDoc(userDocRef);
-            if (userDoc.exists() && userDoc.data().screenReaderVisible !== undefined) {
-                toggleScreenReader(userDoc.data().screenReaderVisible);
-            }
-        } catch (error) {
-            console.error("Error fetching screen reader preference:", error);
-        }
-    }
-});
-
-
-
-    </script>
-
-    
+</script>
 </body>
 </html>

@@ -3,13 +3,13 @@
         {
             "file": "skinRainbowColorBlue.png",
             "label": "Skinrainbowcolorblue",
-            "tier": 1,
+            "tier": 3,
             "cost": 50
         },
         {
             "file": "skinRainbowColorGreen.png",
             "label": "Skinrainbowcolorgreen",
-            "tier": 1,
+            "tier": 2,
             "cost": 50
         },
         {
