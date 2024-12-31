@@ -71,7 +71,7 @@
                     console.log("Tier Element Found:", userTier);
 
                     // Load all available items
-                    const response = await fetch("/json/customisation-options.json");
+                    const response = await fetch("./json/customisation-options.json");
                     const allItems = await response.json();
 
                     // Populate the shop

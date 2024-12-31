@@ -189,7 +189,7 @@
             // Load customisation options based on category
             async function loadCustomisationOptions(category) {
                 try {
-                    const response = await fetch("/json/customisation-options.json");
+                    const response = await fetch("./json/customisation-options.json");
                     const options = await response.json();
                     return options[category] || [];
                 } catch (error) {

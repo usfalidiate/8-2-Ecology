@@ -36,7 +36,7 @@
         async function loadTopicData(topicNumber) {
             console.log(`Loading data for topic: ${topicNumber}`);
             try {
-                const response = await fetch(`/json/topic${topicNumber}Data.json`);
+                const response = await fetch(`./json/topic${topicNumber}Data.json`);
                 if (!response.ok) throw new Error("Failed to load topic data");
     
                 const data = await response.json();

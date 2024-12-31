@@ -39,7 +39,7 @@
             // Load topics and lessons dynamically
             try {
                 console.log("Fetching topics.json...");
-                const topics = await fetchJSON('/json/topics.json');
+                const topics = await fetchJSON('./json/topics.json');
                 console.log("Fetched topics:", topics);
 
                 for (const topic of topics.topics) {

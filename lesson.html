@@ -45,7 +45,7 @@
 
             try {
                 // Load topics metadata from topics.json
-                const topics = await fetch('/json/topics.json').then(res => res.json());
+                const topics = await fetch('./json/topics.json').then(res => res.json());
                 const topicMeta = topics.topics.find(t => t.id === parseInt(topicId));
                 if (!topicMeta) throw new Error(`Topic ${topicId} not found`);
 
