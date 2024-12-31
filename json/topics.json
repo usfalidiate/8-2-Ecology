@@ -3,12 +3,12 @@
       {
         "id": 1,
         "title": "Topic 1 - Placeholder Title from topics.json",
-        "file": "/json/topic1Data.json"
+        "file": "./json/topic1Data.json"
       },
       {
         "id": 2,
         "title": "Topic 2 - Placeholder Title",
-        "file": "/json/topic2Data.json"
+        "file": "./json/topic2Data.json"
       }
     ]
   }
