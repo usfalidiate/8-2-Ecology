@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Arena</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" defer>
+        import { db, auth } from './firebase-config.js';
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Load Navbar
+            const navContainer = document.getElementById("navbar-container");
+            fetch("navbar.html")
+                .then(response => response.text())
+                .then(html => {
+                    navContainer.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error("Error loading navigation bar:", error);
+                });
+        });
+
+        async function fetchAndRenderMiniAvatar(userId) {
+            const userDoc = doc(db, 'users', userId);
+            const userSnapshot = await getDoc(userDoc);
+            if (userSnapshot.exists()) {
+                const avatarConfig = userSnapshot.data().avatarConfig;
+                renderMiniAvatar(avatarConfig);
+            }
+        }
+
+        function renderMiniAvatar(config) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 200; // Mini avatar width
+            canvas.height = Math.round(canvas.width * (9 / 16)); // Maintain 16:9 ratio
+            const layerOrder = ['skin', 'face', 'eyes', 'mouth', 'hair', 'masks', 'tops', 'pants', 'shoes'];
+            const promises = layerOrder.map((layer) => config[layer] ? loadImage(config[layer]) : Promise.resolve());
+            Promise.all(promises).then((images) => {
+                images.filter(Boolean).forEach((img) => ctx.drawImage(img, 0, 0, canvas.width, canvas.height));
+                const avatarContainer = document.getElementById('battle-avatar-container');
+                avatarContainer.innerHTML = '';
+                avatarContainer.appendChild(canvas);
+            });
+        }
+
+        function loadImage(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
+                img.src = src;
+            });
+        }
+
+        function initMapScrolling() {
+            const avatar = document.getElementById('battle-avatar-container');
+            const map = document.getElementById('battle-arena');
+            const wrapper = document.getElementById('battle-arena-wrapper');
+            const avatarSpeed = 20;
+
+            let zoomLevel = 1; // Default zoom level
+            const minZoom = 0.6; // Minimum zoom
+            const maxZoom = 3; // Maximum zoom
+
+            // Initial avatar position
+            let avatarPosition = { x: map.offsetWidth / 2, y: map.offsetHeight / 2 };
+
+            // Center map around the avatar initially
+            wrapper.scrollTo(
+                avatarPosition.x - wrapper.clientWidth / 2,
+                avatarPosition.y - wrapper.clientHeight / 2
+            );
+
+            // Handle avatar movement
+            document.addEventListener('keydown', (e) => {
+                switch (e.key) {
+                    case 'ArrowUp':
+                        avatarPosition.y = Math.max(0, avatarPosition.y - avatarSpeed);
+                        break;
+                    case 'ArrowDown':
+                        avatarPosition.y = Math.min(map.offsetHeight - avatar.offsetHeight, avatarPosition.y + avatarSpeed);
+                        break;
+                    case 'ArrowLeft':
+                        avatarPosition.x = Math.max(0, avatarPosition.x - avatarSpeed);
+                        break;
+                    case 'ArrowRight':
+                        avatarPosition.x = Math.min(map.offsetWidth - avatar.offsetWidth, avatarPosition.x + avatarSpeed);
+                        break;
+                }
+
+                // Update avatar position
+                avatar.style.left = `${avatarPosition.x}px`;
+                avatar.style.top = `${avatarPosition.y}px`;
+
+                // Scroll map when avatar nears edges
+                const edgeBuffer = 150; // Buffer distance from edges
+                const scrollLeft = wrapper.scrollLeft;
+                const scrollTop = wrapper.scrollTop;
+
+                if (avatarPosition.x < scrollLeft + edgeBuffer) {
+                    wrapper.scrollTo(Math.max(0, avatarPosition.x - edgeBuffer), scrollTop);
+                } else if (avatarPosition.x > scrollLeft + wrapper.clientWidth / zoomLevel - edgeBuffer) {
+                    wrapper.scrollTo(
+                        Math.min(map.offsetWidth * zoomLevel - wrapper.clientWidth, avatarPosition.x - wrapper.clientWidth / zoomLevel + edgeBuffer),
+                        scrollTop
+                    );
+                }
+
+                if (avatarPosition.y < scrollTop + edgeBuffer) {
+                    wrapper.scrollTo(scrollLeft, Math.max(0, avatarPosition.y - edgeBuffer));
+                } else if (avatarPosition.y > scrollTop + wrapper.clientHeight / zoomLevel - edgeBuffer) {
+                    wrapper.scrollTo(
+                        scrollLeft,
+                        Math.min(map.offsetHeight * zoomLevel - wrapper.clientHeight, avatarPosition.y - wrapper.clientHeight / zoomLevel + edgeBuffer)
+                    );
+                }
+            });
+
+            // Handle zooming with Ctrl + mouse wheel
+            wrapper.addEventListener('wheel', (e) => {
+                if (!e.ctrlKey) return; // Only zoom when Ctrl key is held
+                e.preventDefault(); // Prevent default scrolling behavior when zooming
+
+                // Adjust zoom level
+                if (e.deltaY < 0) {
+                    zoomLevel = Math.min(maxZoom, zoomLevel + 0.05); // Zoom in
+                } else {
+                    zoomLevel = Math.max(minZoom, zoomLevel - 0.05); // Zoom out
+                }
+
+                // Apply zoom
+                applyZoom(map, wrapper, zoomLevel);
+            });
+        }
+
+        // Utility function to apply zoom and adjust scroll
+        function applyZoom(map, wrapper, zoomLevel) {
+            map.style.transform = `scale(${zoomLevel})`;
+
+            // Adjust scroll to keep the viewport centered
+            const rect = wrapper.getBoundingClientRect();
+            const offsetX = (rect.width / 2 + wrapper.scrollLeft) / zoomLevel;
+            const offsetY = (rect.height / 2 + wrapper.scrollTop) / zoomLevel;
+
+            wrapper.scrollTo(
+                offsetX * zoomLevel - rect.width / 2,
+                offsetY * zoomLevel - rect.height / 2
+            );
+        }
+
+
+
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                fetchAndRenderMiniAvatar(user.uid);
+                initMapScrolling();
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div id="navbar-container"></div>
+
+    <!-- Battle Arena Wrapper -->
+    <div id="battle-arena-wrapper">
+        <div id="battle-arena">
+            <div id="battle-avatar-container"></div>
+        </div>
+    </div>
+</body>
+
+
+</html>

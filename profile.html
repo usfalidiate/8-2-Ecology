@@ -14,8 +14,8 @@
             <div class="avatar-section">
 
                 <h1 id="user-name">Loading...</h1>
-                <p id="synapse-points"><strong>Synapse Points (SP):</strong> Loading...</p>
-                <p id="badges"><strong>Badges:</strong> Loading...</p>
+                <p id="synapse-points"><strong>Loading...</strong></p>
+                <p id="badges"><strong>Loading...</strong> </p>
                 <div id="avatar-container"></div>
                 <div class="editNamesLogoutDiv">
                     <button id="customise-avatar-button" class="editNameButton" >Customise Avatar</button>
@@ -74,6 +74,7 @@
             const collapsibleContent = document.querySelector(".collapsible-content");
 
             let currentAvatarConfig = {};
+            let userInventory = {};
 
 
             // Select all tabs (category buttons)
@@ -148,10 +149,10 @@
 
                         // Update UI
                         const userNameElement = document.getElementById('user-name');
-                        userNameElement.textContent = `${firstName} ${lastName} (${displayName})`;
+                        userNameElement.textContent = `${displayName} (${firstName} ${lastName})`;
 
-                        document.getElementById("synapse-points").innerHTML = `<strong>Synapse Points (SP):</strong> ${synapsePoints}`;
-                        document.getElementById("badges").innerHTML = `<strong>Tier:</strong> ${tier}`;
+                        document.getElementById("synapse-points").innerHTML = `<div class="synapsePoints"> Synapse Points: ${synapsePoints}</div>`;
+                        document.getElementById("badges").innerHTML = `<div class="synapsePoints">Level: ${tier} </div> `;
                     } else {
                         console.log("No user data found in Firestore.");
                     }
@@ -204,26 +205,29 @@
 
                 console.log(`Displaying customisation options for category: ${category}`);
 
-                // Load customisation options for the selected category
+                // Fetch owned items for the selected category from inventory
+                const ownedItems = userInventory[category] || [];
+                console.log(`User owns ${ownedItems.length} items in category: ${category}`);
+
+                // Load all customisation options for the selected category
                 const options = await loadCustomisationOptions(category);
-                console.log(`Loaded ${options.length} options for category: ${category}`);
+
+                // Filter options to match owned items
+                const filteredOptions = options.filter(option => ownedItems.includes(`assets/${category}/${option.file}`));
+                console.log(`Displaying ${filteredOptions.length} options for category: ${category}`);
 
                 // Fetch the user's tier from Firestore
                 const userRef = doc(db, "users", auth.currentUser.uid);
                 const userDoc = await getDoc(userRef);
                 const userData = userDoc.data();
-                    if (!userData.tier) {
-                        console.warn(`Tier field is missing for user: ${auth.currentUser.uid}. Setting to default Tier 1.`);
-                    } else {
-                        console.log(`User tier retrieved from Firestore: ${userData.tier}`);
-                    }
-                    const tier = userData.tier || 1;
 
+                const tier = userData.tier || 1;
+                console.log(`User tier retrieved from Firestore: ${tier}`);
 
-                // Loop through each customisation option and create grid items
-                options.forEach(option => {
-                    console.log(`Processing option: ${option.label}, Required Tier: ${option.tier}`);
-                    
+                // Loop through owned options and create grid items
+                filteredOptions.forEach(option => {
+                    console.log(`Displaying owned item: ${option.file}`);
+
                     // Create the grid item container
                     const gridItem = document.createElement("div");
                     gridItem.classList.add("grid-item");
@@ -234,29 +238,25 @@
                     img.src = `assets/${category}/${option.file}`;
                     gridItem.appendChild(img);
 
-                    // Check if the option is locked (user's tier is below the required tier)
-                    if (tier < option.tier) {
-                        console.log(`Option ${option.label} is locked. User tier: ${tier}, Required tier: ${option.tier}`);
-                        const lockOverlay = document.createElement("div");
-                        lockOverlay.classList.add("lock-overlay");
-                        lockOverlay.textContent = `Tier ${option.tier} Required`;
-                        gridItem.appendChild(lockOverlay);
-                        gridItem.classList.add("locked");
-                    } else {
-                        console.log(`Option ${option.label} is unlocked.`);
-                        gridItem.addEventListener("click", () => {
-                            currentAvatarConfig[category] = `assets/${category}/${option.file}`;
-                            updateAvatar(currentAvatarConfig);
-                            saveAvatarConfig();
-                            document.querySelectorAll(".grid-item").forEach(item => item.classList.remove("selected"));
-                            gridItem.classList.add("selected");
-                        });
+                    // Highlight equipped item
+                    if (currentAvatarConfig[category] === `assets/${category}/${option.file}`) {
+                        gridItem.classList.add("selected");
                     }
+
+                    // Add click event to equip the item
+                    gridItem.addEventListener("click", () => {
+                        currentAvatarConfig[category] = `assets/${category}/${option.file}`;
+                        updateAvatar(currentAvatarConfig);
+                        saveAvatarConfig();
+                        document.querySelectorAll(".grid-item").forEach(item => item.classList.remove("selected"));
+                        gridItem.classList.add("selected");
+                    });
 
                     // Append the grid item to the grid container
                     gridContainer.appendChild(gridItem);
                 });
             }
+
 
           
 
@@ -309,9 +309,18 @@
                         loadUserNames(); // Fetch and display the user's name
 
                         if (userData.exists()) {
-                            currentAvatarConfig = userData.data().avatarConfig || {};
+                            const userDataFields = userData.data();
+                            currentAvatarConfig = userDataFields.avatarConfig || {};
+                            userInventory = userDataFields.inventory || {}; // Fetch inventory
+
+                                // Add a fallback for missing inventory
+                            if (!userInventory) {
+                                console.warn("User inventory is missing. Defaulting to empty inventory.");
+                                userInventory = {};
+                            }
+                            
                             updateAvatar(currentAvatarConfig);
-                            displayCustomisationOptions("hair"); 
+                            displayCustomisationOptions("hair"); // Default to "hair" category
                         } else {
                             console.error("User data not found.");
                         }

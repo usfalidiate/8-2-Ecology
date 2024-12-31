@@ -28,13 +28,25 @@ body, html {
     border-radius: 3px;
 }
 
+.shopBackground {
+    width: 100%;
+    height: 91%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px 20px;
+    box-sizing: border-box;
+    /* border: 2px solid #ffdd00; */
+    border-radius: 3px;
+}
+
 .profileBackground {
     width: 100%;
     height: 91%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 0px 20px;
     box-sizing: border-box;
     /* border: 2px solid #ffdd00; */
     border-radius: 3px;
@@ -180,7 +192,7 @@ button:hover {
     justify-content: space-between; 
     align-items: flex-start;
     gap: 20px;
-    padding: 20px;
+    padding: 0px;
     /* background: rgba(0, 0, 0, 0.7); */
     border-radius: 10px;
     width: 90%;
@@ -192,8 +204,7 @@ button:hover {
     width: 100%;
     text-align: center;
     position: sticky;
-        top: 20px;
-            /* Position it at the top of the viewport */
+    top: 20px; /* Position it at the top of the viewport */
 }
 
 #avatar-container {
@@ -1052,7 +1063,7 @@ input:checked + .slider:before {
     bottom: 10px;
     left: 0;
     right: 0;
-    font-size: 42px; /* Larger font */
+    font-size: 34px; /* Larger font */
     color: #ffd700; /* Shimmering gold */
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.8), 0 0 10px rgba(255, 215, 0, 0.6);
     animation: shimmer 1.5s infinite alternate;
@@ -1574,4 +1585,226 @@ button.activityDiv:focus {
 
 .editNameButton:hover {
     background-color: #f91688;
+}
+
+
+
+
+
+
+
+
+/* Shop Page */
+/* Category Section */
+.category-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Items Container */
+.category-items {
+    display: flex;
+    flex-wrap: wrap;
+    /* Enable wrapping to new lines */
+    justify-content: center;
+    /* Center items horizontally */
+    gap: 20px;
+    /* Space between items */
+    width: 100%;
+    padding: 20px 0;
+    /* Add padding for spacing */
+    transition: max-height 0.3s ease-in-out;
+    /* Smooth transition when expanding/collapsing */
+}
+
+.category-items.collapsed {
+    max-height: 0;
+    padding: 0px;
+    overflow: hidden;
+    /* Prevent content from being visible when collapsed */
+}
+
+/* Category Header */
+.category-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    height: 60px;
+    text-align: center;
+    background-color: #ff47a3;
+    color: black;
+    font-size: 24px;
+    font-weight: 900;
+    border: 3px solid black;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+
+.category-header:hover {
+    background-color: #e63e91;
+    transform: scale(1.05);
+}
+
+
+
+/* Shop Container */
+.shop-container {
+    width: 90%;
+    /* Center content and keep it narrow on larger screens */
+    max-width: 1000px;
+    margin: 0 auto;
+    /* Center horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+/* Individual Shop Item */
+.shop-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 300px;
+    /* Adjust container size for larger images */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 14px;
+}
+
+.shop-item img {
+    width: 200px;
+    /* Double the original size */
+    height: auto;
+    /* Maintain aspect ratio */
+    margin-bottom: 10px;
+}
+
+.shop-item p {
+    margin: 5px 0;
+}
+
+.shop-item .buy-btn {
+    margin-top: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.shop-item .buy-btn:hover {
+    background-color: #0056b3;
+}
+
+.shop-item .buy-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.shop-sticky-header-wrapper {
+    position: fixed;
+    top: 95px;
+    /* right: 100px; */
+    /* Stick to the very top of the viewport */
+    z-index: 1000;
+    /* Ensure it stays above other elements */
+    background: none;
+    /* Match or contrast the page background */
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    /* Add shadow for visibility */
+    padding: 0;
+    /* Add padding for spacing */
+}
+
+/* Shop Sticky Header Synapse Points Styling */
+.shop-sticky-header p {
+    text-align: center;
+    font-size: 30px;
+    /* Larger font size */
+    color: #ffd700;
+    /* Shimmering gold */
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.8), 0 0 10px rgba(255, 215, 0, 0.6);
+    animation: shimmer 1.5s infinite alternate;
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    margin: 0px;
+    /* Stick to the top of the viewport */
+}
+
+/* Reuse the Shimmer Animation */
+@keyframes shimmer {
+    0% {
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.8), 0 0 10px rgba(255, 215, 0, 0.6);
+    }
+
+    100% {
+        text-shadow: 0 0 10px rgba(255, 215, 0, 1), 0 0 20px rgba(255, 215, 0, 0.8);
+    }
+}
+
+.blankDiv {
+    min-height: 100px;
+    width: 100%;
+    align-items: center;
+}
+
+
+
+/*BATTLE ARENA*/
+/* Battle Arena Wrapper */
+#battle-arena-wrapper {
+    position: relative;
+    width: 100vw;
+    /* Full viewport width */
+    height: calc(100vh - 70px);
+    /* Full viewport height minus navbar height */
+    overflow: auto;
+    /* Allow mouse or trackpad scrolling */
+    scroll-behavior: smooth;
+    /* Smooth scrolling for user interactions */
+}
+
+/* Battle Arena Map */
+#battle-arena {
+    position: absolute;
+    width: 1920px;
+    /* Original map dimensions */
+    height: 1080px;
+    background: url('assets/battleArena/battleMap.webp') no-repeat center center;
+    background-size: contain;
+    transform-origin: top left;
+    /* Ensure scaling happens from top-left corner */
+    transition: transform 0.2s ease-in-out;
+    /* Smooth zoom effect */
+}
+
+/* Avatar Styling */
+#battle-avatar-container {
+    position: absolute;
+    width: 50px;
+    /* Adjust for avatar size */
+    height: 50px;
+    top: 50%;
+    /* Centre vertically */
+    left: 50%;
+    /* Centre horizontally */
+    transform: translate(-50%, -50%);
+    /* Adjust position to centre precisely */
+    z-index: 10;
+    /* Ensure avatar is above the map */
 }

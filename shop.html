@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="navbar-container"></div>
+    <div class="blankDiv"></div>
+
+    <div class="shopBackground">
+        <h1>Welcome to the Shop</h1>
+
+        <div id="shopStickyHeaderWrapper" class="shop-sticky-header-wrapper">
+            <div id="shopStickyHeader" class="shop-sticky-header">
+                <p><strong>Synapse Points:</strong> <span id="user-sp">Loading...</span></p>
+                <p><strong>Tier:</strong> <span id="user-tier">Loading...</span></p>
+            </div>
+        </div>
+
+
+        <div id="shop-items" class="shop-container">
+            <!-- Items will be dynamically populated here -->
+        </div>
+    </div>
+
+    <script type="module">
+        import { db, auth } from "./firebase-config.js";
+        import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const shopContainer = document.getElementById("shop-items");
+            const shopStickyHeader = document.getElementById("shopStickyHeader");
+            const userSP = document.getElementById("user-sp");
+            const userTier = document.getElementById("user-tier");
+
+
+            const navContainer = document.getElementById("navbar-container");
+            fetch("navbar.html")
+                .then(response => response.text())
+                .then(html => {
+                    navContainer.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error("Error loading navigation bar:", error);
+                });
+
+            // Use onAuthStateChanged to handle user authentication state
+            auth.onAuthStateChanged(async (user) => {
+                if (!user) {
+                    console.log("No user signed in. Redirecting to login...");
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                try {
+                    const userRef = doc(db, "users", user.uid);
+                    const userDoc = await getDoc(userRef);
+                    const userData = userDoc.data();
+                    const userInventory = userData.inventory || {};
+                    userSP.textContent = userData.synapsePoints || 0;
+                    userTier.textContent = userData.tier || "1";
+
+
+                    console.log("User Data Retrieved:", userData);
+                    console.log("SP Element Found:", userSP);
+                    console.log("Tier Element Found:", userTier);
+
+                    // Load all available items
+                    const response = await fetch("/json/customisation-options.json");
+                    const allItems = await response.json();
+
+                    // Populate the shop
+                    for (const [category, items] of Object.entries(allItems)) {
+                        const categoryDiv = document.createElement("div");
+                        categoryDiv.classList.add("category-section");
+
+                        // Create the category header (button-like h2)
+                        const header = document.createElement("div");
+                        header.textContent = category.toUpperCase();
+                        header.classList.add("category-header");
+
+                        // Create the items container and start it collapsed
+                        const itemsContainer = document.createElement("div");
+                        itemsContainer.classList.add("category-items", "collapsed");
+
+                        // Add shop items to the container
+                        items.forEach(item => {
+                            const owned = userInventory[category]?.includes(`assets/${category}/${item.file}`);
+                            const itemDiv = document.createElement("div");
+                            itemDiv.classList.add("shop-item");
+                            itemDiv.innerHTML = `
+                                <img src="assets/${category}/${item.file}" alt="${item.label}">
+                                <p>${item.label}</p>
+                                <p>Cost: ${item.cost} SP</p>
+                                <button class="buy-btn" ${owned ? "disabled" : ""}>
+                                    ${owned ? "Owned" : "Buy"}
+                                </button>
+                            `;
+
+                            // Add purchase logic
+                            if (!owned) {
+                                itemDiv.querySelector(".buy-btn").addEventListener("click", async () => {
+                                    const currentSP = parseInt(userSP.textContent?.trim(), 10) || 0;
+
+                                    if (currentSP >= item.cost) {
+                                        await updateDoc(userRef, {
+                                            synapsePoints: currentSP - item.cost,
+                                            [`inventory.${category}`]: [
+                                                ...(userInventory[category] || []),
+                                                `assets/${category}/${item.file}`
+                                            ]
+                                        });
+
+                                        alert(`${item.label} purchased!`);
+                                        location.reload();
+                                    } else {
+                                        alert("Not enough Synapse Points!");
+                                    }
+                                });
+                            }
+
+                            itemsContainer.appendChild(itemDiv);
+                        });
+
+                        // Add the collapse functionality to the header
+                        header.addEventListener("click", () => {
+                            itemsContainer.classList.toggle("collapsed");
+                        });
+
+                        // Append the header and items container to the category div
+                        categoryDiv.appendChild(header);
+                        categoryDiv.appendChild(itemsContainer);
+
+                        // Append the category div to the shop container
+                        shopContainer.appendChild(categoryDiv);
+                    }
+
+
+
+                } catch (error) {
+                    console.error("Error loading shop:", error.message);
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

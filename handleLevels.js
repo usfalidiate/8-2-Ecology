@@ -1,22 +1,34 @@
 import { db, auth } from "./firebase-config.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
-// Tier Levels Configuration
-const tierLevels = [
-    { tier: 1, minSP: 0 },
-    { tier: 2, minSP: 100 },
-    { tier: 3, minSP: 250 },
-    { tier: 4, minSP: 500 },
-    { tier: 5, minSP: 750 },
-    { tier: 6, minSP: 1000 }
-];
+// Tier Levels will be dynamically loaded
+let tierLevels = [];
 
-// Calculate Tier Based on SPs
+// Fetch Tier Levels from gameData.json
+export async function loadTierLevels() {
+    try {
+        const response = await fetch("/json/gameData.json");
+        const data = await response.json();
+        tierLevels = data.tierLevels;
+        console.log("Tier Levels Loaded:", tierLevels);
+    } catch (error) {
+        console.error("Error loading tier levels:", error);
+        throw error;
+    }
+}
+
+
 export function calculateTier(synapsePoints) {
+    if (tierLevels.length === 0) {
+        console.warn("Tier Levels not loaded. Returning default tier.");
+        return 1; // Default tier if levels aren't loaded
+    }
+
     return tierLevels.reduce((currentTier, level) => {
         return synapsePoints >= level.minSP ? level.tier : currentTier;
     }, 1);
 }
+
 
 // Fetch Latest User Data from Firestore
 export async function fetchUserData() {
@@ -27,9 +39,11 @@ export async function fetchUserData() {
     return userDoc.exists() ? userDoc.data() : null;
 }
 
-// Update SPs and Tier in Firestore
 export async function updateSynapsePoints(amount, topicKey, taskKey) {
     try {
+        // Ensure tier levels are loaded before proceeding
+        await loadTierLevels();
+
         const user = auth.currentUser;
         if (!user) throw new Error("No user is signed in.");
         const userRef = doc(db, "users", user.uid);
@@ -75,6 +89,7 @@ export async function updateSynapsePoints(amount, topicKey, taskKey) {
         throw error;
     }
 }
+
 
 
 // Mark a Task as Completed
