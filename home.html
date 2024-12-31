@@ -42,7 +42,7 @@
     // Fetch `topics.json`
     async function fetchTopics() {
         try {
-            const response = await fetch("/json/topics.json");
+            const response = await fetch("./json/topics.json");
             if (!response.ok) throw new Error("Failed to load topics.json");
             const data = await response.json();
             return data.topics || [];
